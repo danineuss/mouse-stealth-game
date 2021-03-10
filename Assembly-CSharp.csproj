@@ -47,6 +47,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ThirdPersonCameraController.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCharacterController.cs" />
+     <Compile Include="Assets\Third Party\Rat\RatAnimator.cs" />
+     <None Include="Assets\Third Party\Rat\Rat Animations.txt" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/2019.3.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
