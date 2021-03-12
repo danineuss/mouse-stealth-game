@@ -67,6 +67,7 @@ crashlytics-build.properties
 # Manually added files
 /ArtifactDB
 /SourceAssetDB
+/[Tt]emp/.gitignore
 
 
 
