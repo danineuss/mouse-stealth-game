@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class ThirdPersonCameraController : MonoBehaviour 
 {
+    // Camera setup
     public float RotationSpeed = 1;
-    public Transform Target, Player ;
+    public Transform Target, Player;
     float mouseX, mouseY;
-
-    public Transform Obstruction;
-    public float DefaultCameraDistance = 1.0f;
-    float zoomSpeed = 2f;
+    public Vector3 DefaultCameraDelta = new Vector3(0, 0.7f, -1f).normalized;
+    public float DefaultCameraDistance = 1.0f; 
     float minimumCameraDistance = 0.5f;
+
+    // Obstuction handling
+    public Transform Obstruction;
+    float zoomSpeed = 2f;
    
 
     void Start() 
@@ -20,8 +23,9 @@ public class ThirdPersonCameraController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        transform.position = Target.position + Vector3.back * DefaultCameraDistance;
-
+        // transform.position = Target.position + Vector3.back * DefaultCameraDistance;
+        Debug.Log(DefaultCameraDelta);
+        transform.position = Target.position + DefaultCameraDelta * DefaultCameraDistance;
     }
 
     void LateUpdate() 
