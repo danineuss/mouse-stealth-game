@@ -23,15 +23,13 @@ public class ThirdPersonCameraController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // transform.position = Target.position + Vector3.back * DefaultCameraDistance;
-        Debug.Log(DefaultCameraDelta);
-        transform.position = Target.position + DefaultCameraDelta * DefaultCameraDistance;
+        // transform.position = Target.position + DefaultCameraDelta * DefaultCameraDistance;
     }
 
     void LateUpdate() 
     {
         CameraControl();
-        ViewObstructed();
+        // ViewObstructed();
     }
 
     void CameraControl() 
@@ -40,7 +38,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         mouseY -= Input.GetAxis("Mouse Y") * RotationSpeed;
         mouseY = Mathf.Clamp(mouseY, -35, 60);
 
-        transform.LookAt(Target);
+        // transform.LookAt(Target);
 
         if (!Input.GetKey(KeyCode.LeftShift)) {
             Player.rotation = Quaternion.Euler(0, mouseX, 0);
@@ -48,40 +46,40 @@ public class ThirdPersonCameraController : MonoBehaviour
         Target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
     }
 
-    void ViewObstructed() 
-    {
-        if (!Physics.Raycast(Target.position, transform.position - Target.position, out RaycastHit hit, 4.5f) ||
-            hit.collider.gameObject.CompareTag("Player"))
-        {
-            ZoomCamera(false);
-            Obstruction = null;
-            return;
-        }
+    // void ViewObstructed() 
+    // {
+    //     if (!Physics.Raycast(Target.position, transform.position - Target.position, out RaycastHit hit, 4.5f) ||
+    //         hit.collider.gameObject.CompareTag("Player"))
+    //     {
+    //         ZoomCamera(false);
+    //         Obstruction = null;
+    //         return;
+    //     }
 
-        Obstruction = hit.transform;
+    //     Obstruction = hit.transform;
 
-        if (Vector3.Distance(Obstruction.position, Target.position) >= 3f)
-        {
-            Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-            ZoomCamera(true);
-        }
-        else
-        {
-            Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-        }
-    }
+    //     if (Vector3.Distance(Obstruction.position, Target.position) >= 3f)
+    //     {
+    //         Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+    //         ZoomCamera(true);
+    //     }
+    //     else
+    //     {
+    //         Obstruction.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+    //     }
+    // }
 
-    void ZoomCamera(bool zoomIn)
-    {
-        if (zoomIn)
-        {
-            if (Vector3.Distance(transform.position, Target.position) <= minimumCameraDistance) { return; }
-            transform.Translate(Vector3.forward * zoomSpeed * Time.deltaTime);
-        } 
-        else
-        {
-            if (Vector3.Distance(transform.position, Target.position) > DefaultCameraDistance) { return; }
-            transform.Translate(Vector3.back * zoomSpeed * Time.deltaTime);
-        }
-    }
+    // void ZoomCamera(bool zoomIn)
+    // {
+    //     if (zoomIn)
+    //     {
+    //         if (Vector3.Distance(transform.position, Target.position) <= minimumCameraDistance) { return; }
+    //         transform.Translate(Vector3.forward * zoomSpeed * Time.deltaTime);
+    //     } 
+    //     else
+    //     {
+    //         if (Vector3.Distance(transform.position, Target.position) > DefaultCameraDistance) { return; }
+    //         transform.Translate(Vector3.back * zoomSpeed * Time.deltaTime);
+    //     }
+    // }
 }

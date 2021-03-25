@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Animations\Rat\RatAnimator.cs" />
+     <Compile Include="Assets\Scripts\FirstPersonCameraController.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCameraController.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCharacterController.cs" />
      <None Include="Assets\Materials\World Materials Collection\WorldMatLiteFree.shader" />
