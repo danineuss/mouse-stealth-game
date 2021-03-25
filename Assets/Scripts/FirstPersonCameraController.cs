@@ -6,13 +6,15 @@ public class FirstPersonCameraController : MonoBehaviour
 {
     // Camera setup
     public float RotationSpeed = 1;
-    public Transform Player;
+    public Transform Target, Player;
     float mouseX, mouseY;
 
     void Start() 
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        transform.LookAt(Target);
     }
 
     void LateUpdate() 
@@ -27,9 +29,9 @@ public class FirstPersonCameraController : MonoBehaviour
         mouseY = Mathf.Clamp(mouseY, -35, 60);
 
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            return;
+        if (!Input.GetKey(KeyCode.LeftShift)) {
+            Player.rotation = Quaternion.Euler(0, mouseX, 0);
         }
-        Player.rotation = Quaternion.Euler(0, mouseX, 0);
+        transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
     }
 }
