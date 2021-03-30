@@ -1,25 +1,22 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ThirdPersonCharacterController : MonoBehaviour {
     public float speed;
-
-    private Collision currentCollision = null;
-    private Vector3 currentCollisionNormal = Vector3.zero;
-    private float currentDistanceFromCollision = 0;
+    private Collider currentCollider = null;
 
     void Update() {
         PlayerMovement();
+    }
+
+    void LateUpdate() {
         RestrictPlayerMovement();        
     }
 
-    void OnCollisionEnter (Collision collision) {
-        if (collision.collider.tag != "Sticky") { return; }
-        
-        currentCollision = collision;
-        currentCollisionNormal = collision.GetContact(0).normal;
-        currentDistanceFromCollision = Vector3.Distance(collision.GetContact(0).point, transform.position);
+    void OnTriggerEnter (Collider collider) {
+        if (collider.tag != "MouseTunnel" || collider == currentCollider) { return; }
+        currentCollider = collider;
     }
 
     void PlayerMovement() {
@@ -32,9 +29,8 @@ public class ThirdPersonCharacterController : MonoBehaviour {
     }
 
     void RestrictPlayerMovement() {
-        if (currentCollision == null) { return; } 
+        if (currentCollider == null) { return; } 
         
-        var closestPoint = currentCollision.collider.ClosestPoint(transform.position);
-        transform.position = closestPoint + currentDistanceFromCollision * currentCollisionNormal;
+        transform.position = currentCollider.ClosestPoint(transform.position);
     }
 }
