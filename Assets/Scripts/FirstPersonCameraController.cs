@@ -6,15 +6,13 @@ public class FirstPersonCameraController : MonoBehaviour
 {
     // Camera setup
     public float RotationSpeed = 1;
-    public Transform Target, Player;
+    public Transform Player;
     float mouseX, mouseY;
 
     void Start() 
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
-        transform.LookAt(Target);
     }
 
     void LateUpdate() 
