@@ -31,6 +31,8 @@ public class ThirdPersonCharacterController : MonoBehaviour {
     void RestrictPlayerMovement() {
         if (currentCollider == null) { return; } 
         
-        transform.position = currentCollider.ClosestPoint(transform.position);
+        var closestPoint = currentCollider.ClosestPoint(transform.position);
+        var newPosition = new Vector3(closestPoint.x, transform.position.y, closestPoint.z);
+        transform.position = newPosition;
     }
 }
