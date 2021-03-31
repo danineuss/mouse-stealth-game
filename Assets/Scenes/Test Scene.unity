@@ -647,7 +647,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639441905}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.34, y: -0.45, z: -0.0877}
+  m_LocalPosition: {x: 2.34, y: -0.445, z: -0.0877}
   m_LocalScale: {x: 0.12, y: 0.006, z: 0.21017228}
   m_Children: []
   m_Father: {fileID: 1243241854}
@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 643594512}
   - component: {fileID: 643594511}
   - component: {fileID: 643594510}
+  - component: {fileID: 643594509}
   m_Layer: 0
   m_Name: Roaming Area
   m_TagString: Untagged
@@ -752,12 +753,24 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643594507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01906, y: 0, z: 0.053}
-  m_LocalScale: {x: 0.02564107, y: 0.02564107, z: 0.071148366}
+  m_LocalPosition: {x: 0, y: 0, z: 0.053}
+  m_LocalScale: {x: 0.01954542, y: 0.017920544, z: 0.071148366}
   m_Children: []
   m_Father: {fileID: 1201867751}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &643594509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643594507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c034891bd778e7b49adad39675f60099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &643594510
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -778,7 +791,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643594507}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

@@ -1,23 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Assertions;
 
-public class PlayerRoamingArea : MonoBehaviour
+public class PlayerRoamingArea : MonoBehaviour, IPlayerMovementRestictable
 {
-    public GameObject Player;
-    public bool IsPlayerContained;
-    private Bounds bounds;
-    private float distanceEpsilon = 0.005f;
+    private Collider boxCollider;
     
     void Start() {
-        bounds = GetComponent<Collider>().bounds;
+        boxCollider = GetComponent<Collider>();
+        Assert.IsNotNull(boxCollider);
     }
 
-    void Update() {
-        IsPlayerContained = bounds.SqrDistance(Player.transform.position) < distanceEpsilon;
-        var playerPosition = Player.transform.position;
+    public Vector3 RestrictPlayerMovement (Vector3 playerPosition) {
+        var bounds = boxCollider.bounds;
         var posX = Mathf.Clamp(playerPosition.x, bounds.min.x, bounds.max.x);
         var posZ = Mathf.Clamp(playerPosition.z, bounds.min.z, bounds.max.z);
-        Player.transform.position = new Vector3(posX, playerPosition.y, posZ);
+        return new Vector3(posX, playerPosition.y, posZ);
     }
 }
