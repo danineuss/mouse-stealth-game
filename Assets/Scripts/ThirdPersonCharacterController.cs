@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class ThirdPersonCharacterController : MonoBehaviour {
     public float speed;
-    private Collider currentCollider = null;
+    public IPlayerMovementRestictable currentRestictable = null;
 
     void Update() {
         PlayerMovement();
@@ -15,8 +14,12 @@ public class ThirdPersonCharacterController : MonoBehaviour {
     }
 
     void OnTriggerEnter (Collider collider) {
-        if (collider.tag != "MouseTunnel" || collider == currentCollider) { return; }
-        currentCollider = collider;
+        IPlayerMovementRestictable restictable = collider.GetComponentInParent<IPlayerMovementRestictable>();
+        if (restictable == null || restictable == currentRestictable) { 
+            return; 
+        }
+
+        currentRestictable = restictable;
     }
 
     void PlayerMovement() {
@@ -29,10 +32,9 @@ public class ThirdPersonCharacterController : MonoBehaviour {
     }
 
     void RestrictPlayerMovement() {
-        if (currentCollider == null) { return; } 
+        if (currentRestictable == null) { return; } 
         
-        var closestPoint = currentCollider.ClosestPoint(transform.position);
-        var newPosition = new Vector3(closestPoint.x, transform.position.y, closestPoint.z);
+        var newPosition = currentRestictable.RestrictPlayerMovement(transform.position);
         transform.position = newPosition;
     }
 }

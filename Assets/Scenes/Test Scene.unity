@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 113111388}
   - component: {fileID: 113111387}
   - component: {fileID: 113111386}
+  - component: {fileID: 113111389}
   m_Layer: 0
   m_Name: Rail (1)
   m_TagString: MouseTunnel
@@ -242,7 +243,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113111384}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.0082, y: -0.0162, z: 0.0026}
+  m_LocalPosition: {x: -0.0082, y: -0.0162, z: 0.003}
   m_LocalScale: {x: 0.00030622495, y: 0.0003343295, z: 0.037973966}
   m_Children: []
   m_Father: {fileID: 1355377445}
@@ -308,6 +309,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113111384}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &113111389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113111384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &210438325
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +631,7 @@ GameObject:
   - component: {fileID: 639441909}
   - component: {fileID: 639441908}
   - component: {fileID: 639441907}
+  - component: {fileID: 639441910}
   m_Layer: 0
   m_Name: Rail (1)
   m_TagString: MouseTunnel
@@ -699,6 +713,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639441905}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &639441910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639441905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &643594507
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,9 +737,8 @@ GameObject:
   - component: {fileID: 643594512}
   - component: {fileID: 643594511}
   - component: {fileID: 643594510}
-  - component: {fileID: 643594509}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Roaming Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -733,20 +758,6 @@ Transform:
   m_Father: {fileID: 1201867751}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &643594509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643594507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c034891bd778e7b49adad39675f60099, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Player: {fileID: 1201681381}
-  IsPlayerContained: 0
 --- !u!65 &643594510
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -911,6 +922,7 @@ GameObject:
   - component: {fileID: 760834865}
   - component: {fileID: 760834864}
   - component: {fileID: 760834863}
+  - component: {fileID: 760834866}
   m_Layer: 0
   m_Name: Rail
   m_TagString: MouseTunnel
@@ -926,8 +938,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760834861}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.34, y: -0.45, z: 0.313}
-  m_LocalScale: {x: 0.12, y: 0.006, z: 0.25757542}
+  m_LocalPosition: {x: 2.34, y: -0.45, z: 0.3119}
+  m_LocalScale: {x: 0.12, y: 0.006, z: 0.2618512}
   m_Children: []
   m_Father: {fileID: 1243241854}
   m_RootOrder: 0
@@ -992,6 +1004,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760834861}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &760834866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760834861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &856178615
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,6 +1028,7 @@ GameObject:
   - component: {fileID: 856178619}
   - component: {fileID: 856178618}
   - component: {fileID: 856178617}
+  - component: {fileID: 856178620}
   m_Layer: 0
   m_Name: Rail
   m_TagString: MouseTunnel
@@ -1019,7 +1044,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856178615}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: -0.0268, y: -0, z: 0.0028}
+  m_LocalPosition: {x: -0.0268, y: 0.00033, z: 0.003}
   m_LocalScale: {x: 0.00030622495, y: 0.0003343295, z: 0.033845}
   m_Children: []
   m_Father: {fileID: 1355377445}
@@ -1085,6 +1110,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856178615}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &856178620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856178615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1274,7 @@ GameObject:
   - component: {fileID: 1043405759}
   - component: {fileID: 1043405758}
   - component: {fileID: 1043405757}
+  - component: {fileID: 1043405760}
   m_Layer: 0
   m_Name: Rail (2)
   m_TagString: MouseTunnel
@@ -1252,7 +1290,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043405755}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.0082, y: 0.0168, z: 0.0026}
+  m_LocalPosition: {x: -0.0082, y: 0.0168, z: 0.003}
   m_LocalScale: {x: 0.00030622495, y: 0.0003343295, z: 0.037973966}
   m_Children: []
   m_Father: {fileID: 1355377445}
@@ -1318,6 +1356,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043405755}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1043405760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043405755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1201681381 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1483139749900246, guid: aefc69cb8993f004ca7e3446b73d67c4,
@@ -1845,6 +1895,7 @@ GameObject:
   - component: {fileID: 1729483473}
   - component: {fileID: 1729483472}
   - component: {fileID: 1729483471}
+  - component: {fileID: 1729483474}
   m_Layer: 0
   m_Name: Rail
   m_TagString: MouseTunnel
@@ -1926,6 +1977,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729483469}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1729483474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729483469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1792230819
 PrefabInstance:
   m_ObjectHideFlags: 0
