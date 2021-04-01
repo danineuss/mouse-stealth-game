@@ -1342,6 +1342,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vision Cone
       objectReference: {fileID: 0}
+    - target: {fileID: 6846961827758018559, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_SpotAngle
+      value: 53.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846961827758018559, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_Range
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b035256d4c924a4481e4e5892135f4b, type: 3}
 --- !u!1 &1043405755
