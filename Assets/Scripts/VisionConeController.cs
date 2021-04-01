@@ -8,13 +8,14 @@ public class VisionConeController : MonoBehaviour
 {
     public float FieldOfView = 50;
     public float TiltAngle = 40;
-    public float PanAngle = 15;
-    private Transform panParent, tiltParent, spotLight, cone = null;
+    public float PanAngle = 0;
+    private Transform panParent, tiltParent, cone;
+    private Light spotLight;
 
     void Start()
     {
         InitializeComponents();
-        UpdateVisionCone();
+        UpdateVisionConeOrientation();
 
         // transform.LookAt(target);
         // float angle = (TiltAngle + 90) * Mathf.Deg2Rad;
@@ -28,7 +29,7 @@ public class VisionConeController : MonoBehaviour
     void InitializeComponents() {
         panParent = GetComponentsInChildren<Transform>().Where(x => x.name == "Pan Parent").First();
         tiltParent = GetComponentsInChildren<Transform>().Where(x => x.name == "Tilt Parent").First();
-        spotLight = GetComponentsInChildren<Transform>().Where(x => x.name == "Spot Light").First();
+        spotLight = GetComponentsInChildren<Light>().Where(x => x.name == "Spot Light").First();
         cone = GetComponentsInChildren<Transform>().Where(x => x.name == "Cone").First();
 
         Assert.IsNotNull(panParent, "Pan parent is null.");
@@ -37,13 +38,19 @@ public class VisionConeController : MonoBehaviour
         Assert.IsNotNull(cone, "Cone is null.");
     }
 
-    void UpdateVisionCone() {
+    void UpdateVisionConeOrientation() {
         panParent.localEulerAngles = new Vector3(0, 0, PanAngle);
         tiltParent.localEulerAngles = new Vector3(0, TiltAngle, 0);
+
+        spotLight.spotAngle = FieldOfView;
+
+        var currentScaleZ = cone.transform.localScale.z;
+        var newScaleXY = 2 * currentScaleZ * Mathf.Tan(FieldOfView / 2 * Mathf.Deg2Rad);
+        cone.transform.localScale = new Vector3(newScaleXY, newScaleXY, currentScaleZ);
     }
 
     void Update()
     {
-        
+        UpdateVisionConeOrientation();
     }
 }
