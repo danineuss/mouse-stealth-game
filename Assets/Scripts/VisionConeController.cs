@@ -11,30 +11,22 @@ public class VisionConeController : MonoBehaviour
     public float TiltAngle = 40;
     public float PanAngle = 0;
     public Transform Player;
+    public LayerMask ObstacleMask;
 
     private Transform panParent, tiltParent, scaleParent;
     private Light spotLight;
+    private Color spotLightGreen = new Color(0f, 183f, 18f, 1f);
 
     void Start()
     {
         InitializeComponents();
         UpdateVisionConeOrientation();
-
-        // transform.LookAt(target);
-        // float angle = (TiltAngle + 90) * Mathf.Deg2Rad;
-        // Vector3 rayDirection = transform.forward * Mathf.Sin(angle) + transform.right * Mathf.Cos(angle);
-        Debug.DrawLine(tiltParent.position, tiltParent.position + tiltParent.right * 7, Color.red, 3f);
-        // Debug.DrawRay(transform.position, transform.up, Color.green, 3f);
-        // Debug.DrawRay(transform.position, transform.right, Color.blue, 3f);
-        // Debug.DrawLine(transform.position, transform.position + rayDirection * 7, Color.red, 3f);
+        StartCoroutine("DetectPlayerWithDelay", 0.15f);
     }
 
     void Update()
     {
         UpdateVisionConeOrientation();
-
-        float angleToPlayer = Vector3.Angle(tiltParent.right, Player.transform.position - transform.position);
-        
     }
 
     void InitializeComponents() {
@@ -59,5 +51,33 @@ public class VisionConeController : MonoBehaviour
 
         var newScaleYZ = 2 * Range / 6 * Mathf.Tan(FieldOfView / 2 * Mathf.Deg2Rad);
         scaleParent.localScale = new Vector3(Range / 6, newScaleYZ, newScaleYZ);
+    }
+
+    IEnumerator DetectPlayerWithDelay(float seconds) {
+        while (true) {
+            yield return new WaitForSeconds(seconds);
+            DetectPlayer();
+        }
+    }
+
+    void DetectPlayer() {
+        float angleToPlayer = Vector3.Angle(tiltParent.right, Player.transform.position - transform.position);
+        float distanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
+        
+        if (angleToPlayer > FieldOfView / 2 || distanceToPlayer > Range) {
+            spotLight.color = spotLightGreen;
+            return;
+        } 
+        
+        bool playerObstructed = Physics.Raycast(
+            transform.position, (Player.transform.position - transform.position).normalized, 
+            distanceToPlayer, ObstacleMask
+        );
+        if (playerObstructed) {
+            spotLight.color = spotLightGreen;
+            return;
+        }
+
+        spotLight.color = Color.red;
     }
 }

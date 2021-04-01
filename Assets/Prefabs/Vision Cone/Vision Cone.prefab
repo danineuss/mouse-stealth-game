@@ -143,6 +143,9 @@ MonoBehaviour:
   TiltAngle: 40
   PanAngle: 0
   Player: {fileID: 0}
+  PlayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &6846961827758018529
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +191,7 @@ Light:
   m_Color: {r: 0, g: 0.7169812, b: 0.07029223, a: 1}
   m_Intensity: 1000
   m_Range: 10
-  m_SpotAngle: 50
+  m_SpotAngle: 53.1
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
