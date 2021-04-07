@@ -76,13 +76,13 @@ public class VisionCone : MonoBehaviour
         SetNextControlPoint();
     }
 
-    public void SetSpotState(DetectorState newDetectorState) {
+    public void SetSpotState(DetectorState newDetectorState, float lerp = 0f) {
         switch (newDetectorState) {
             case DetectorState.Idle:
-                spotLight.color = kSpotLightGreen;
+                spotLight.color = Color.LerpUnclamped(kSpotLightGreen, kSpotLightOrange, lerp);
                 break;
             case DetectorState.Searching:
-                spotLight.color = kSpotLightOrange;
+                spotLight.color = Color.LerpUnclamped(kSpotLightOrange, kSpotLightRed, lerp);
                 break;
             case DetectorState.Alarmed:
                 spotLight.color = kSpotLightRed;

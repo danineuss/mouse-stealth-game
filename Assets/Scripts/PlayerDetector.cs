@@ -13,53 +13,96 @@ public class PlayerDetector : MonoBehaviour
 {
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
+    [SerializeField, Range(0.25f, 3f)] private float kDetectionEscalationSpeed = 1f;
     public DetectorState CurrentDetectorState { get; private set; }
+
     private VisionCone visionCone;
+    private bool playerVisible;
+    private float detectionEscalationMeter = 0f;
+    private float kDetectionDelay = 0.1f;
 
     void Start()
     {
         visionCone = GetComponentInChildren<VisionCone>();
         CurrentDetectorState = DetectorState.Idle;
 
-        IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(0.2f);
+        IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectionDelay);
         StartCoroutine(detectPlayerCoroutine);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        SetDetectionState();
     }
 
     IEnumerator DetectPlayerWithDelay(float seconds) {
         while (true) {
             yield return new WaitForSeconds(seconds);
             DetectPlayer();
-            visionCone.SetSpotState(CurrentDetectorState);
         }
     }
 
-    void DetectPlayer() {
-        float angleToPlayer = Vector3.Angle(visionCone.CurrentLookatTarget - transform.position, 
-                                            Player.transform.position - transform.position);
-        float distanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
-        
-        if (angleToPlayer > visionCone.FieldOfView / 2 || distanceToPlayer > visionCone.Range) {
-            CurrentDetectorState = DetectorState.Idle;
+    void DetectPlayer() {        
+        if (PlayerOutsideVisibleCone()) {
+            playerVisible = false;
             return;
         } 
         
         bool playerObstructed = Physics.Raycast(
             transform.position, 
             (Player.transform.position - transform.position).normalized, 
-            distanceToPlayer, 
+            Vector3.Distance(Player.transform.position, transform.position), 
             ObstacleMask
         );
+
         if (playerObstructed) {
-            CurrentDetectorState = DetectorState.Idle;
-            return;
+            playerVisible = false;
+        } else {
+            playerVisible = true;
+        }
+    }
+
+    bool PlayerOutsideVisibleCone() {
+        float angleToPlayer = Vector3.Angle(visionCone.CurrentLookatTarget - transform.position, 
+                                            Player.transform.position - transform.position);
+        float distanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
+        return (angleToPlayer > visionCone.FieldOfView / 2 || distanceToPlayer > visionCone.Range);
+    }
+
+    void SetDetectionState() {
+        if (playerVisible) {
+            detectionEscalationMeter += Time.deltaTime * kDetectionEscalationSpeed;
+        } else {
+            detectionEscalationMeter -= Time.deltaTime * kDetectionEscalationSpeed;
         }
 
-        CurrentDetectorState = DetectorState.Alarmed;
+        
+        if (detectionEscalationMeter >= 1f) {
+            EscelateDetection();
+        }
+        if (detectionEscalationMeter <= Time.deltaTime * kDetectionEscalationSpeed) {
+            DeescalateDetection();
+        }
+        
+        detectionEscalationMeter = Mathf.Clamp(detectionEscalationMeter, 0f, 1f);
+        visionCone.SetSpotState(CurrentDetectorState, detectionEscalationMeter);
+    }
+
+    void EscelateDetection() {
+        switch (CurrentDetectorState) {
+            case DetectorState.Idle:
+                CurrentDetectorState = DetectorState.Searching;
+                break;
+            case DetectorState.Searching:
+                CurrentDetectorState = DetectorState.Alarmed;
+                break;
+        }
+        detectionEscalationMeter = 0f;
+    }
+
+    void DeescalateDetection() {
+        if (CurrentDetectorState == DetectorState.Searching && !playerVisible) { 
+            CurrentDetectorState = DetectorState.Idle;
+        }
     }
 }

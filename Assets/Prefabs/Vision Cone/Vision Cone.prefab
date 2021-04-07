@@ -76,13 +76,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddceabc7bff38e94d9de971d18c23b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  ObstacleMask:
-    serializedVersion: 2
-    m_Bits: 512
   ConeScaleParent: {fileID: 8771947521020579387}
   VisionConeControlPoints: {fileID: 0}
   spotLight: {fileID: 6846961827758018559}
+  VisionConePeriod: 5
+  kSpotLightGreen: {r: 0, g: 0.7176471, b: 0.07058824, a: 1}
+  kSpotLightOrange: {r: 183, g: 102, b: 0, a: 1}
+  kSpotLightRed: {r: 191, g: 0, b: 10, a: 1}
+  kSpotLightBlue: {r: 0, g: 23, b: 183, a: 1}
 --- !u!1 &6846961827758018529
 GameObject:
   m_ObjectHideFlags: 0
