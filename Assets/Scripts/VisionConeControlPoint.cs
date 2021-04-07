@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionControlPoint : MonoBehaviour
+public class VisionConeControlPoint : MonoBehaviour
 {
     [SerializeField] private float fieldOfView; 
     public float FieldOfView {
