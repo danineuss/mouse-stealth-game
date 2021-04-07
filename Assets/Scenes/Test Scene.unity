@@ -321,6 +321,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &258435719 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8477133248410741364, guid: 8fde4828e151ba04a8a18f878f2cf362,
+    type: 3}
+  m_PrefabInstance: {fileID: 1311591859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &258435720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258435719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df43d0b26e1cf71408e001400c14a47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1008883032}
+  ObstacleMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1001 &446102302
 PrefabInstance:
   m_ObjectHideFlags: 0
