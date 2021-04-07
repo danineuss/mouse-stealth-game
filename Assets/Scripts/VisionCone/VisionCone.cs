@@ -54,10 +54,15 @@ public class VisionCone : MonoBehaviour
     }
 
     void SetNextControlPoint() {
-        controlPointIndex = 1 - controlPointIndex;
+        // Currently supports one or two Control Points.
+        if (VisionConeControlPoints.controlPoints.Count == 2) {
+            controlPointIndex = 1 - controlPointIndex;
+        }
+
         var newControlPoint = VisionConeControlPoints.controlPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
+
         IEnumerator lerpLookatTarget = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
         StartCoroutine(lerpLookatTarget);
     }
@@ -69,7 +74,7 @@ public class VisionCone : MonoBehaviour
         while (elapsedTime < durationSeconds) {
             var t = elapsedTime / durationSeconds;
             FieldOfView = Mathf.Lerp(startFieldOfView, newFieldOfView, t);
-            CurrentLookatTarget = Vector3.Lerp(startLookatTarget, newLookatTarget, t);
+            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, newLookatTarget, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }

@@ -344,7 +344,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   kDetectionEscalationSpeed: 1
-  playerVisible: 0
 --- !u!1001 &446102302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -497,7 +496,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624155649}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.183, y: -0.331, z: -0.311}
+  m_LocalPosition: {x: 0.17, y: -0.331, z: -0.311}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 714960991}
@@ -1197,6 +1196,11 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 1008883032}
+    - target: {fileID: 6481307520767780976, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6846961827733443580, guid: 7b035256d4c924a4481e4e5892135f4b,
         type: 3}
       propertyPath: m_LocalPosition.x
