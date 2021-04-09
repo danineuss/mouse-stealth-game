@@ -3,74 +3,68 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum VisionConeState {
+    Idle,
+    Patrolling,
+    FollowingPlayer
+}
+
 public class VisionCone : MonoBehaviour
 {
-    [SerializeField] private Transform ConeScaleParent;
     [SerializeField] private VisionConeControlPoints VisionConeControlPoints;
-    [SerializeField] private Light spotLight;
     [SerializeField] private float VisionConePeriod = 5f;
-    [SerializeField] private Color kSpotLightGreen = new Color(0f, 183f, 18f, 1f);
-    [SerializeField] private Color kSpotLightOrange = new Color(183f, 102f, 0f, 1f);
-    [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
-    [SerializeField] private Color kSpotLightBlue = new Color(0f, 23f, 183f, 1f);
 
     public Vector3 CurrentLookatTarget { get; private set; }
     public float FieldOfView { get; private set; }
-    public float Range { get; private set; }
+    public float Range { 
+        get {
+            return (CurrentLookatTarget - transform.position).magnitude;
+        }
+    }
  
-    private IEnumerator patrollingCoroutine;
-    private IEnumerator followPlayerCoroutine;
+    private ConeVisualizer coneVisualizer;
+    private IEnumerator currentCoroutine;
     private int controlPointIndex = 0;
-    private VisionConeControlPoint targetControlPoint;
-    private float kConeRangeMultiplier = 1.5f;
+    private VisionConeState visionConeState;
     private float kFollowPlayerClampValue = 0.1f;
 
     void Start()
     {
         InitializeCone();        
-        UpdateVisionConeOrientation();
-        SetNextControlPoint();
-    }
-
-    void Update()
-    {
-        UpdateVisionConeOrientation();
+        MoveTowardsNextControlPoint();
     }
 
     void InitializeCone() {
         var currentControlPoint = VisionConeControlPoints.controlPoints[controlPointIndex];
         CurrentLookatTarget = currentControlPoint.transform.position;
         FieldOfView = currentControlPoint.FieldOfView;
+
+        coneVisualizer = GetComponent<ConeVisualizer>();
+        coneVisualizer.UpdateConeVisualization(CurrentLookatTarget, FieldOfView);
+        
+        visionConeState = VisionConeState.Idle;
     }
 
-    void UpdateVisionConeOrientation() {
-        var deltaVector = CurrentLookatTarget - transform.position;
-        Range = deltaVector.magnitude * kConeRangeMultiplier;
-        transform.rotation = Quaternion.LookRotation(deltaVector);
-
-        spotLight.spotAngle = FieldOfView;
-        spotLight.range = Range;
-
-        // Some of the following numbers are the result of the scale of the Cone 3D Model.
-        var newScaleXY = 2 * Range / 6 * Mathf.Tan(FieldOfView / 2 * Mathf.Deg2Rad);
-        ConeScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, Range / 6);
-    }
-
-    void SetNextControlPoint() {
-        // Currently supports one or two Control Points.
-        if (VisionConeControlPoints.controlPoints.Count == 2) {
-            controlPointIndex = 1 - controlPointIndex;
+    void Update()
+    {
+        if (visionConeState == VisionConeState.Idle) {
+            MoveTowardsNextControlPoint();
         }
+        coneVisualizer.UpdateConeVisualization(CurrentLookatTarget, FieldOfView);
+    }
 
+    void MoveTowardsNextControlPoint() {
         var newControlPoint = VisionConeControlPoints.controlPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
 
-        patrollingCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
-        StartCoroutine(patrollingCoroutine);
+        currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
+        StartCoroutine(currentCoroutine);
     }
 
     IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds) {
+        visionConeState = VisionConeState.Patrolling;
+
         float elapsedTime = 0f;
         float startFieldOfView = FieldOfView;
         Vector3 startLookatTarget = CurrentLookatTarget;
@@ -81,7 +75,16 @@ public class VisionCone : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        SetNextControlPoint();
+
+        visionConeState = VisionConeState.Idle;
+        IterateControlPointIndex();
+    }
+    
+    void IterateControlPointIndex() {
+        // Currently supports one or two Control Points.
+        if (VisionConeControlPoints.controlPoints.Count == 2) {
+            controlPointIndex = 1 - controlPointIndex;
+        }
     }
 
     IEnumerator FollowPlayer(Transform player) {
@@ -96,31 +99,18 @@ public class VisionCone : MonoBehaviour
     }
 
     public void SetPlayerAsTarget(Transform player) {
-        StopCoroutine(patrollingCoroutine);
-        followPlayerCoroutine = FollowPlayer(player);
-        StartCoroutine(followPlayerCoroutine);
+        StopCoroutine(currentCoroutine);
+        currentCoroutine = FollowPlayer(player);
+        visionConeState = VisionConeState.FollowingPlayer;
+        StartCoroutine(currentCoroutine);
     }
 
     public void ResetToPatrolling() {
-        StopCoroutine(followPlayerCoroutine);
-        StartCoroutine(patrollingCoroutine);
+        StopCoroutine(currentCoroutine);
+        visionConeState = VisionConeState.Idle;
     }
 
-    public void SetSpotState(DetectorState newDetectorState, float lerp = 0f) {
-        switch (newDetectorState) {
-            case DetectorState.Idle:
-                spotLight.color = Color.LerpUnclamped(kSpotLightGreen, kSpotLightOrange, lerp);
-                break;
-            case DetectorState.Searching:
-                spotLight.color = Color.LerpUnclamped(kSpotLightOrange, kSpotLightRed, lerp);
-                break;
-            case DetectorState.Alarmed:
-                spotLight.color = kSpotLightRed;
-                break;
-            case DetectorState.Distracted:
-                spotLight.color = kSpotLightBlue;
-                break;
-        }
-
+    public void SetSpotState(DetectorState newDetectorState, float lerpDuration = 0f) {
+        coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
     }
 }
