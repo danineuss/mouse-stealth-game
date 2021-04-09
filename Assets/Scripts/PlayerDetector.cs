@@ -44,6 +44,9 @@ public class PlayerDetector : MonoBehaviour
 
     void DetectPlayer() {        
         if (PlayerOutsideVisibleCone()) {
+            if (playerVisible) {
+                visionCone.ResetToPatrolling();
+            }
             playerVisible = false;
             return;
         } 
@@ -56,10 +59,15 @@ public class PlayerDetector : MonoBehaviour
         );
 
         if (playerObstructed) {
+            if (playerVisible) {
+                visionCone.ResetToPatrolling();
+            }
             playerVisible = false;
-        } else {
-            playerVisible = true;
-        }
+            return;
+        } 
+        
+        playerVisible = true;
+        visionCone.SetPlayerAsTarget(Player);
     }
 
     bool PlayerOutsideVisibleCone() {

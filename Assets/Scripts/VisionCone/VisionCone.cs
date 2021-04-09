@@ -18,6 +18,8 @@ public class VisionCone : MonoBehaviour
     public float FieldOfView { get; private set; }
     public float Range { get; private set; }
     
+    private IEnumerator patrollingCoroutine;
+    private IEnumerator followPlayerCoroutine;
     private int controlPointIndex = 0;
     private VisionConeControlPoint targetControlPoint;
     private float kConeRangeMultiplier = 1.5f;
@@ -63,8 +65,8 @@ public class VisionCone : MonoBehaviour
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
 
-        IEnumerator lerpLookatTarget = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
-        StartCoroutine(lerpLookatTarget);
+        patrollingCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
+        StartCoroutine(patrollingCoroutine);
     }
 
     IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds) {
@@ -79,6 +81,24 @@ public class VisionCone : MonoBehaviour
             yield return null;
         }
         SetNextControlPoint();
+    }
+
+    IEnumerator FollowPlayer(Transform player) {
+        while (true) {
+            CurrentLookatTarget = player.position;
+            yield return null;
+        }
+    }
+
+    public void SetPlayerAsTarget(Transform player) {
+        StopCoroutine(patrollingCoroutine);
+        followPlayerCoroutine = FollowPlayer(player);
+        StartCoroutine(followPlayerCoroutine);
+    }
+
+    public void ResetToPatrolling() {
+        StopCoroutine(followPlayerCoroutine);
+        StartCoroutine(patrollingCoroutine);
     }
 
     public void SetSpotState(DetectorState newDetectorState, float lerp = 0f) {
