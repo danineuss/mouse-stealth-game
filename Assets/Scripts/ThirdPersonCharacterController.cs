@@ -6,7 +6,7 @@ public class ThirdPersonCharacterController : MonoBehaviour {
     public IPlayerMovementRestictable currentRestictable = null;
 
     void Update() {
-        PlayerMovement();
+        MovementInput();
     }
 
     void LateUpdate() {
@@ -22,7 +22,7 @@ public class ThirdPersonCharacterController : MonoBehaviour {
         currentRestictable = restictable;
     }
 
-    void PlayerMovement() {
+    void MovementInput() {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
