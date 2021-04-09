@@ -17,12 +17,13 @@ public class VisionCone : MonoBehaviour
     public Vector3 CurrentLookatTarget { get; private set; }
     public float FieldOfView { get; private set; }
     public float Range { get; private set; }
-    
+ 
     private IEnumerator patrollingCoroutine;
     private IEnumerator followPlayerCoroutine;
     private int controlPointIndex = 0;
     private VisionConeControlPoint targetControlPoint;
     private float kConeRangeMultiplier = 1.5f;
+    private float kFollowPlayerClampValue = 0.1f;
 
     void Start()
     {
@@ -74,9 +75,9 @@ public class VisionCone : MonoBehaviour
         float startFieldOfView = FieldOfView;
         Vector3 startLookatTarget = CurrentLookatTarget;
         while (elapsedTime < durationSeconds) {
-            var t = elapsedTime / durationSeconds;
-            FieldOfView = Mathf.Lerp(startFieldOfView, newFieldOfView, t);
-            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, newLookatTarget, t);
+            FieldOfView = Mathf.Lerp(startFieldOfView, newFieldOfView, elapsedTime / durationSeconds);
+            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, newLookatTarget, 
+                                                elapsedTime / durationSeconds);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -85,7 +86,11 @@ public class VisionCone : MonoBehaviour
 
     IEnumerator FollowPlayer(Transform player) {
         while (true) {
-            CurrentLookatTarget = player.position;
+            var deltaVector = player.position - CurrentLookatTarget;
+            if (deltaVector.magnitude > kFollowPlayerClampValue) {
+                deltaVector *= kFollowPlayerClampValue / deltaVector.magnitude;
+            }
+            CurrentLookatTarget += deltaVector;
             yield return null;
         }
     }
