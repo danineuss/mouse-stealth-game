@@ -6,21 +6,28 @@ using UnityEngine;
 public class UICoordinator : MonoBehaviour
 {
     private GameObject failedScreen;
+    private GameObject pausedScreen;
 
     void Start() {
+        InitializeScreens();
+    }
+
+    void InitializeScreens() {
         failedScreen = GetComponentsInChildren<Transform>()
                         .Where(x => x.CompareTag("FailedScreen"))
                         .First()
                         .gameObject;
+        pausedScreen = GetComponentsInChildren<Transform>()
+                        .Where(x => x.CompareTag("PausedScreen"))
+                        .First()
+                        .gameObject;
+
         failedScreen.SetActive(false);
+        pausedScreen.SetActive(false);
     }
 
-    public void HideGamePaused() {
-        
-    }
-
-    public void ShowGamePaused() {
-
+    public void ShowGamePaused(bool paused) {
+        pausedScreen.SetActive(paused);
     }
 
     public void ShowGameFailed() {

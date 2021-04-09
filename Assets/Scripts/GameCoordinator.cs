@@ -15,6 +15,11 @@ public class GameCoordinator : MonoBehaviour
     public UICoordinator UICoordinator;
 
     private GameState gameState = GameState.Idle;
+    private float timeSinceLastPause;
+
+    void Start() {
+        timeSinceLastPause = Time.time;
+    }
 
     void Update()
     {
@@ -27,24 +32,41 @@ public class GameCoordinator : MonoBehaviour
         foreach (var playerDetector in PlayerDetectors) {
             if (playerDetector.CurrentDetectorState.Equals(DetectorState.Alarmed)) {
                 gameState = GameState.Failed;
-                Time.timeScale = 0.0f;
+                Time.timeScale = 0f;
                 return;
             }
         }
     }
 
     void CheckGamePaused() {
+        if (gameState == GameState.Failed || Time.unscaledTime - timeSinceLastPause < 0.2f) { 
+            return; 
+        }
 
+        if (Input.GetKey(KeyCode.Escape)) {
+            timeSinceLastPause = Time.unscaledTime;
+            ToggleGamePaused();
+        }
+    }
+
+    void ToggleGamePaused() {
+        if (gameState == GameState.Idle) {
+            gameState = GameState.Paused;
+            Time.timeScale = 0f;
+        } else {
+            gameState = GameState.Idle;
+            Time.timeScale = 1f;
+        }
     }
 
     void UpdateUI() {
         switch (gameState)
         {
             case GameState.Idle:
-                UICoordinator.HideGamePaused();
+                UICoordinator.ShowGamePaused(false);
                 break;
             case GameState.Paused:
-                UICoordinator.ShowGamePaused();
+                UICoordinator.ShowGamePaused(true);
                 break;
             case GameState.Failed:
                 UICoordinator.ShowGameFailed();
