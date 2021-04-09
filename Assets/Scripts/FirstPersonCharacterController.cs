@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class ThirdPersonCharacterController : MonoBehaviour {
+public class FirstPersonCharacterController : MonoBehaviour {
     public float speed;
     public IPlayerMovementRestictable currentRestictable = null;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UICoordinator : MonoBehaviour
 {
+    public GameCoordinator GameCoordinator;
     private GameObject failedScreen;
     private GameObject pausedScreen;
 
@@ -32,5 +33,9 @@ public class UICoordinator : MonoBehaviour
 
     public void ShowGameFailed() {
         failedScreen.SetActive(true);
+    }
+
+    public void SendRestartGameCommand() {
+        GameCoordinator.RestartGame();
     }
 }

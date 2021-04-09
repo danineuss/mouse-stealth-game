@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState {
     Idle,
@@ -13,12 +14,15 @@ public class GameCoordinator : MonoBehaviour
 {
     public List<PlayerDetector> PlayerDetectors;
     public UICoordinator UICoordinator;
+    public FirstPersonCameraController FirstPersonCameraController;
 
-    private GameState gameState = GameState.Idle;
+    private GameState gameState;
     private float timeSinceLastPause;
 
     void Start() {
+        gameState = GameState.Idle;
         timeSinceLastPause = Time.time;
+        Time.timeScale = 1f;
     }
 
     void Update()
@@ -32,7 +36,7 @@ public class GameCoordinator : MonoBehaviour
         foreach (var playerDetector in PlayerDetectors) {
             if (playerDetector.CurrentDetectorState.Equals(DetectorState.Alarmed)) {
                 gameState = GameState.Failed;
-                Time.timeScale = 0f;
+                ToggleGamePaused();
                 return;
             }
         }
@@ -45,17 +49,18 @@ public class GameCoordinator : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
+            gameState = (gameState == GameState.Idle) ? GameState.Paused : GameState.Idle;
             ToggleGamePaused();
         }
     }
 
     void ToggleGamePaused() {
         if (gameState == GameState.Idle) {
-            gameState = GameState.Paused;
-            Time.timeScale = 0f;
-        } else {
-            gameState = GameState.Idle;
             Time.timeScale = 1f;
+            FirstPersonCameraController.ToggleCursorLocked(true);
+        } else {
+            Time.timeScale = 0f;
+            FirstPersonCameraController.ToggleCursorLocked(false);
         }
     }
 
@@ -74,5 +79,9 @@ public class GameCoordinator : MonoBehaviour
             default:
                 throw new InvalidOperationException("Switch case not exhaustive, code shoud not reach here.");
         }
+    }
+
+    public void RestartGame() {
+        SceneManager.LoadScene("Test Scene");
     }
 }

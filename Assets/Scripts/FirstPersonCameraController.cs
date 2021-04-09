@@ -11,13 +11,17 @@ public class FirstPersonCameraController : MonoBehaviour
 
     void Start() 
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        ToggleCursorLocked(true);
     }
 
     void LateUpdate() 
     {
         CameraControl();
+    }
+
+    public void ToggleCursorLocked(bool locked) {
+        Cursor.visible = !locked;
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     void CameraControl() 
