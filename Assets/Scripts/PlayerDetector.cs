@@ -23,7 +23,7 @@ public class PlayerDetector : MonoBehaviour
 
     void Start()
     {
-        visionCone = GetComponentInChildren<VisionCone>();
+        visionCone = GetComponent<VisionCone>();
         CurrentDetectorState = DetectorState.Idle;
 
         IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectionDelay);
@@ -40,6 +40,10 @@ public class PlayerDetector : MonoBehaviour
             yield return new WaitForSeconds(seconds);
             DetectPlayer();
         }
+    }
+
+    public void SetStateDistracted() {
+        
     }
 
     void DetectPlayer() {        

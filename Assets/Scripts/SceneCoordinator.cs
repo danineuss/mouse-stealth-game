@@ -1,26 +1,26 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameState {
+public enum SceneState {
     Idle,
     Paused,
     Failed
 }
 
-public class GameCoordinator : MonoBehaviour
+public class SceneCoordinator : MonoBehaviour
 {
     public List<PlayerDetector> PlayerDetectors;
     public UICoordinator UICoordinator;
     public FirstPersonCameraController FirstPersonCameraController;
 
-    private GameState gameState;
+    private SceneState sceneState;
     private float timeSinceLastPause;
 
     void Start() {
-        gameState = GameState.Idle;
+        sceneState = SceneState.Idle;
         timeSinceLastPause = Time.time;
         Time.timeScale = 1f;
     }
@@ -35,7 +35,7 @@ public class GameCoordinator : MonoBehaviour
     void CheckPlayerDetection() {
         foreach (var playerDetector in PlayerDetectors) {
             if (playerDetector.CurrentDetectorState.Equals(DetectorState.Alarmed)) {
-                gameState = GameState.Failed;
+                sceneState = SceneState.Failed;
                 ToggleGamePaused();
                 return;
             }
@@ -43,19 +43,19 @@ public class GameCoordinator : MonoBehaviour
     }
 
     void CheckGamePaused() {
-        if (gameState == GameState.Failed || Time.unscaledTime - timeSinceLastPause < 0.2f) { 
+        if (sceneState == SceneState.Failed || Time.unscaledTime - timeSinceLastPause < 0.2f) { 
             return; 
         }
 
         if (Input.GetKey(KeyCode.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
-            gameState = (gameState == GameState.Idle) ? GameState.Paused : GameState.Idle;
+            sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ToggleGamePaused();
         }
     }
 
     void ToggleGamePaused() {
-        if (gameState == GameState.Idle) {
+        if (sceneState == SceneState.Idle) {
             Time.timeScale = 1f;
             FirstPersonCameraController.ToggleCursorLocked(true);
         } else {
@@ -65,15 +65,15 @@ public class GameCoordinator : MonoBehaviour
     }
 
     void UpdateUI() {
-        switch (gameState)
+        switch (sceneState)
         {
-            case GameState.Idle:
+            case SceneState.Idle:
                 UICoordinator.ShowGamePaused(false);
                 break;
-            case GameState.Paused:
+            case SceneState.Paused:
                 UICoordinator.ShowGamePaused(true);
                 break;
-            case GameState.Failed:
+            case SceneState.Failed:
                 UICoordinator.ShowGameFailed();
                 break;
             default:

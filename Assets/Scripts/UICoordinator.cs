@@ -1,11 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class UICoordinator : MonoBehaviour
 {
-    public GameCoordinator GameCoordinator;
+    public SceneCoordinator sceneCoordinator;
     private GameObject failedScreen;
     private GameObject pausedScreen;
 
@@ -36,6 +36,6 @@ public class UICoordinator : MonoBehaviour
     }
 
     public void SendRestartGameCommand() {
-        GameCoordinator.RestartGame();
+        sceneCoordinator.RestartGame();
     }
 }
