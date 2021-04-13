@@ -838,7 +838,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aec2e54c1825d349afb53c268a69724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetDetector: {fileID: 0}
+--- !u!114 &610367819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610367813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e752a0019216d594884fe64fa1da278d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyEvents: {fileID: 1263987195}
 --- !u!1 &624155649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2218,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SittingManLarge
+      objectReference: {fileID: 0}
+    - target: {fileID: 8477133248410741364, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fde4828e151ba04a8a18f878f2cf362, type: 3}

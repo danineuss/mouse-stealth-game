@@ -17,7 +17,7 @@ public class EnemyIO : MonoBehaviour
     }
 
     void OnMouseEnter() {
-        enemyVM.EnemyEvents.CursorEnterEnemy();
+        enemyVM.EnemyEvents.CursorEnterEnemy(enemyVM);
     }
 
     void OnMouseExit() {

@@ -6,17 +6,17 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyEvents : MonoBehaviour
 {
-    public event Action OnCursorEnterEnemy;
+    public event Action<EnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
 
-    public void CursorEnterEnemy(EnemyVM enemy = null) {
+    public void CursorEnterEnemy(EnemyVM enemyVM = null) {
         if (OnCursorEnterEnemy == null) {
             return;
         }
-        OnCursorEnterEnemy();
+        OnCursorEnterEnemy(enemyVM);
     }
     
-    public void CursorExitEnemy(EnemyVM enemy = null) {
+    public void CursorExitEnemy() {
         if (OnCurserExitEnemy == null) {
             return;
         }

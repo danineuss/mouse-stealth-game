@@ -23,7 +23,7 @@ public class EnemyVM : MonoBehaviour
         EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
     }
     
-    private void OnCursorEnterEnemy() {
+    private void OnCursorEnterEnemy(EnemyVM enemyVM) {
         enemyIO.ToggleDisplayVisibility(true);
     }
 
