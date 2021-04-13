@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 
 public class RailPlayerRestriction : MonoBehaviour, IPlayerMovementRestictable {
     private Collider railCollider;    
-    void Start()
-    {
+    void Start() {
         railCollider = GetComponent<Collider>();
-        Assert.IsNotNull(railCollider);
     }
     
     public Vector3 RestrictPlayerMovement (Vector3 PlayerPosition) {        
