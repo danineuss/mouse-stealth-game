@@ -14,6 +14,12 @@ public class PlayerVM : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F)) {
+            if (targetEnemy == null) {
+                return;
+            }
+            targetEnemy.GetDistracted();
+        }
     }
 
     void OnCursorEnterEnemy(EnemyVM enemyVM) {

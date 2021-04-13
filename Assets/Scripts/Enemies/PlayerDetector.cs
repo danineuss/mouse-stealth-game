@@ -20,6 +20,25 @@ public class PlayerDetector : MonoBehaviour
     private bool playerVisible;
     private float detectionEscalationMeter = 0f;
     private float kDetectionDelay = 0.1f;
+    private float kDistractionDuration = 5f;
+    private float timeOfLastDistraction = 0f;
+
+    public void SetStateDistracted() {
+        CurrentDetectorState = DetectorState.Distracted;
+        visionCone.SetStateDistracted(true);    
+
+        timeOfLastDistraction = Time.time;
+        StartCoroutine(ResetDistraction());
+    }
+
+    IEnumerator ResetDistraction() {
+        while (Time.time - timeOfLastDistraction < kDistractionDuration) {
+            yield return null;
+        }
+
+        CurrentDetectorState = DetectorState.Idle;
+        visionCone.SetStateDistracted(false);
+    }
 
     void Start()
     {
@@ -42,11 +61,11 @@ public class PlayerDetector : MonoBehaviour
         }
     }
 
-    public void SetStateDistracted() {
-        
-    }
+    void DetectPlayer() {    
+        if (CurrentDetectorState == DetectorState.Distracted) {
+            return;
+        }
 
-    void DetectPlayer() {        
         if (PlayerOutsideVisibleCone()) {
             if (playerVisible) {
                 visionCone.ResetToPatrolling();
@@ -82,6 +101,14 @@ public class PlayerDetector : MonoBehaviour
     }
 
     void SetDetectionState() {
+        if (CurrentDetectorState != DetectorState.Distracted) {
+            SetDetectionEscalationMeter();
+        }
+        
+        visionCone.SetSpotState(CurrentDetectorState, detectionEscalationMeter);
+    }
+
+    void SetDetectionEscalationMeter() {
         if (playerVisible) {
             detectionEscalationMeter += Time.deltaTime * kDetectionEscalationSpeed;
         } else {
@@ -97,7 +124,6 @@ public class PlayerDetector : MonoBehaviour
         }
         
         detectionEscalationMeter = Mathf.Clamp(detectionEscalationMeter, 0f, 1f);
-        visionCone.SetSpotState(CurrentDetectorState, detectionEscalationMeter);
     }
 
     void EscelateDetection() {

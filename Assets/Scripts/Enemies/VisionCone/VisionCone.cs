@@ -6,12 +6,13 @@ using UnityEngine;
 public enum VisionConeState {
     Idle,
     Patrolling,
-    FollowingPlayer
+    FollowingPlayer,
+    Distracted
 }
 
 public class VisionCone : MonoBehaviour
 {
-    [SerializeField] private VisionConeControlPoints VisionConeControlPoints;
+    [SerializeField] private VisionConeControlPoints ControlPoints;
     [SerializeField] private float VisionConePeriod = 5f;
 
     public Vector3 CurrentLookatTarget { get; private set; }
@@ -28,6 +29,34 @@ public class VisionCone : MonoBehaviour
     private VisionConeState visionConeState;
     private float kFollowPlayerClampValue = 0.1f;
 
+    public void SetPlayerAsTarget(Transform player) {
+        StopCoroutine(currentCoroutine);
+        currentCoroutine = FollowPlayer(player);
+        visionConeState = VisionConeState.FollowingPlayer;
+        StartCoroutine(currentCoroutine);
+    }
+
+    public void SetStateDistracted(bool distracted) {
+        if (!distracted) {
+            visionConeState = VisionConeState.Idle;
+            return;
+        }
+        
+        StopCoroutine(currentCoroutine);
+        currentCoroutine = ObserveDistraction();
+        visionConeState = VisionConeState.Distracted;
+        StartCoroutine(currentCoroutine);
+    }
+
+    public void ResetToPatrolling() {
+        StopCoroutine(currentCoroutine);
+        visionConeState = VisionConeState.Idle;
+    }
+
+    public void SetSpotState(DetectorState newDetectorState, float lerpDuration = 0f) {
+        coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
+    }
+
     void Start()
     {
         InitializeCone();        
@@ -35,7 +64,7 @@ public class VisionCone : MonoBehaviour
     }
 
     void InitializeCone() {
-        var currentControlPoint = VisionConeControlPoints.patrolPoints[controlPointIndex];
+        var currentControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         CurrentLookatTarget = currentControlPoint.transform.position;
         FieldOfView = currentControlPoint.FieldOfView;
 
@@ -54,7 +83,7 @@ public class VisionCone : MonoBehaviour
     }
 
     void MoveTowardsNextControlPoint() {
-        var newControlPoint = VisionConeControlPoints.patrolPoints[controlPointIndex];
+        var newControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
 
@@ -82,7 +111,7 @@ public class VisionCone : MonoBehaviour
     
     void IterateControlPointIndex() {
         // Currently supports one or two Control Points.
-        if (VisionConeControlPoints.patrolPoints.Count == 2) {
+        if (ControlPoints.patrolPoints.Count == 2) {
             controlPointIndex = 1 - controlPointIndex;
         }
     }
@@ -98,19 +127,21 @@ public class VisionCone : MonoBehaviour
         }
     }
 
-    public void SetPlayerAsTarget(Transform player) {
-        StopCoroutine(currentCoroutine);
-        currentCoroutine = FollowPlayer(player);
-        visionConeState = VisionConeState.FollowingPlayer;
-        StartCoroutine(currentCoroutine);
-    }
+    IEnumerator ObserveDistraction() {
+        float elapsedTime = 0f;
+        float lerpDuration = 1f;
+        float startFieldOfView = FieldOfView;
+        Vector3 startLookatTarget = CurrentLookatTarget;
 
-    public void ResetToPatrolling() {
-        StopCoroutine(currentCoroutine);
-        visionConeState = VisionConeState.Idle;
-    }
-
-    public void SetSpotState(DetectorState newDetectorState, float lerpDuration = 0f) {
-        coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
+        while (elapsedTime < lerpDuration) {
+            FieldOfView = Mathf.Lerp(startFieldOfView, ControlPoints.distractPoint.FieldOfView, 
+                                        elapsedTime / lerpDuration);
+            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, ControlPoints.distractPoint.Position, 
+                                                elapsedTime / lerpDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        yield return null;
     }
 }

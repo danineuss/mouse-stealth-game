@@ -15,12 +15,19 @@ public class EnemyVM : MonoBehaviour
     }
     
     private EnemyIO enemyIO;
+    private PlayerDetector playerDetector;
     
     void Start()
     {
         enemyIO = GetComponentInChildren<EnemyIO>();
+        playerDetector = GetComponentInChildren<PlayerDetector>();
+
         EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+    }
+
+    public void GetDistracted() {
+        playerDetector.SetStateDistracted();
     }
     
     private void OnCursorEnterEnemy(EnemyVM enemyVM) {
