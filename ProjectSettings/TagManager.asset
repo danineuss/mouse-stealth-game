@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FailedScreen
   - PausedScreen
+  - InteractiveUI
   layers:
   - Default
   - TransparentFX
