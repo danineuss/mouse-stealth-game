@@ -35,7 +35,7 @@ public class VisionCone : MonoBehaviour
     }
 
     void InitializeCone() {
-        var currentControlPoint = VisionConeControlPoints.controlPoints[controlPointIndex];
+        var currentControlPoint = VisionConeControlPoints.patrolPoints[controlPointIndex];
         CurrentLookatTarget = currentControlPoint.transform.position;
         FieldOfView = currentControlPoint.FieldOfView;
 
@@ -54,7 +54,7 @@ public class VisionCone : MonoBehaviour
     }
 
     void MoveTowardsNextControlPoint() {
-        var newControlPoint = VisionConeControlPoints.controlPoints[controlPointIndex];
+        var newControlPoint = VisionConeControlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
 
@@ -82,7 +82,7 @@ public class VisionCone : MonoBehaviour
     
     void IterateControlPointIndex() {
         // Currently supports one or two Control Points.
-        if (VisionConeControlPoints.controlPoints.Count == 2) {
+        if (VisionConeControlPoints.patrolPoints.Count == 2) {
             controlPointIndex = 1 - controlPointIndex;
         }
     }

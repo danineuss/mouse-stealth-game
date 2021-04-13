@@ -776,6 +776,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499581555}
   m_CullTransparentMesh: 0
+--- !u!1 &501924644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 501924645}
+  - component: {fileID: 501924646}
+  m_Layer: 0
+  m_Name: DistractPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &501924645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501924644}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0361, y: -0.152, z: -0.0529}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 714960991}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &501924646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501924644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dba1d0365a9ff348940939a1e7c4822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldOfView: 10
 --- !u!1 &543296209
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0b1c690796c63d40838a7bf2a8be13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fieldOfView: 34.6
+  fieldOfView: 36.74
 --- !u!1 &635153995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1169,7 @@ Transform:
   m_Children:
   - {fileID: 624155650}
   - {fileID: 543296210}
+  - {fileID: 501924645}
   m_Father: {fileID: 1578682121}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1140,9 +1185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7884d92e710c29d4b921ea301d335b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlPoints:
+  patrolPoints:
   - {fileID: 624155651}
   - {fileID: 543296211}
+  distractPoint: {fileID: 501924646}
 --- !u!114 &716327739 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 480196634, guid: aefc69cb8993f004ca7e3446b73d67c4,
