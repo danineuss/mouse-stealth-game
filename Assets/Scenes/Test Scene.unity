@@ -215,6 +215,30 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51642461}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &76234347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4661630583969337526, guid: 8fde4828e151ba04a8a18f878f2cf362,
+    type: 3}
+  m_PrefabInstance: {fileID: 1311591859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &76234349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76234347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.43633655, b: 0.7830189, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &113111384
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,6 +345,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c96e555caa6cf14bb1fdd90c9bceadc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &200964492 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8771947521020579387, guid: 7b035256d4c924a4481e4e5892135f4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1024460910}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &221696129
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337425270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.025, y: 0.18716, z: 0}
+  m_LocalPosition: {x: 0, y: 0.204, z: 0}
   m_LocalScale: {x: 0.045797527, y: 0.045797527, z: 0.045797527}
   m_Children: []
   m_Father: {fileID: 880011826}
@@ -426,11 +456,11 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337425270}
-  m_Text: Distract
+  m_Text: '"F" to Distract'
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
-  m_Anchor: 0
+  m_Anchor: 4
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
@@ -1469,9 +1499,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.0971843
-  m_Height: 0.28211164
+  m_Height: 0.31823862
   m_Direction: 1
-  m_Center: {x: -0.007184315, y: 0.09000001, z: 0}
+  m_Center: {x: -0.007184315, y: 0.071936525, z: 0}
 --- !u!1 &909654289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,6 +1630,21 @@ PrefabInstance:
       propertyPath: kSpotLightBlue.b
       value: 0.8584906
       objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: coneScaleParent
+      value: 
+      objectReference: {fileID: 200964492}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: blueMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: greenMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
     - target: {fileID: 6846961827733443580, guid: 7b035256d4c924a4481e4e5892135f4b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1660,6 +1705,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vision Cone
       objectReference: {fileID: 0}
+    - target: {fileID: 7855643861133270464, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7855643861133270464, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
+    - target: {fileID: 7855643861133270464, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
     - target: {fileID: 8555367425154196634, guid: 7b035256d4c924a4481e4e5892135f4b,
         type: 3}
       propertyPath: VisionConeControlPoints
@@ -2254,6 +2314,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 59.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4661630583969337526, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: m_TagString
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 4899786783182166119, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
@@ -3186,6 +3251,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 909654290}
     m_Modifications:
+    - target: {fileID: 480196636, guid: aefc69cb8993f004ca7e3446b73d67c4, type: 3}
+      propertyPath: field of view
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 1483139749900246, guid: aefc69cb8993f004ca7e3446b73d67c4, type: 3}
       propertyPath: m_Name
       value: Rat Grey

@@ -7,6 +7,7 @@ public class EnemyIO : MonoBehaviour
 {
     private EnemyVM enemyVM;
     private GameObject textDisplay;
+    private Outline enemyOutline;
 
     void Start() {
         enemyVM = GetComponentInParent<EnemyVM>();
@@ -14,6 +15,11 @@ public class EnemyIO : MonoBehaviour
                         .First()
                         .gameObject;
         textDisplay.SetActive(false);
+        enemyOutline = enemyVM.GetComponentsInChildren<Transform>().Where(x => x.CompareTag("Model"))
+                        .First()
+                        .GetComponent<Outline>();
+                        
+        ToggleDisplayVisibility(false);
     }
 
     void OnMouseEnter() {
@@ -26,5 +32,11 @@ public class EnemyIO : MonoBehaviour
 
     public void ToggleDisplayVisibility(bool visible) {
         textDisplay.SetActive(visible);
+
+        if (visible) {
+            enemyOutline.OutlineWidth = 10;
+        } else {
+            enemyOutline.OutlineWidth = 0;
+        }
     }
 }

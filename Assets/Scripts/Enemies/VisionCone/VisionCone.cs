@@ -69,7 +69,7 @@ public class VisionCone : MonoBehaviour
         FieldOfView = currentControlPoint.FieldOfView;
 
         coneVisualizer = GetComponent<ConeVisualizer>();
-        coneVisualizer.UpdateConeVisualization(CurrentLookatTarget, FieldOfView);
+        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
         
         visionConeState = VisionConeState.Idle;
     }
@@ -79,7 +79,7 @@ public class VisionCone : MonoBehaviour
         if (visionConeState == VisionConeState.Idle) {
             MoveTowardsNextControlPoint();
         }
-        coneVisualizer.UpdateConeVisualization(CurrentLookatTarget, FieldOfView);
+        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
     }
 
     void MoveTowardsNextControlPoint() {
