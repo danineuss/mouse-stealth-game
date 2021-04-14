@@ -8,6 +8,7 @@ public class EnemyEvents : MonoBehaviour
 {
     public event Action<EnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
+    public event Action<PlayerDetector> OnDetectorChangedState;
 
     public void CursorEnterEnemy(EnemyVM enemyVM = null) {
         if (OnCursorEnterEnemy == null) {
@@ -21,5 +22,12 @@ public class EnemyEvents : MonoBehaviour
             return;
         }
         OnCurserExitEnemy();
+    }
+
+    public void DetectorChangedState(PlayerDetector playerDetector) {
+        if (OnDetectorChangedState == null) {
+            return;
+        }
+        OnDetectorChangedState(playerDetector);
     }
 }

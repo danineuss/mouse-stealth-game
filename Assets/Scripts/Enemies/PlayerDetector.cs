@@ -14,8 +14,18 @@ public class PlayerDetector : MonoBehaviour
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
     [SerializeField, Range(0.1f, 3f)] private float kDetectionEscalationSpeed = 0.1f;
-    public DetectorState DetectorState { get; private set; }
+    public DetectorState DetectorState { 
+        get {
+            return detectorState;
+        } 
+        private set {
+            detectorState = value;
+            enemyEvents.DetectorChangedState(this);
+        } 
+    }
 
+    private DetectorState detectorState;
+    private EnemyEvents enemyEvents;
     private VisionCone visionCone;
     private bool playerVisible;
     private float detectionEscalationMeter = 0f;
@@ -47,6 +57,7 @@ public class PlayerDetector : MonoBehaviour
     void Start()
     {
         visionCone = GetComponent<VisionCone>();
+        enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
         DetectorState = DetectorState.Idle;
 
         IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectionDelay);

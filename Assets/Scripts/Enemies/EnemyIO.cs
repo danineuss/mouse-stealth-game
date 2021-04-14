@@ -8,18 +8,44 @@ public class EnemyIO : MonoBehaviour
     private EnemyVM enemyVM;
     private GameObject textDisplay;
     private Outline enemyOutline;
+    private Transform playerFollowTransform = null;
+    private bool interactible = true;
+
+    public void SetDisplayVisibility(bool visible) {
+        if (!interactible) {
+            return;
+        }
+
+        textDisplay.SetActive(visible);
+        enemyOutline.OutlineWidth = visible ? 10 : 0;
+    }
+
+    public void SetTextFollowingPlayer(Transform playerTransform = null) {
+        playerFollowTransform = playerTransform;
+    }
+
+    public void SetInteractible(DetectorState detectorState) {
+        var interactible = (detectorState == DetectorState.Idle) ? true : false;
+        if (!interactible) {
+            SetDisplayVisibility(false); 
+        }
+        this.interactible = interactible;  
+    }
 
     void Start() {
         enemyVM = GetComponentInParent<EnemyVM>();
         textDisplay = GetComponentsInChildren<Transform>().Where(x => x.CompareTag("InteractiveUI"))
                         .First()
                         .gameObject;
-        textDisplay.SetActive(false);
         enemyOutline = enemyVM.GetComponentsInChildren<Transform>().Where(x => x.CompareTag("Model"))
                         .First()
                         .GetComponent<Outline>();
-                        
-        ToggleDisplayVisibility(false);
+
+        SetDisplayVisibility(false);
+    }
+
+    void Update() {
+        UpdateTextOrientation();
     }
 
     void OnMouseEnter() {
@@ -30,13 +56,11 @@ public class EnemyIO : MonoBehaviour
         enemyVM.EnemyEvents.CursorExitEnemy();
     }
 
-    public void ToggleDisplayVisibility(bool visible) {
-        textDisplay.SetActive(visible);
-
-        if (visible) {
-            enemyOutline.OutlineWidth = 10;
-        } else {
-            enemyOutline.OutlineWidth = 0;
+    void UpdateTextOrientation() {
+        if (playerFollowTransform == null) {
+            return;
         }
+
+        transform.LookAt(playerFollowTransform);
     }
 }

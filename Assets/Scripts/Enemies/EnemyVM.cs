@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyVM : MonoBehaviour
 {
+    [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private EnemyEvents enemyEvents;
     public EnemyEvents EnemyEvents { 
         get {
@@ -22,19 +23,40 @@ public class EnemyVM : MonoBehaviour
         enemyIO = GetComponentInChildren<EnemyIO>();
         playerDetector = GetComponentInChildren<PlayerDetector>();
 
-        EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnDetectorChangedState += OnDetectorChangeState;
+
+        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
+        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
     }
 
     public void GetDistracted() {
         playerDetector.SetStateDistracted();
+        enemyIO.SetInteractible(DetectorState.Distracted);
     }
     
-    private void OnCursorEnterEnemy(EnemyVM enemyVM) {
-        enemyIO.ToggleDisplayVisibility(true);
+    void OnCursorEnterEnemy(EnemyVM enemyVM) {
+        enemyIO.SetDisplayVisibility(true);
     }
 
-    private void OnCurserExitEnemy() {
-        enemyIO.ToggleDisplayVisibility(false);
+    void OnCurserExitEnemy() {
+        enemyIO.SetDisplayVisibility(false);
+    }
+
+    void OnDetectorChangeState(PlayerDetector playerDetector) {
+        if (playerDetector != this.playerDetector) {
+            return;
+        }
+        
+        enemyIO.SetInteractible(playerDetector.DetectorState);
+    }
+
+    void OnReceivePlayerLocation(Transform playerTransform) {
+        enemyIO.SetTextFollowingPlayer(playerTransform);
+    }
+
+    void OnRemovePlayerLocation() {
+        enemyIO.SetTextFollowingPlayer(null);
     }
 }

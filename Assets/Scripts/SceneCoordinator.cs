@@ -12,14 +12,15 @@ public enum SceneState {
 
 public class SceneCoordinator : MonoBehaviour
 {
-    public List<PlayerDetector> PlayerDetectors;
     public UICoordinator UICoordinator;
     public FirstPersonCameraController FirstPersonCameraController;
+    [SerializeField] private EnemyEvents enemyEvents;
 
     private SceneState sceneState;
     private float timeSinceLastPause;
 
     void Start() {
+        enemyEvents.OnDetectorChangedState += CheckForFailedGame;
         sceneState = SceneState.Idle;
         timeSinceLastPause = Time.time;
         Time.timeScale = 1f;
@@ -27,18 +28,14 @@ public class SceneCoordinator : MonoBehaviour
 
     void Update()
     {
-        CheckPlayerDetection();
         CheckGamePaused();
         UpdateUI();
     }
 
-    void CheckPlayerDetection() {
-        foreach (var playerDetector in PlayerDetectors) {
-            if (playerDetector.DetectorState.Equals(DetectorState.Alarmed)) {
-                sceneState = SceneState.Failed;
-                ToggleGamePaused();
-                return;
-            }
+    void CheckForFailedGame(PlayerDetector playerDetector) {
+        if (playerDetector.DetectorState.Equals(DetectorState.Alarmed)) {
+            sceneState = SceneState.Failed;
+            ToggleGamePaused();
         }
     }
 

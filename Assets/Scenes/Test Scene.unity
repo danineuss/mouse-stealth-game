@@ -415,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5c50d360ff9ef46854a80defc239b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerEvents: {fileID: 1263987196}
   enemyEvents: {fileID: 1263987195}
 --- !u!1 &337425270
 GameObject:
@@ -441,13 +442,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337425270}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0.204, z: 0}
   m_LocalScale: {x: 0.045797527, y: 0.045797527, z: 0.045797527}
   m_Children: []
   m_Father: {fileID: 880011826}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!102 &337425272
 TextMesh:
   serializedVersion: 3
@@ -461,7 +462,7 @@ TextMesh:
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
-  m_Alignment: 0
+  m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 0
   m_FontStyle: 0
@@ -925,6 +926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyEvents: {fileID: 1263987195}
+  playerEvents: {fileID: 1263987196}
 --- !u!1 &624155649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,6 +2110,7 @@ GameObject:
   - component: {fileID: 1263987193}
   - component: {fileID: 1263987192}
   - component: {fileID: 1263987195}
+  - component: {fileID: 1263987196}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2173,6 +2176,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55047b1029ff27341aa68c44ad97982b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1263987196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263987191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f855c589ff34464abeb611e020d1d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1280488376

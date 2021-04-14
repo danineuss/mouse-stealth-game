@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerVM : MonoBehaviour
 {
     [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private PlayerEvents playerEvents;
     private EnemyVM targetEnemy = null;
     void Start()
     {
@@ -14,19 +15,26 @@ public class PlayerVM : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) {
-            if (targetEnemy == null) {
-                return;
-            }
-            targetEnemy.GetDistracted();
-        }
+        CheckPlayerInput();
     }
 
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
         targetEnemy = enemyVM;
+        playerEvents.SendPlayerLocation(transform);
     }
 
     void OnCurserExitEnemy() {
         targetEnemy = null;
+        playerEvents.RemovePlayerLocation();
+    }
+
+    void CheckPlayerInput() {      
+        if (targetEnemy == null) {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            targetEnemy.GetDistracted();
+        }
     }
 }
