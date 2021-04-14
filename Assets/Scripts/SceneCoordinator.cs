@@ -34,7 +34,7 @@ public class SceneCoordinator : MonoBehaviour
 
     void CheckPlayerDetection() {
         foreach (var playerDetector in PlayerDetectors) {
-            if (playerDetector.CurrentDetectorState.Equals(DetectorState.Alarmed)) {
+            if (playerDetector.DetectorState.Equals(DetectorState.Alarmed)) {
                 sceneState = SceneState.Failed;
                 ToggleGamePaused();
                 return;

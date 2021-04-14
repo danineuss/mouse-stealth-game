@@ -576,7 +576,7 @@ MonoBehaviour:
   ObstacleMask:
     serializedVersion: 2
     m_Bits: 512
-  kDetectionEscalationSpeed: 1
+  kDetectionEscalationSpeed: 0.5
 --- !u!1 &498696519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,6 +1555,51 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1578682121}
     m_Modifications:
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightOrange.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightOrange.g
+      value: 0.65156436
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightOrange.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightRed.r
+      value: 0.6886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightRed.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightRed.b
+      value: 0.03605633
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightBlue.r
+      value: 0.008098987
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightBlue.g
+      value: 0.11940706
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223248139054407913, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: kSpotLightBlue.b
+      value: 0.8584906
+      objectReference: {fileID: 0}
     - target: {fileID: 6846961827733443580, guid: 7b035256d4c924a4481e4e5892135f4b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1618,6 +1663,11 @@ PrefabInstance:
     - target: {fileID: 8555367425154196634, guid: 7b035256d4c924a4481e4e5892135f4b,
         type: 3}
       propertyPath: VisionConeControlPoints
+      value: 
+      objectReference: {fileID: 714960992}
+    - target: {fileID: 8555367425154196634, guid: 7b035256d4c924a4481e4e5892135f4b,
+        type: 3}
+      propertyPath: ControlPoints
       value: 
       objectReference: {fileID: 714960992}
     m_RemovedComponents: []

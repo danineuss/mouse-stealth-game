@@ -13,8 +13,8 @@ public class PlayerDetector : MonoBehaviour
 {
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
-    [SerializeField, Range(0.25f, 3f)] private float kDetectionEscalationSpeed = 1f;
-    public DetectorState CurrentDetectorState { get; private set; }
+    [SerializeField, Range(0.1f, 3f)] private float kDetectionEscalationSpeed = 0.1f;
+    public DetectorState DetectorState { get; private set; }
 
     private VisionCone visionCone;
     private bool playerVisible;
@@ -24,7 +24,11 @@ public class PlayerDetector : MonoBehaviour
     private float timeOfLastDistraction = 0f;
 
     public void SetStateDistracted() {
-        CurrentDetectorState = DetectorState.Distracted;
+        if (DetectorState == DetectorState.Searching) {
+            return;
+        }
+        
+        DetectorState = DetectorState.Distracted;
         visionCone.SetStateDistracted(true);    
 
         timeOfLastDistraction = Time.time;
@@ -36,14 +40,14 @@ public class PlayerDetector : MonoBehaviour
             yield return null;
         }
 
-        CurrentDetectorState = DetectorState.Idle;
+        DetectorState = DetectorState.Idle;
         visionCone.SetStateDistracted(false);
     }
 
     void Start()
     {
         visionCone = GetComponent<VisionCone>();
-        CurrentDetectorState = DetectorState.Idle;
+        DetectorState = DetectorState.Idle;
 
         IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectionDelay);
         StartCoroutine(detectPlayerCoroutine);
@@ -62,7 +66,7 @@ public class PlayerDetector : MonoBehaviour
     }
 
     void DetectPlayer() {    
-        if (CurrentDetectorState == DetectorState.Distracted) {
+        if (DetectorState == DetectorState.Distracted) {
             return;
         }
 
@@ -101,11 +105,15 @@ public class PlayerDetector : MonoBehaviour
     }
 
     void SetDetectionState() {
-        if (CurrentDetectorState != DetectorState.Distracted) {
+        if (DetectorState == DetectorState.Idle && playerVisible) {
+            DetectorState = DetectorState.Searching;
+        }
+
+        if (DetectorState != DetectorState.Distracted) {
             SetDetectionEscalationMeter();
         }
         
-        visionCone.SetSpotState(CurrentDetectorState, detectionEscalationMeter);
+        visionCone.SetSpotState(DetectorState, detectionEscalationMeter);
     }
 
     void SetDetectionEscalationMeter() {
@@ -127,20 +135,15 @@ public class PlayerDetector : MonoBehaviour
     }
 
     void EscelateDetection() {
-        switch (CurrentDetectorState) {
-            case DetectorState.Idle:
-                CurrentDetectorState = DetectorState.Searching;
-                break;
-            case DetectorState.Searching:
-                CurrentDetectorState = DetectorState.Alarmed;
-                break;
+        if (DetectorState == DetectorState.Searching) {
+            DetectorState = DetectorState.Alarmed;
         }
         detectionEscalationMeter = 0f;
     }
 
     void DeescalateDetection() {
-        if (CurrentDetectorState == DetectorState.Searching && !playerVisible) { 
-            CurrentDetectorState = DetectorState.Idle;
+        if (DetectorState == DetectorState.Searching && !playerVisible) { 
+            DetectorState = DetectorState.Idle;
         }
     }
 }

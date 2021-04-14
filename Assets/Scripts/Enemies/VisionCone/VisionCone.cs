@@ -141,7 +141,5 @@ public class VisionCone : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        
-        yield return null;
     }
 }
