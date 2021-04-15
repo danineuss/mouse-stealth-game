@@ -8,6 +8,7 @@ public class PlayerEvents : MonoBehaviour
 {
     public event Action<Transform> OnSendPlayerLocation;
     public event Action OnRemovePlayerLocation;
+    public event Action<IPlayerAbility> OnAbilityExecuted;
 
     public void SendPlayerLocation(Transform playerTransform) {
         if (OnSendPlayerLocation == null) {
@@ -21,5 +22,12 @@ public class PlayerEvents : MonoBehaviour
             return;
         }
         OnRemovePlayerLocation();
+    }
+
+    public void AbilityExecuted(IPlayerAbility ability) {
+        if (OnAbilityExecuted == null) {
+            return;
+        }
+        OnAbilityExecuted(ability);
     }
 }

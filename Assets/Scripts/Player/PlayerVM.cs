@@ -6,9 +6,16 @@ public class PlayerVM : MonoBehaviour
 {
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private PlayerEvents playerEvents;
+    public PlayerEvents PlayerEvents {
+        get => playerEvents; 
+        private set => playerEvents = value;
+    }
+
     private EnemyVM targetEnemy = null;
+    private PlayerAbilities playerAbilities;
     void Start()
     {
+        playerAbilities = GetComponentInChildren<PlayerAbilities>();
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
     }
@@ -28,13 +35,11 @@ public class PlayerVM : MonoBehaviour
         playerEvents.RemovePlayerLocation();
     }
 
-    void CheckPlayerInput() {      
-        if (targetEnemy == null) {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.F)) {
-            targetEnemy.GetDistracted();
+    void CheckPlayerInput() {
+        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
+            if (Input.GetKeyDown(keyCode)) {
+                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
+            }
         }
     }
 }

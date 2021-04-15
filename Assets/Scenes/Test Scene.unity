@@ -913,6 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aec2e54c1825d349afb53c268a69724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargetDetector: {fileID: 0}
 --- !u!114 &610367819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,10 +2446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e80f0ce3ecf1083459a0f58a388d3375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerDetectors:
-  - {fileID: 485089950}
   UICoordinator: {fileID: 221696131}
   FirstPersonCameraController: {fileID: 716327739}
+  enemyEvents: {fileID: 1263987195}
 --- !u!1001 &1355377444
 PrefabInstance:
   m_ObjectHideFlags: 0
