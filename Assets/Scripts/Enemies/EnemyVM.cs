@@ -7,12 +7,8 @@ public class EnemyVM : MonoBehaviour
     [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private EnemyEvents enemyEvents;
     public EnemyEvents EnemyEvents { 
-        get {
-            return enemyEvents;
-        }
-        private set {
-            enemyEvents = value;
-        }
+        get => enemyEvents;
+        private set => enemyEvents = value;
     }
     
     private EnemyIO enemyIO;

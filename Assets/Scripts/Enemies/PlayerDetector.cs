@@ -15,9 +15,7 @@ public class PlayerDetector : MonoBehaviour
     [SerializeField] private LayerMask ObstacleMask;
     [SerializeField, Range(0.1f, 3f)] private float kDetectionEscalationSpeed = 0.1f;
     public DetectorState DetectorState { 
-        get {
-            return detectorState;
-        } 
+        get => detectorState;
         private set {
             detectorState = value;
             enemyEvents.DetectorChangedState(this);

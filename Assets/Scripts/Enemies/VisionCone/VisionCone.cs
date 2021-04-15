@@ -18,9 +18,7 @@ public class VisionCone : MonoBehaviour
     public Vector3 CurrentLookatTarget { get; private set; }
     public float FieldOfView { get; private set; }
     public float Range { 
-        get {
-            return (CurrentLookatTarget - transform.position).magnitude;
-        }
+        get => (CurrentLookatTarget - transform.position).magnitude;
     }
  
     private ConeVisualizer coneVisualizer;

@@ -5,14 +5,12 @@ using UnityEngine;
 public class VisionConeDistractPoint : MonoBehaviour, IVisionConeControlPoint {
     [SerializeField] private float fieldOfView; 
     public float FieldOfView {
-        get { return fieldOfView; }
-        private set { fieldOfView = value; }
+        get => fieldOfView;
+        private set => fieldOfView = value;
     }
 
     public Vector3 Position {
-        get { 
-            return transform.position; 
-        }
+        get => transform.position; 
     }
     
     public void OnDrawGizmos()
