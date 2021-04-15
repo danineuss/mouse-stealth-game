@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ConeVisualizer : MonoBehaviour
 {
     public float Range { get; private set; }
 
-    [SerializeField] private Transform coneScaleParent;
     [SerializeField] private Color kSpotLightGreen = new Color(0f, 183f, 18f, 1f);
     [SerializeField] private Color kSpotLightOrange = new Color(183f, 102f, 0f, 1f);
     [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
@@ -16,6 +16,7 @@ public class ConeVisualizer : MonoBehaviour
     private MeshRenderer coneMeshRenderer;
     private Light spotLight;
     private Outline coneOutline;
+    private Transform coneScaleParent;
     private float kConeRangeMultiplier = 1.5f;
 
     public void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView) {
@@ -56,5 +57,8 @@ public class ConeVisualizer : MonoBehaviour
         spotLight = GetComponentInChildren<Light>();
         coneMeshRenderer = GetComponentInChildren<MeshRenderer>();
         coneOutline = GetComponentInChildren<Outline>();
+        coneScaleParent = GetComponentsInChildren<Transform>()
+                            .Where(x => x.CompareTag("ScaleParent"))
+                            .First();
     }
 }

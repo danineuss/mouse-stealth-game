@@ -25,6 +25,7 @@ public class EnemyVM : MonoBehaviour
 
         playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
         playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
 
     public void GetDistracted() {
@@ -54,5 +55,9 @@ public class EnemyVM : MonoBehaviour
 
     void OnRemovePlayerLocation() {
         enemyIO.SetTextFollowingPlayer(null);
+    }
+
+    void OnPlayerAbilityExecuted(IPlayerAbility ability) {
+        enemyIO.UpdateCooldownForAbility(ability);
     }
 }
