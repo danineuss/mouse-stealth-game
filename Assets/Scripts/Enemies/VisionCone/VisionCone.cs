@@ -66,6 +66,7 @@ public class VisionCone : MonoBehaviour
         var currentControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         CurrentLookatTarget = currentControlPoint.transform.position;
         FieldOfView = currentControlPoint.FieldOfView;
+        IterateControlPointIndex();
 
         coneVisualizer = GetComponent<ConeVisualizer>();
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);

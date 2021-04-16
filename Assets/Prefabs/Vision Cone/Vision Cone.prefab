@@ -147,6 +147,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   kDetectionEscalationSpeed: 0.5
+  kDetectionDeescalationSpeed: 0.075
 --- !u!1 &6846961827758018529
 GameObject:
   m_ObjectHideFlags: 0

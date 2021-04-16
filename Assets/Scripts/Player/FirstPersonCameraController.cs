@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class FirstPersonCameraController : MonoBehaviour 
 {
-    // Camera setup
-    public float RotationSpeed = 1;
-    public Transform Player;
-    float mouseX, mouseY;
+    [SerializeField] private float RotationSpeed = 1;
+    [SerializeField] private Transform Player;
+    
+    private float cursorX, cursorY;
+    private float initialYRotation;
 
     void Start() 
     {
+        initialYRotation = Player.localRotation.eulerAngles.y;
         ToggleCursorLocked(true);
     }
 
@@ -26,14 +28,14 @@ public class FirstPersonCameraController : MonoBehaviour
 
     void CameraControl() 
     {
-        mouseX += Input.GetAxis("Mouse X") * RotationSpeed;
-        mouseY -= Input.GetAxis("Mouse Y") * RotationSpeed;
-        mouseY = Mathf.Clamp(mouseY, -35, 60);
+        cursorX += Input.GetAxis("Mouse X") * RotationSpeed;
+        cursorY -= Input.GetAxis("Mouse Y") * RotationSpeed;
+        cursorY = Mathf.Clamp(cursorY, -35, 60);
 
 
         if (!Input.GetKey(KeyCode.LeftShift)) {
-            Player.rotation = Quaternion.Euler(0, mouseX, 0);
+            Player.rotation = Quaternion.Euler(0, initialYRotation + cursorX, 0);
         }
-        transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+        transform.rotation = Quaternion.Euler(cursorY, initialYRotation + cursorX, 0);
     }
 }

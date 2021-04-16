@@ -27,8 +27,8 @@ public class PlayerDetector : MonoBehaviour
     private EnemyEvents enemyEvents;
     private VisionCone visionCone;
     private bool playerVisible;
-    private float detectionEscalationMeter = 0f;
-    private float kDetectPlayerRepetitionDelay = 0.1f;
+    private float detectionEscalationMeter = 0.5f;
+    private float kDetectPlayerRepetitionDelay = 0.075f;
     private float kDistractionDuration = 5f;
     private float timeOfLastDistraction = 0f;
 
@@ -138,7 +138,7 @@ public class PlayerDetector : MonoBehaviour
         if (detectionEscalationMeter >= 1f) {
             EscelateDetection();
         }
-        if (detectionEscalationMeter <= Time.deltaTime * kDetectionDeescalationSpeed) {
+        if (detectionEscalationMeter <= 0.01f) {
             DeescalateDetection();
         }
         
