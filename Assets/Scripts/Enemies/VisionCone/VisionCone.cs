@@ -28,10 +28,8 @@ public class VisionCone : MonoBehaviour
     private float kFollowPlayerClampValue = 0.1f;
 
     public void SetPlayerAsTarget(Transform player) {
-        StopCoroutine(currentCoroutine);
-        currentCoroutine = FollowPlayer(player);
         visionConeState = VisionConeState.FollowingPlayer;
-        StartCoroutine(currentCoroutine);
+        StartNewCoroutine(FollowPlayer(player));
     }
 
     public void SetStateDistracted(bool distracted) {
@@ -40,14 +38,17 @@ public class VisionCone : MonoBehaviour
             return;
         }
         
+        visionConeState = VisionConeState.Distracted;
+        StartNewCoroutine(ObserveDistraction());
         StopCoroutine(currentCoroutine);
         currentCoroutine = ObserveDistraction();
-        visionConeState = VisionConeState.Distracted;
         StartCoroutine(currentCoroutine);
     }
 
     public void ResetToPatrolling() {
-        StopCoroutine(currentCoroutine);
+        if (currentCoroutine != null) {
+            StopCoroutine(currentCoroutine);
+        }
         visionConeState = VisionConeState.Idle;
     }
 
@@ -72,8 +73,7 @@ public class VisionCone : MonoBehaviour
         visionConeState = VisionConeState.Idle;
     }
 
-    void Update()
-    {
+    void Update() {
         if (visionConeState == VisionConeState.Idle) {
             MoveTowardsNextControlPoint();
         }
@@ -106,8 +106,8 @@ public class VisionCone : MonoBehaviour
             yield return null;
         }
 
-        visionConeState = VisionConeState.Idle;
         IterateControlPointIndex();
+        visionConeState = VisionConeState.Idle;
     }
     
     // Currently supports one or two Control Points: iterate iff Count == 2, otherwise stay.
@@ -115,6 +115,14 @@ public class VisionCone : MonoBehaviour
         if (ControlPoints.patrolPoints.Count == 2) {
             controlPointIndex = 1 - controlPointIndex;
         }
+    }
+
+    void StartNewCoroutine(IEnumerator newCoroutine) {
+        if (currentCoroutine != null) {
+            StopCoroutine(currentCoroutine);
+        }
+        currentCoroutine = newCoroutine;
+        StartCoroutine(currentCoroutine);
     }
 
     IEnumerator FollowPlayer(Transform player) {

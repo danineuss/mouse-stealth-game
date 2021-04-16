@@ -13,7 +13,8 @@ public class PlayerDetector : MonoBehaviour
 {
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
-    [SerializeField, Range(0.1f, 3f)] private float kDetectionEscalationSpeed = 0.1f;
+    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
+    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
     public DetectorState DetectorState { 
         get => detectorState;
         private set {
@@ -27,7 +28,7 @@ public class PlayerDetector : MonoBehaviour
     private VisionCone visionCone;
     private bool playerVisible;
     private float detectionEscalationMeter = 0f;
-    private float kDetectionDelay = 0.1f;
+    private float kDetectPlayerRepetitionDelay = 0.1f;
     private float kDistractionDuration = 5f;
     private float timeOfLastDistraction = 0f;
 
@@ -58,7 +59,7 @@ public class PlayerDetector : MonoBehaviour
         enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
         DetectorState = DetectorState.Idle;
 
-        IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectionDelay);
+        IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectPlayerRepetitionDelay);
         StartCoroutine(detectPlayerCoroutine);
     }
 
@@ -79,11 +80,12 @@ public class PlayerDetector : MonoBehaviour
             return;
         }
 
+        bool wasPlayerPreviouslyVisible = playerVisible;
         if (PlayerOutsideVisibleCone()) {
-            if (playerVisible) {
+            playerVisible = false;
+            if (wasPlayerPreviouslyVisible) {
                 visionCone.ResetToPatrolling();
             }
-            playerVisible = false;
             return;
         } 
         
@@ -95,10 +97,10 @@ public class PlayerDetector : MonoBehaviour
         );
 
         if (playerObstructed) {
-            if (playerVisible) {
+            playerVisible = false;
+            if (wasPlayerPreviouslyVisible) {
                 visionCone.ResetToPatrolling();
             }
-            playerVisible = false;
             return;
         } 
         
@@ -129,14 +131,14 @@ public class PlayerDetector : MonoBehaviour
         if (playerVisible) {
             detectionEscalationMeter += Time.deltaTime * kDetectionEscalationSpeed;
         } else {
-            detectionEscalationMeter -= Time.deltaTime * kDetectionEscalationSpeed;
+            detectionEscalationMeter -= Time.deltaTime * kDetectionDeescalationSpeed;
         }
 
         
         if (detectionEscalationMeter >= 1f) {
             EscelateDetection();
         }
-        if (detectionEscalationMeter <= Time.deltaTime * kDetectionEscalationSpeed) {
+        if (detectionEscalationMeter <= Time.deltaTime * kDetectionDeescalationSpeed) {
             DeescalateDetection();
         }
         

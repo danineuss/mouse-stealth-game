@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2505133718151265350}
   m_Layer: 0
   m_Name: Scale Anchor
-  m_TagString: Scale Anchor
+  m_TagString: ScaleAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,10 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504e0d4b928b6fd46af233c873654569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kSpotLightGreen: {r: 0, g: 0.754717, b: 0.07507648, a: 1}
-  kSpotLightOrange: {r: 183, g: 102, b: 0, a: 1}
-  kSpotLightRed: {r: 191, g: 0, b: 10, a: 1}
-  kSpotLightBlue: {r: 0, g: 23, b: 183, a: 1}
+  kSpotLightGreen: {r: 0, g: 0.46226418, b: 0.045744855, a: 1}
+  kSpotLightOrange: {r: 0.8207547, g: 0.4631998, b: 0.0077429875, a: 1}
+  kSpotLightRed: {r: 0.764151, g: 0, b: 0.04000771, a: 1}
+  kSpotLightBlue: {r: 0, g: 0.09755037, b: 0.745283, a: 1}
   greenMaterial: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
   blueMaterial: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
   kConeRangeMultiplier: 1.5
@@ -189,10 +189,10 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0, g: 0.7169812, b: 0.07029223, a: 1}
-  m_Intensity: 500
+  m_Color: {r: 0, g: 0.6320754, b: 0.06217143, a: 1}
+  m_Intensity: 30
   m_Range: 10
-  m_SpotAngle: 53.1
+  m_SpotAngle: 66.12476
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
@@ -200,9 +200,9 @@ Light:
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
+    m_Bias: 0
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
