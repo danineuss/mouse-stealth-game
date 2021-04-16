@@ -28,7 +28,7 @@ public class ConeVisualizer : MonoBehaviour
         spotLight.range = range;
 
         var distanceToScaleAnchor = (coneScaleAnchor.position - transform.position).magnitude;
-        var newScaleZ = coneScaleParent.localScale.z + (range - distanceToScaleAnchor) / range;
+        var newScaleZ = coneScaleParent.localScale.z + 0.7f * (range - distanceToScaleAnchor) / range;
         var newScaleXY = 2 * newScaleZ * Mathf.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
         coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
     }

@@ -21,20 +21,16 @@ public class EnemyIO : MonoBehaviour
         enemyOutline.OutlineWidth = visible ? 10 : 0;
     }
 
-    public void SetTextFollowingPlayer(Transform playerTransform = null, 
-                                        List<IPlayerAbility> abilities = null) {
-        if (abilities == null || abilities.Count == 0) {
-            textDisplay.gameObject.SetActive(false);
-            cooldownScaleParent.gameObject.SetActive(false);
-            return;
-        }
+    public void SetTextFollowingPlayer(bool shouldDisplayText, Transform playerTransform = null) {
+        textDisplay.gameObject.SetActive(shouldDisplayText);
+        cooldownScaleParent.gameObject.SetActive(shouldDisplayText);
 
-        playerFollowTransform = playerTransform;
-        textDisplay.gameObject.SetActive(true);
-        cooldownScaleParent.gameObject.SetActive(true);
+        if (shouldDisplayText) {
+            playerFollowTransform = playerTransform;
+        }
     }
 
-    public void SetInteractible(DetectorState detectorState) {
+    public void SetTextColor(DetectorState detectorState) {
         if (detectorState == DetectorState.Idle) { 
             textDisplay.color = kActiveTextColor;
         } else {

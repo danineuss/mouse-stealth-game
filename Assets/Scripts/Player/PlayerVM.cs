@@ -27,7 +27,11 @@ public class PlayerVM : MonoBehaviour
 
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
         targetEnemy = enemyVM;
-        playerEvents.SendPlayerLocation(transform, playerAbilities.RelevantAbilities);
+        if (playerAbilities.RelevantAbilities.Count > 0) {
+            playerEvents.SendPlayerLocation(enemyVM, true, transform);
+        } else {
+            playerEvents.SendPlayerLocation(enemyVM, false, null);
+        }
     }
 
     void OnCurserExitEnemy() {

@@ -30,10 +30,13 @@ public class EnemyVM : MonoBehaviour
 
     public void GetDistracted() {
         playerDetector.SetStateDistracted();
-        enemyIO.SetInteractible(DetectorState.Distracted);
+        enemyIO.SetTextColor(DetectorState.Distracted);
     }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
+        if (enemyVM != this) {
+            return;
+        }
         enemyIO.SetDisplayVisibility(true);
     }
 
@@ -46,15 +49,20 @@ public class EnemyVM : MonoBehaviour
             return;
         }
         
-        enemyIO.SetInteractible(playerDetector.DetectorState);
+        enemyIO.SetTextColor(playerDetector.DetectorState);
     }
 
-    void OnReceivePlayerLocation(Transform playerTransform, List<IPlayerAbility> abilities) {
-        enemyIO.SetTextFollowingPlayer(playerTransform, abilities);
+    void OnReceivePlayerLocation(
+        EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null 
+    ) {
+        if (enemyVM != this) {
+            return;
+        }
+        enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
     void OnRemovePlayerLocation() {
-        enemyIO.SetTextFollowingPlayer(null);
+        enemyIO.SetTextFollowingPlayer(false);
     }
 
     void OnPlayerAbilityExecuted(IPlayerAbility ability) {
