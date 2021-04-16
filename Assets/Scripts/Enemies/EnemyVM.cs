@@ -14,11 +14,13 @@ public class EnemyVM : MonoBehaviour
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
     
-    void Start()
-    {
+    void Awake() {
         enemyIO = GetComponentInChildren<EnemyIO>();
         playerDetector = GetComponentInChildren<PlayerDetector>();
+    }
 
+    void Start()
+    {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         enemyEvents.OnDetectorChangedState += OnDetectorChangeState;

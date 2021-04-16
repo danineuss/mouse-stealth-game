@@ -56,6 +56,10 @@ public class VisionCone : MonoBehaviour
         coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
     }
 
+    void Awake() {
+        coneVisualizer = GetComponent<ConeVisualizer>();
+    }
+
     void Start()
     {
         InitializeCone();        
@@ -68,7 +72,6 @@ public class VisionCone : MonoBehaviour
         FieldOfView = currentControlPoint.FieldOfView;
         IterateControlPointIndex();
 
-        coneVisualizer = GetComponent<ConeVisualizer>();
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
         
         visionConeState = VisionConeState.Idle;

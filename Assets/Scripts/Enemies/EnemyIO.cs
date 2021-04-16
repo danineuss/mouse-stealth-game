@@ -48,20 +48,20 @@ public class EnemyIO : MonoBehaviour
 
     void Awake() {
         abilityCooldowns = new Dictionary<IPlayerAbility, float>();
-    }
-    void Start() {
         enemyVM = GetComponentInParent<EnemyVM>();
         textDisplay = GetComponentInChildren<TextMesh>();
-        textDisplay.color = kActiveTextColor;
         cooldownScaleParent = GetComponentsInChildren<Transform>()
                                 .Where(x => x.CompareTag("ScaleParent"))
                                 .First();
-        cooldownScaleParent.localScale = new Vector3(1f, 0f, 1f);
         enemyOutline = enemyVM.GetComponentsInChildren<Transform>()
                         .Where(x => x.CompareTag("Model"))
                         .First()
                         .GetComponent<Outline>();
+    }
 
+    void Start() {
+        textDisplay.color = kActiveTextColor;
+        cooldownScaleParent.localScale = new Vector3(1f, 0f, 1f);
         SetDisplayVisibility(false);
     }
 

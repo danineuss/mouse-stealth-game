@@ -53,14 +53,16 @@ public class PlayerDetector : MonoBehaviour
         visionCone.SetStateDistracted(false);
     }
 
-    void Start()
-    {
+    void Awake() {
         visionCone = GetComponent<VisionCone>();
         enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
+    }
+
+    void Start()
+    {
         DetectorState = DetectorState.Idle;
 
-        IEnumerator detectPlayerCoroutine = DetectPlayerWithDelay(kDetectPlayerRepetitionDelay);
-        StartCoroutine(detectPlayerCoroutine);
+        StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
     }
 
     void Update()

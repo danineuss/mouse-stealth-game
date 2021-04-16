@@ -33,9 +33,12 @@ public class PlayerAbilities : MonoBehaviour
         }
     }
 
-    void Start() {
+    void Awake() {
         Abilities = GetComponentsInChildren<IPlayerAbility>()
                     .ToDictionary(value => value.AssociatedKey, value => value);
+    }
+
+    void Start() {
         timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
         playerEvents = GetComponentInParent<PlayerVM>().PlayerEvents;
     }

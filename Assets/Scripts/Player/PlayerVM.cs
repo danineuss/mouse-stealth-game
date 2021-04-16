@@ -13,9 +13,13 @@ public class PlayerVM : MonoBehaviour
 
     private EnemyVM targetEnemy = null;
     private PlayerAbilities playerAbilities;
+
+    void Awake() {
+        playerAbilities = GetComponentInChildren<PlayerAbilities>();
+    }
+    
     void Start()
     {
-        playerAbilities = GetComponentInChildren<PlayerAbilities>();
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
     }
