@@ -12,9 +12,10 @@ public enum SceneState {
 
 public class SceneCoordinator : MonoBehaviour
 {
-    public UICoordinator UICoordinator;
-    public FirstPersonCameraController FirstPersonCameraController;
+    [SerializeField] private UICoordinator UICoordinator;
+    [SerializeField] private FirstPersonCameraController FirstPersonCameraController;
     [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private string sceneName;
 
     private SceneState sceneState;
     private float timeSinceLastPause;
@@ -79,6 +80,6 @@ public class SceneCoordinator : MonoBehaviour
     }
 
     public void RestartGame() {
-        SceneManager.LoadScene("Test Scene");
+        SceneManager.LoadScene(sceneName);
     }
 }

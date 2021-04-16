@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UICoordinator : MonoBehaviour
 {
-    public SceneCoordinator sceneCoordinator;
+    [SerializeField] private SceneCoordinator sceneCoordinator;
     private GameObject failedScreen;
     private GameObject pausedScreen;
 
