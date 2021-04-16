@@ -49,8 +49,8 @@ public class EnemyVM : MonoBehaviour
         enemyIO.SetInteractible(playerDetector.DetectorState);
     }
 
-    void OnReceivePlayerLocation(Transform playerTransform) {
-        enemyIO.SetTextFollowingPlayer(playerTransform);
+    void OnReceivePlayerLocation(Transform playerTransform, List<IPlayerAbility> abilities) {
+        enemyIO.SetTextFollowingPlayer(playerTransform, abilities);
     }
 
     void OnRemovePlayerLocation() {

@@ -21,8 +21,17 @@ public class EnemyIO : MonoBehaviour
         enemyOutline.OutlineWidth = visible ? 10 : 0;
     }
 
-    public void SetTextFollowingPlayer(Transform playerTransform = null) {
+    public void SetTextFollowingPlayer(Transform playerTransform = null, 
+                                        List<IPlayerAbility> abilities = null) {
+        if (abilities == null || abilities.Count == 0) {
+            textDisplay.gameObject.SetActive(false);
+            cooldownScaleParent.gameObject.SetActive(false);
+            return;
+        }
+
         playerFollowTransform = playerTransform;
+        textDisplay.gameObject.SetActive(true);
+        cooldownScaleParent.gameObject.SetActive(true);
     }
 
     public void SetInteractible(DetectorState detectorState) {
@@ -41,6 +50,9 @@ public class EnemyIO : MonoBehaviour
         }
     }
 
+    void Awake() {
+        abilityCooldowns = new Dictionary<IPlayerAbility, float>();
+    }
     void Start() {
         enemyVM = GetComponentInParent<EnemyVM>();
         textDisplay = GetComponentInChildren<TextMesh>();
@@ -53,7 +65,6 @@ public class EnemyIO : MonoBehaviour
                         .Where(x => x.CompareTag("Model"))
                         .First()
                         .GetComponent<Outline>();
-        abilityCooldowns = new Dictionary<IPlayerAbility, float>();
 
         SetDisplayVisibility(false);
     }
@@ -80,7 +91,7 @@ public class EnemyIO : MonoBehaviour
     }
 
     void UpdateAbilityCooldownIndicator() {
-        var keys = new List<IPlayerAbility>(abilityCooldowns.Keys);
+        var keys = new List<IPlayerAbility>(abilityCooldowns.Keys) ?? new List<IPlayerAbility>();
         foreach (var key in keys) {
             var newCooldown = abilityCooldowns[key] - Time.deltaTime;
             newCooldown = Mathf.Clamp(newCooldown, 0f, key.CoolDown);

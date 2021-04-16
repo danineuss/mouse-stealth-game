@@ -15,6 +15,10 @@ public class PlayerAbilities : MonoBehaviour
     public List<KeyCode> RelevantKeyPresses {
         get => Abilities.Select(x => x.Value.AssociatedKey).ToList();
     }
+
+    public List<IPlayerAbility> RelevantAbilities {
+        get => Abilities.Select(x => x.Value).ToList();
+    }
     
     public void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null) {
         var lastExecute = timesSinceLastExecute[ability];

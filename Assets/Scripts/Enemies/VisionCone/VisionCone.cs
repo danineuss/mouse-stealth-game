@@ -84,6 +84,9 @@ public class VisionCone : MonoBehaviour
         var newControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
+        if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView) {
+            return;
+        }
 
         currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
         StartCoroutine(currentCoroutine);
@@ -107,8 +110,8 @@ public class VisionCone : MonoBehaviour
         IterateControlPointIndex();
     }
     
+    // Currently supports one or two Control Points: iterate iff Count == 2, otherwise stay.
     void IterateControlPointIndex() {
-        // Currently supports one or two Control Points.
         if (ControlPoints.patrolPoints.Count == 2) {
             controlPointIndex = 1 - controlPointIndex;
         }

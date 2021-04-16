@@ -6,15 +6,15 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerEvents : MonoBehaviour
 {
-    public event Action<Transform> OnSendPlayerLocation;
+    public event Action<Transform, List<IPlayerAbility>> OnSendPlayerLocation;
     public event Action OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
 
-    public void SendPlayerLocation(Transform playerTransform) {
+    public void SendPlayerLocation(Transform playerTransform, List<IPlayerAbility> abilities) {
         if (OnSendPlayerLocation == null) {
             return;
         }
-        OnSendPlayerLocation(playerTransform);
+        OnSendPlayerLocation(playerTransform, abilities);
     }
     
     public void RemovePlayerLocation() {

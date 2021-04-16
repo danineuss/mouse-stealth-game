@@ -10,6 +10,7 @@ TagManager:
   - Model
   - Cone
   - ScaleParent
+  - ScaleAnchor
   layers:
   - Default
   - TransparentFX
