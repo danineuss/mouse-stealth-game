@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerEvents : MonoBehaviour
 {
     public event Action<EnemyVM, bool, Transform> OnSendPlayerLocation;
-    public event Action OnRemovePlayerLocation;
+    public event Action<EnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
 
     public void SendPlayerLocation(
@@ -19,11 +19,11 @@ public class PlayerEvents : MonoBehaviour
         OnSendPlayerLocation(enemyVM, shouldDisplayText, playerTransform);
     }
     
-    public void RemovePlayerLocation() {
+    public void RemovePlayerLocation(EnemyVM enemyVM) {
         if (OnRemovePlayerLocation == null) {
             return;
         }
-        OnRemovePlayerLocation();
+        OnRemovePlayerLocation(enemyVM);
     }
 
     public void AbilityExecuted(IPlayerAbility ability) {

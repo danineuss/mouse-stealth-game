@@ -30,9 +30,14 @@ public class EnemyVM : MonoBehaviour
         playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
 
-    public void GetDistracted() {
+    public bool GetDistracted() {
+        if (playerDetector.DetectorState != DetectorState.Idle) {
+            return false;
+        }
+
         playerDetector.SetStateDistracted();
         enemyIO.SetTextColor(DetectorState.Distracted);
+        return true;
     }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
@@ -63,7 +68,10 @@ public class EnemyVM : MonoBehaviour
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
-    void OnRemovePlayerLocation() {
+    void OnRemovePlayerLocation(EnemyVM enemyVM) {
+        if (enemyVM != this) {
+            return;
+        }
         enemyIO.SetTextFollowingPlayer(false);
     }
 

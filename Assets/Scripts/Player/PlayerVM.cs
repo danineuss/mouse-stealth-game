@@ -39,8 +39,8 @@ public class PlayerVM : MonoBehaviour
     }
 
     void OnCurserExitEnemy() {
+        playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
-        playerEvents.RemovePlayerLocation();
     }
 
     void CheckPlayerInput() {

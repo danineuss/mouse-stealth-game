@@ -16,7 +16,6 @@ public class PlayerAbilityDistract : MonoBehaviour, IPlayerAbility
             return false;
         }
 
-        enemyVM.GetDistracted();
-        return true;
+        return enemyVM.GetDistracted();
     }
 }
