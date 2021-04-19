@@ -15,6 +15,7 @@ public class SceneCoordinator : MonoBehaviour
     [SerializeField] private UICoordinator UICoordinator;
     [SerializeField] private FirstPersonCameraController FirstPersonCameraController;
     [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private SceneEvents sceneEvents;
     [SerializeField] private string sceneName;
 
     private SceneState sceneState;
@@ -22,6 +23,7 @@ public class SceneCoordinator : MonoBehaviour
 
     void Start() {
         enemyEvents.OnDetectorChangedState += CheckForFailedGame;
+
         sceneState = SceneState.Idle;
         timeSinceLastPause = Time.time;
         Time.timeScale = 1f;
@@ -34,7 +36,7 @@ public class SceneCoordinator : MonoBehaviour
     }
 
     void CheckForFailedGame(PlayerDetector playerDetector) {
-        if (playerDetector.DetectorState.Equals(DetectorState.Alarmed)) {
+        if (playerDetector.DetectorState == DetectorState.Alarmed) {
             sceneState = SceneState.Failed;
             ToggleGamePaused();
         }
@@ -43,7 +45,7 @@ public class SceneCoordinator : MonoBehaviour
     void CheckGamePaused() {
         if (sceneState == SceneState.Failed || Time.unscaledTime - timeSinceLastPause < 0.2f) { 
             return; 
-        }
+        }        
 
         if (Input.GetKey(KeyCode.Escape)) {
             timeSinceLastPause = Time.unscaledTime;

@@ -6,25 +6,21 @@ using UnityEngine;
 public class UICoordinator : MonoBehaviour
 {
     [SerializeField] private SceneCoordinator sceneCoordinator;
-    private GameObject failedScreen;
-    private GameObject pausedScreen;
+    [SerializeField] private GameObject failedScreen;
+    [SerializeField] private GameObject pausedScreen;
+    [SerializeField] private GameObject introScreen;
+    [SerializeField] private GameObject distractAbilityScreen;
+    [SerializeField] private GameObject victoryScreen;
+
 
     void Start() {
         InitializeScreens();
     }
 
     void InitializeScreens() {
-        failedScreen = GetComponentsInChildren<Transform>()
-                        .Where(x => x.CompareTag("FailedScreen"))
-                        .First()
-                        .gameObject;
-        pausedScreen = GetComponentsInChildren<Transform>()
-                        .Where(x => x.CompareTag("PausedScreen"))
-                        .First()
-                        .gameObject;
-
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
+        introScreen.SetActive(true);
     }
 
     public void ShowGamePaused(bool paused) {
@@ -38,4 +34,9 @@ public class UICoordinator : MonoBehaviour
     public void SendRestartGameCommand() {
         sceneCoordinator.RestartGame();
     }
+
+    // public void CloseIntroScreen() {
+    //     introScreen.SetActive(false);
+    //     sceneCoordinator.CloseDialog();
+    // }
 }
