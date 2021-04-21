@@ -20,7 +20,7 @@ public class UICoordinator : MonoBehaviour
     void InitializeScreens() {
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
-        introScreen.SetActive(true);
+        // introScreen.SetActive(true);
     }
 
     public void ShowGamePaused(bool paused) {
@@ -35,8 +35,8 @@ public class UICoordinator : MonoBehaviour
         sceneCoordinator.RestartGame();
     }
 
-    // public void CloseIntroScreen() {
-    //     introScreen.SetActive(false);
-    //     sceneCoordinator.CloseDialog();
-    // }
+    public void CloseIntroScreen() {
+        introScreen.SetActive(false);
+        sceneCoordinator.UnpauseGame();
+    }
 }

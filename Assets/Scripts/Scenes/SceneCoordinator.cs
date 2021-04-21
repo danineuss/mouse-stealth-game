@@ -21,12 +21,21 @@ public class SceneCoordinator : MonoBehaviour
     private SceneState sceneState;
     private float timeSinceLastPause;
 
+    public void RestartGame() {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void UnpauseGame() {
+        ChangeGamePausedState(false);
+    }
+
     void Start() {
         enemyEvents.OnDetectorChangedState += CheckForFailedGame;
 
         sceneState = SceneState.Idle;
         timeSinceLastPause = Time.time;
-        Time.timeScale = 1f;
+
+        ChangeGamePausedState(true);
     }
 
     void Update()
@@ -38,7 +47,7 @@ public class SceneCoordinator : MonoBehaviour
     void CheckForFailedGame(PlayerDetector playerDetector) {
         if (playerDetector.DetectorState == DetectorState.Alarmed) {
             sceneState = SceneState.Failed;
-            ToggleGamePaused();
+            ChangeGamePausedState(true);
         }
     }
 
@@ -50,17 +59,17 @@ public class SceneCoordinator : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
-            ToggleGamePaused();
+            ChangeGamePausedState(sceneState == SceneState.Paused);
         }
     }
 
-    void ToggleGamePaused() {
-        if (sceneState == SceneState.Idle) {
-            Time.timeScale = 1f;
-            FirstPersonCameraController.ToggleCursorLocked(true);
-        } else {
+    void ChangeGamePausedState(bool paused) {
+        if (paused) {
             Time.timeScale = 0f;
-            FirstPersonCameraController.ToggleCursorLocked(false);
+            FirstPersonCameraController.ChangeCursorLockedState(false);
+        } else {
+            Time.timeScale = 1f;
+            FirstPersonCameraController.ChangeCursorLockedState(true);
         }
     }
 
@@ -79,9 +88,5 @@ public class SceneCoordinator : MonoBehaviour
             default:
                 throw new InvalidOperationException("Switch case not exhaustive, code shoud not reach here.");
         }
-    }
-
-    public void RestartGame() {
-        SceneManager.LoadScene(sceneName);
     }
 }

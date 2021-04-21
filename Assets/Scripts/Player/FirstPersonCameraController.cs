@@ -9,11 +9,17 @@ public class FirstPersonCameraController : MonoBehaviour
     
     private float cursorX, cursorY;
     private float initialYRotation;
+    private bool cursorLocked;
+
+    public void ChangeCursorLockedState(bool locked) {
+        Cursor.visible = !locked;
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
+        cursorLocked = locked;
+    }
 
     void Start() 
     {
         initialYRotation = Player.localRotation.eulerAngles.y;
-        ToggleCursorLocked(true);
     }
 
     void LateUpdate() 
@@ -21,17 +27,15 @@ public class FirstPersonCameraController : MonoBehaviour
         CameraControl();
     }
 
-    public void ToggleCursorLocked(bool locked) {
-        Cursor.visible = !locked;
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-    }
-
     void CameraControl() 
     {
+        if (!cursorLocked) {
+            return;
+        }
+
         cursorX += Input.GetAxis("Mouse X") * RotationSpeed;
         cursorY -= Input.GetAxis("Mouse Y") * RotationSpeed;
         cursorY = Mathf.Clamp(cursorY, -35, 60);
-
 
         if (!Input.GetKey(KeyCode.LeftShift)) {
             Player.rotation = Quaternion.Euler(0, initialYRotation + cursorX, 0);
