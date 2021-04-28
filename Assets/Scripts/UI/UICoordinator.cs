@@ -8,7 +8,7 @@ public class UICoordinator : MonoBehaviour
     [SerializeField] private SceneCoordinator sceneCoordinator;
     [SerializeField] private GameObject failedScreen;
     [SerializeField] private GameObject pausedScreen;
-    [SerializeField] private GameObject introScreen;
+    [SerializeField] private DialogVM introVM;
     [SerializeField] private GameObject distractAbilityScreen;
     [SerializeField] private GameObject victoryScreen;
 
@@ -20,7 +20,7 @@ public class UICoordinator : MonoBehaviour
     void InitializeScreens() {
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
-        introScreen.SetActive(true);
+        introVM.gameObject.SetActive(true);
     }
 
     public void ShowGamePaused(bool paused) {
@@ -35,8 +35,8 @@ public class UICoordinator : MonoBehaviour
         sceneCoordinator.RestartGame();
     }
 
-    public void CloseIntroScreen() {
-        introScreen.SetActive(false);
+    public void CloseDialog(DialogVM dialogVM) {
+        dialogVM.gameObject.SetActive(false);
         sceneCoordinator.UnpauseGame();
     }
 }
