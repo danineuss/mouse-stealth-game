@@ -24,8 +24,14 @@ public class SceneCoordinator : MonoBehaviour {
         SceneManager.LoadScene(sceneName);
     }
 
-    public void UnpauseGame() {
-        ChangeGamePausedState(false);
+    public void ChangeGamePausedState(bool paused) {
+        if (paused) {
+            Time.timeScale = 0f;
+            FirstPersonCameraController.ChangeCursorLockedState(false);
+        } else {
+            Time.timeScale = 1f;
+            FirstPersonCameraController.ChangeCursorLockedState(true);
+        }
     }
 
     void Start() {
@@ -58,16 +64,6 @@ public class SceneCoordinator : MonoBehaviour {
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ChangeGamePausedState(sceneState == SceneState.Paused);
-        }
-    }
-
-    void ChangeGamePausedState(bool paused) {
-        if (paused) {
-            Time.timeScale = 0f;
-            FirstPersonCameraController.ChangeCursorLockedState(false);
-        } else {
-            Time.timeScale = 1f;
-            FirstPersonCameraController.ChangeCursorLockedState(true);
         }
     }
 
