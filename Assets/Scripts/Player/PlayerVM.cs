@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerVM : MonoBehaviour
-{
+public class PlayerVM : MonoBehaviour {
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private PlayerEvents playerEvents;
     public PlayerEvents PlayerEvents {
@@ -18,14 +17,12 @@ public class PlayerVM : MonoBehaviour
         playerAbilities = GetComponentInChildren<PlayerAbilities>();
     }
     
-    void Start()
-    {
+    void Start() {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
     }
 
-    void Update()
-    {
+    void Update() {
         CheckPlayerInput();
     }
 

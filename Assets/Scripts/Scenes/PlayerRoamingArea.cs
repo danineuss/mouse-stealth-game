@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 
-public class PlayerRoamingArea : MonoBehaviour, IPlayerMovementRestictable
-{
+public class PlayerRoamingArea : MonoBehaviour, IPlayerMovementRestictable {
     private Collider boxCollider;
     
     void Start() {

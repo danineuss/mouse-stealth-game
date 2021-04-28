@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerAbilities : MonoBehaviour
-{   
+public class PlayerAbilities : MonoBehaviour {   
     public Dictionary<KeyCode, IPlayerAbility> Abilities {
         get; private set;
     }

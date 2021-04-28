@@ -9,8 +9,7 @@ public enum DetectorState {
     Distracted
 }
 
-public class PlayerDetector : MonoBehaviour
-{
+public class PlayerDetector : MonoBehaviour {
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
@@ -58,15 +57,13 @@ public class PlayerDetector : MonoBehaviour
         enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
     }
 
-    void Start()
-    {
+    void Start() {
         DetectorState = DetectorState.Idle;
 
         StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
     }
 
-    void Update()
-    {
+    void Update() {
         SetDetectionState();
     }
 

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyVM : MonoBehaviour
-{
+public class EnemyVM : MonoBehaviour {
     [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private EnemyEvents enemyEvents;
     public EnemyEvents EnemyEvents { 
@@ -19,8 +18,7 @@ public class EnemyVM : MonoBehaviour
         playerDetector = GetComponentInChildren<PlayerDetector>();
     }
 
-    void Start()
-    {
+    void Start() {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         enemyEvents.OnDetectorChangedState += OnDetectorChangeState;

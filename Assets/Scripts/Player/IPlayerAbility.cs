@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IPlayerAbility
-{
+public interface IPlayerAbility {
     KeyCode AssociatedKey {
         get;
     }

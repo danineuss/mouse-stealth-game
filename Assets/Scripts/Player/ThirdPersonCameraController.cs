@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonCameraController : MonoBehaviour 
-{
+public class ThirdPersonCameraController : MonoBehaviour {
     public float RotationSpeed = 1;
     public Transform Target, Player;
     float mouseX, mouseY;
 
-    void Start() 
-    {
+    void Start() {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void LateUpdate() 
-    {
+    void LateUpdate() {
         CameraControl();
     }
 
-    void CameraControl() 
-    {
+    void CameraControl() {
         mouseX += Input.GetAxis("Mouse X") * RotationSpeed;
         mouseY -= Input.GetAxis("Mouse Y") * RotationSpeed;
         mouseY = Mathf.Clamp(mouseY, -35, 60);

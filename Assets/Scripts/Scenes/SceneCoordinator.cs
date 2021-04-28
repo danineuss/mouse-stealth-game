@@ -10,8 +10,7 @@ public enum SceneState {
     Failed
 }
 
-public class SceneCoordinator : MonoBehaviour
-{
+public class SceneCoordinator : MonoBehaviour {
     [SerializeField] private UICoordinator UICoordinator;
     [SerializeField] private FirstPersonCameraController FirstPersonCameraController;
     [SerializeField] private EnemyEvents enemyEvents;
@@ -38,8 +37,7 @@ public class SceneCoordinator : MonoBehaviour
         ChangeGamePausedState(true);
     }
 
-    void Update()
-    {
+    void Update() {
         CheckGamePaused();
         UpdateUI();
     }
@@ -74,8 +72,7 @@ public class SceneCoordinator : MonoBehaviour
     }
 
     void UpdateUI() {
-        switch (sceneState)
-        {
+        switch (sceneState) {
             case SceneState.Idle:
                 UICoordinator.ShowGamePaused(false);
                 break;
