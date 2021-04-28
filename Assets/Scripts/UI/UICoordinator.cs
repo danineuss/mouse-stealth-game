@@ -20,7 +20,7 @@ public class UICoordinator : MonoBehaviour
     void InitializeScreens() {
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
-        // introScreen.SetActive(true);
+        introScreen.SetActive(true);
     }
 
     public void ShowGamePaused(bool paused) {
