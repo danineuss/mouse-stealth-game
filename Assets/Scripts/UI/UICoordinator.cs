@@ -5,16 +5,19 @@ using UnityEngine;
 
 public class UICoordinator : MonoBehaviour
 {
-    [SerializeField] private SceneCoordinator sceneCoordinator;
+    [SerializeField] private SceneVM sceneVM;
     [SerializeField] private GameObject failedScreen;
     [SerializeField] private GameObject pausedScreen;
     [SerializeField] private DialogVM introScreen;
     [SerializeField] private DialogVM distractAbilityScreen;
     [SerializeField] private GameObject victoryScreen;
-
+    public SceneEvents SceneEvents {
+        get => sceneVM.SceneEvents;
+    }
 
     void Start() {
         InitializeScreens();
+        InitializeEvents();
     }
 
     void InitializeScreens() {
@@ -22,6 +25,11 @@ public class UICoordinator : MonoBehaviour
         pausedScreen.SetActive(false);
         distractAbilityScreen.gameObject.SetActive(false);
         introScreen.gameObject.SetActive(true);
+    }
+
+    void InitializeEvents() {
+        sceneVM.SceneEvents.OnDialogOpened += OpenDialog;
+        sceneVM.SceneEvents.OnDialogClosed += CloseDialog;
     }
 
     public void ShowGamePaused(bool paused) {
@@ -33,16 +41,14 @@ public class UICoordinator : MonoBehaviour
     }
 
     public void SendRestartGameCommand() {
-        sceneCoordinator.RestartGame();
+        sceneVM.RestartGame();
     }
 
-    public void OpenDialog(DialogVM dialogVM) {
+    void OpenDialog(DialogVM dialogVM) {
         dialogVM.gameObject.SetActive(true);
-        sceneCoordinator.ChangeGamePausedState(true);
     }
 
-    public void CloseDialog(DialogVM dialogVM) {
+    void CloseDialog(DialogVM dialogVM) {
         dialogVM.gameObject.SetActive(false);
-        sceneCoordinator.ChangeGamePausedState(false);
     }
 }

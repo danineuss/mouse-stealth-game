@@ -1218,9 +1218,10 @@ PrefabInstance:
     - target: {fileID: 8484407314933834061, guid: ba57957757ec0f1469a4ea8cdc3a9d3a,
         type: 3}
       propertyPath: m_Name
-      value: SceneCoordinator
+      value: SceneVM
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8484407314933834035, guid: ba57957757ec0f1469a4ea8cdc3a9d3a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ba57957757ec0f1469a4ea8cdc3a9d3a, type: 3}
 --- !u!1001 &328774609
 PrefabInstance:
@@ -2743,6 +2744,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 594242135}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &622300478 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8484407314933834061, guid: ba57957757ec0f1469a4ea8cdc3a9d3a,
+    type: 3}
+  m_PrefabInstance: {fileID: 302067384}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &622300479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622300478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230cff006fc214940aee829ed62efe3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICoordinator: {fileID: 1428400687}
+  FirstPersonCameraController: {fileID: 364768347}
+  enemyEvents: {fileID: 786321557}
+  sceneEvents: {fileID: 331622347}
+  sceneName: Rawi Demo Level 1
 --- !u!4 &627275061 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5951987642533784473, guid: 62f2e94081387be41adca03b2e620dbf,
@@ -3395,18 +3419,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 131628371}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &879144304 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8484407314933834035, guid: ba57957757ec0f1469a4ea8cdc3a9d3a,
-    type: 3}
-  m_PrefabInstance: {fileID: 302067384}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e80f0ce3ecf1083459a0f58a388d3375, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &927354980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3534,6 +3546,11 @@ PrefabInstance:
         boards with a display to send them an intrusive but banal message. Usually
         promotional mail. \r"
       objectReference: {fileID: 0}
+    - target: {fileID: 1921680817013753880, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 294.87
+      objectReference: {fileID: 0}
     - target: {fileID: 1921680817036474250, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_Text
@@ -3649,6 +3666,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Distract 02
       objectReference: {fileID: 0}
+    - target: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7722d46dd6453984093fb19e4c43eb1e, type: 3}
 --- !u!224 &936222452 stripped
@@ -3680,6 +3702,7 @@ GameObject:
   - component: {fileID: 939406583}
   - component: {fileID: 939406585}
   - component: {fileID: 939406584}
+  - component: {fileID: 939406586}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -3728,6 +3751,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.1124527, y: 0.1136812, z: 0.99035645}
   m_Center: {x: 0.31729305, y: 0.05012542, z: 0.505249}
+--- !u!114 &939406586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939406582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59697faa6de3bf44a801c688969ff72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogVM: {fileID: 1737403226}
+  sceneVM: {fileID: 622300479}
 --- !u!1001 &942936702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6274,12 +6311,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38919e3b6bf99d54c86eb3517ee17eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneCoordinator: {fileID: 879144304}
+  sceneVM: {fileID: 622300479}
   failedScreen: {fileID: 1005156257}
   pausedScreen: {fileID: 521767393}
   introScreen: {fileID: 1367584623}
   distractAbilityScreen: {fileID: 1737403226}
-  victoryScreen: {fileID: 0}
+  victoryScreen: {fileID: 1043970167}
 --- !u!4 &1428400688
 Transform:
   m_ObjectHideFlags: 0
@@ -7206,6 +7243,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Distract 01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7722d46dd6453984093fb19e4c43eb1e, type: 3}

@@ -27,8 +27,7 @@ public class DialogVM : MonoBehaviour {
 
     public void IterateScreens() {
         if (currentScreen == screens.Count - 1) {
-            screens[currentScreen].SetActive(false);
-            uiCoordinator.CloseDialog(this);
+            uiCoordinator.SceneEvents.DialogClosed(this);
             return;
         }
 

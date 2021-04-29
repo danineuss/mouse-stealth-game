@@ -10,12 +10,16 @@ public enum SceneState {
     Failed
 }
 
-public class SceneCoordinator : MonoBehaviour {
+public class SceneVM : MonoBehaviour {
     [SerializeField] private UICoordinator UICoordinator;
     [SerializeField] private FirstPersonCameraController FirstPersonCameraController;
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private SceneEvents sceneEvents;
     [SerializeField] private string sceneName;
+    public SceneEvents SceneEvents{
+        get => sceneEvents;
+        private set => sceneEvents = value;
+    }
 
     private SceneState sceneState;
     private float timeSinceLastPause;
@@ -24,7 +28,27 @@ public class SceneCoordinator : MonoBehaviour {
         SceneManager.LoadScene(sceneName);
     }
 
-    public void ChangeGamePausedState(bool paused) {
+    void Start() {
+        InitializeEvents();
+
+        sceneState = SceneState.Idle;
+        timeSinceLastPause = Time.time;
+
+        ChangeGamePausedState(true);
+    }
+
+    void InitializeEvents() {
+        enemyEvents.OnDetectorChangedState += CheckForFailedGame;
+        sceneEvents.OnDialogOpened += OpenDialog;
+        sceneEvents.OnDialogClosed += CloseDialog;
+    }
+
+    void Update() {
+        CheckGamePaused();
+        UpdateUI();
+    }
+
+    void ChangeGamePausedState(bool paused) {
         if (paused) {
             Time.timeScale = 0f;
             FirstPersonCameraController.ChangeCursorLockedState(false);
@@ -34,25 +58,19 @@ public class SceneCoordinator : MonoBehaviour {
         }
     }
 
-    void Start() {
-        enemyEvents.OnDetectorChangedState += CheckForFailedGame;
-
-        sceneState = SceneState.Idle;
-        timeSinceLastPause = Time.time;
-
-        ChangeGamePausedState(true);
-    }
-
-    void Update() {
-        CheckGamePaused();
-        UpdateUI();
-    }
-
     void CheckForFailedGame(PlayerDetector playerDetector) {
         if (playerDetector.DetectorState == DetectorState.Alarmed) {
             sceneState = SceneState.Failed;
             ChangeGamePausedState(true);
         }
+    }
+
+    void OpenDialog(DialogVM dialogVM) {
+        ChangeGamePausedState(true);
+    }
+
+    void CloseDialog(DialogVM dialogVM) {
+        ChangeGamePausedState(false);
     }
 
     void CheckGamePaused() {
