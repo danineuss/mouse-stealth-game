@@ -10,7 +10,7 @@ public class UICoordinator : MonoBehaviour
     [SerializeField] private GameObject pausedScreen;
     [SerializeField] private DialogVM introScreen;
     [SerializeField] private DialogVM distractAbilityScreen;
-    [SerializeField] private GameObject victoryScreen;
+    [SerializeField] private DialogVM victoryScreen;
     public SceneEvents SceneEvents {
         get => sceneVM.SceneEvents;
     }
@@ -24,6 +24,8 @@ public class UICoordinator : MonoBehaviour
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
         distractAbilityScreen.gameObject.SetActive(false);
+        victoryScreen.gameObject.SetActive(false);
+        
         introScreen.gameObject.SetActive(true);
     }
 
