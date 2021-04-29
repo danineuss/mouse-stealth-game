@@ -21,9 +21,8 @@ public class PlayerAbilities : MonoBehaviour {
     
     public void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null) {
         var lastExecute = timesSinceLastExecute[ability];
-        if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f) {
+        if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
             return;
-        }
 
         var executed = ability.Execute(enemyVM);
         if (executed) {
@@ -32,9 +31,16 @@ public class PlayerAbilities : MonoBehaviour {
         }
     }
 
+    public void LearnAbility(IPlayerAbility ability) {
+        if (Abilities.ContainsValue(ability))
+            return;
+        
+        Abilities.Add(ability.AssociatedKey, ability);
+        timesSinceLastExecute.Add(ability, -1f);
+    }
+
     void Awake() {
-        Abilities = GetComponentsInChildren<IPlayerAbility>()
-                    .ToDictionary(value => value.AssociatedKey, value => value);
+        Abilities = new Dictionary<KeyCode, IPlayerAbility>();
     }
 
     void Start() {

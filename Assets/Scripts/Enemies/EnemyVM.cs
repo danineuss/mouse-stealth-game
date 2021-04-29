@@ -19,6 +19,10 @@ public class EnemyVM : MonoBehaviour {
     }
 
     void Start() {
+        InitializeEvents();
+    }
+
+    void InitializeEvents() {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         enemyEvents.OnDetectorChangedState += OnDetectorChangeState;

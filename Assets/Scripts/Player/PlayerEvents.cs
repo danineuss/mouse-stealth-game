@@ -8,6 +8,7 @@ public class PlayerEvents : MonoBehaviour {
     public event Action<EnemyVM, bool, Transform> OnSendPlayerLocation;
     public event Action<EnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
+    public event Action<IPlayerAbility> OnAbilityLearned;
 
     public void SendPlayerLocation(
         EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
@@ -30,5 +31,12 @@ public class PlayerEvents : MonoBehaviour {
             return;
         
         OnAbilityExecuted(ability);
+    }
+
+    public void AbilityLearned(IPlayerAbility ability) {
+        if (OnAbilityLearned == null)
+            return;
+        
+        OnAbilityLearned(ability);
     }
 }

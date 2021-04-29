@@ -18,8 +18,13 @@ public class PlayerVM : MonoBehaviour {
     }
     
     void Start() {
+        InitializeEvents();
+    }
+
+    void InitializeEvents() {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
     void Update() {
@@ -38,6 +43,10 @@ public class PlayerVM : MonoBehaviour {
     void OnCurserExitEnemy() {
         playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
+    }
+
+    void OnAbilityLearned(IPlayerAbility ability) {
+        playerAbilities.LearnAbility(ability);
     }
 
     void CheckPlayerInput() {

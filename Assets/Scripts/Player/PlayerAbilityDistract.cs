@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAbilityDistract : MonoBehaviour, IPlayerAbility {
+public class PlayerAbilityDistract : IPlayerAbility {
     public KeyCode AssociatedKey {
         get => KeyCode.F;
     }
