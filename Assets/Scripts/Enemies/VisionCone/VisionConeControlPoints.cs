@@ -11,7 +11,8 @@ public class VisionConeControlPoints : MonoBehaviour {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.25f);
 
-        if (patrolPoints.Count == 0) { return; }
+        if (patrolPoints.Count == 0)
+            return;
 
         foreach (var controlPoint in patrolPoints) {
             DrawGizmosForPoint(controlPoint);

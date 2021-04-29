@@ -12,23 +12,23 @@ public class PlayerEvents : MonoBehaviour {
     public void SendPlayerLocation(
         EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
     ) {
-        if (OnSendPlayerLocation == null) {
+        if (OnSendPlayerLocation == null)
             return;
-        }
+
         OnSendPlayerLocation(enemyVM, shouldDisplayText, playerTransform);
     }
     
     public void RemovePlayerLocation(EnemyVM enemyVM) {
-        if (OnRemovePlayerLocation == null) {
+        if (OnRemovePlayerLocation == null)
             return;
-        }
+        
         OnRemovePlayerLocation(enemyVM);
     }
 
     public void AbilityExecuted(IPlayerAbility ability) {
-        if (OnAbilityExecuted == null) {
+        if (OnAbilityExecuted == null)
             return;
-        }
+        
         OnAbilityExecuted(ability);
     }
 }

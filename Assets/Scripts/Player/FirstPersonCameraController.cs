@@ -25,9 +25,8 @@ public class FirstPersonCameraController : MonoBehaviour {
     }
 
     void CameraControl() {
-        if (!cursorLocked) {
+        if (!cursorLocked)
             return;
-        }
 
         cursorX += Input.GetAxis("Mouse X") * RotationSpeed;
         cursorY -= Input.GetAxis("Mouse Y") * RotationSpeed;

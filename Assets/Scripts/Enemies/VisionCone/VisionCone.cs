@@ -86,9 +86,8 @@ public class VisionCone : MonoBehaviour {
         var newControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
-        if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView) {
+        if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView)
             return;
-        }
 
         currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
         StartCoroutine(currentCoroutine);

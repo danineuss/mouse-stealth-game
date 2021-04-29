@@ -32,7 +32,8 @@ public class FirstPersonCharacterController : MonoBehaviour {
     }
 
     void RestrictPlayerMovement() {
-        if (currentRestictable == null) { return; } 
+        if (currentRestictable == null)
+            return;
         
         var newPosition = currentRestictable.RestrictPlayerMovement(transform.position);
         transform.position = newPosition;

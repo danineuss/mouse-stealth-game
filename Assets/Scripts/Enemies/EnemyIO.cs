@@ -78,9 +78,8 @@ public class EnemyIO : MonoBehaviour {
     }
 
     void UpdateTextOrientation() {
-        if (playerFollowTransform == null) {
+        if (playerFollowTransform == null)
             return;
-        }
 
         transform.LookAt(playerFollowTransform);
     }

@@ -10,23 +10,23 @@ public class EnemyEvents : MonoBehaviour {
     public event Action<PlayerDetector> OnDetectorChangedState;
 
     public void CursorEnterEnemy(EnemyVM enemyVM = null) {
-        if (OnCursorEnterEnemy == null) {
+        if (OnCursorEnterEnemy == null)
             return;
-        }
+
         OnCursorEnterEnemy(enemyVM);
     }
     
     public void CursorExitEnemy() {
-        if (OnCurserExitEnemy == null) {
+        if (OnCurserExitEnemy == null)
             return;
-        }
+
         OnCurserExitEnemy();
     }
 
     public void DetectorChangedState(PlayerDetector playerDetector) {
-        if (OnDetectorChangedState == null) {
+        if (OnDetectorChangedState == null)
             return;
-        }
+
         OnDetectorChangedState(playerDetector);
     }
 }

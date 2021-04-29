@@ -32,9 +32,8 @@ public class PlayerDetector : MonoBehaviour {
     private float timeOfLastDistraction = 0f;
 
     public void SetStateDistracted() {
-        if (DetectorState == DetectorState.Searching) {
+        if (DetectorState == DetectorState.Searching)
             return;
-        }
         
         DetectorState = DetectorState.Distracted;
         visionCone.SetStateDistracted(true);    
@@ -44,9 +43,8 @@ public class PlayerDetector : MonoBehaviour {
     }
 
     IEnumerator ResetDistraction() {
-        while (Time.time - timeOfLastDistraction < kDistractionDuration) {
+        while (Time.time - timeOfLastDistraction < kDistractionDuration)
             yield return null;
-        }
 
         DetectorState = DetectorState.Idle;
         visionCone.SetStateDistracted(false);
@@ -75,9 +73,8 @@ public class PlayerDetector : MonoBehaviour {
     }
 
     void DetectPlayer() {    
-        if (DetectorState == DetectorState.Distracted) {
+        if (DetectorState == DetectorState.Distracted)
             return;
-        }
 
         bool wasPlayerPreviouslyVisible = playerVisible;
         if (PlayerOutsideVisibleCone()) {

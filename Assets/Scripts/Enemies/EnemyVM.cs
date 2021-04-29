@@ -39,9 +39,9 @@ public class EnemyVM : MonoBehaviour {
     }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+    
         enemyIO.SetDisplayVisibility(true);
     }
 
@@ -50,9 +50,8 @@ public class EnemyVM : MonoBehaviour {
     }
 
     void OnDetectorChangeState(PlayerDetector playerDetector) {
-        if (playerDetector != this.playerDetector) {
+        if (playerDetector != this.playerDetector)
             return;
-        }
         
         enemyIO.SetTextColor(playerDetector.DetectorState);
     }
@@ -60,16 +59,16 @@ public class EnemyVM : MonoBehaviour {
     void OnReceivePlayerLocation(
         EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null 
     ) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
     void OnRemovePlayerLocation(EnemyVM enemyVM) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+
         enemyIO.SetTextFollowingPlayer(false);
     }
 
