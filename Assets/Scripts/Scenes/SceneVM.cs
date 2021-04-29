@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public enum SceneState {
     Idle,
     Paused,
+    InDialog,
     Failed
 }
 
@@ -31,7 +32,7 @@ public class SceneVM : MonoBehaviour {
     void Start() {
         InitializeEvents();
 
-        sceneState = SceneState.Idle;
+        sceneState = SceneState.InDialog;
         timeSinceLastPause = Time.time;
 
         ChangeGamePausedState(true);
@@ -66,19 +67,27 @@ public class SceneVM : MonoBehaviour {
     }
 
     void OpenDialog(DialogVM dialogVM) {
+        sceneState = SceneState.InDialog;
         ChangeGamePausedState(true);
     }
 
     void CloseDialog(DialogVM dialogVM) {
+        sceneState = SceneState.Idle;
         ChangeGamePausedState(false);
     }
 
     void CheckGamePaused() {
-        if (sceneState == SceneState.Failed || Time.unscaledTime - timeSinceLastPause < 0.2f) { 
+        if (sceneState == SceneState.Failed || 
+            sceneState == SceneState.InDialog ||
+            Time.unscaledTime - timeSinceLastPause < 0.2f) {
             return; 
-        }        
+        }
 
-        if (Input.GetKey(KeyCode.Escape)) {
+        #if UNITY_EDITOR
+        if(Input.GetKeyDown(KeyCode.E)) {
+        #else
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+        #endif
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ChangeGamePausedState(sceneState == SceneState.Paused);
@@ -92,6 +101,8 @@ public class SceneVM : MonoBehaviour {
                 break;
             case SceneState.Paused:
                 UICoordinator.ShowGamePaused(true);
+                break;
+            case SceneState.InDialog:
                 break;
             case SceneState.Failed:
                 UICoordinator.ShowGameFailed();
