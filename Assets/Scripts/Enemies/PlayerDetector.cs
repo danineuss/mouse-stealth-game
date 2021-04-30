@@ -17,8 +17,11 @@ public class PlayerDetector : MonoBehaviour {
     public DetectorState DetectorState { 
         get => detectorState;
         private set {
+            if (detectorState == value)
+                return;
+
             detectorState = value;
-            enemyEvents.DetectorChangedState(this);
+            enemyEvents.ChangeDetectorState(this);
         } 
     }
 

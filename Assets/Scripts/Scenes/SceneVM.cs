@@ -39,7 +39,7 @@ public class SceneVM : MonoBehaviour {
     }
 
     void InitializeEvents() {
-        enemyEvents.OnDetectorChangedState += CheckForFailedGame;
+        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
         sceneEvents.OnDialogOpened += OpenDialog;
         sceneEvents.OnDialogClosed += CloseDialog;
     }
@@ -108,7 +108,7 @@ public class SceneVM : MonoBehaviour {
                 UICoordinator.ShowGameFailed();
                 break;
             default:
-                throw new InvalidOperationException("Switch case not exhaustive, code shoud not reach here.");
+                throw new InvalidOperationException("Switch case not exhaustive: " + sceneState);
         }
     }
 }

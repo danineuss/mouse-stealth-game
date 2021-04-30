@@ -12,6 +12,15 @@ public class EnemyVM : MonoBehaviour {
     
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
+    public bool GetDistracted() {
+        if (playerDetector.DetectorState != DetectorState.Idle) {
+            return false;
+        }
+
+        playerDetector.SetStateDistracted();
+        enemyIO.SetTextColor(DetectorState.Distracted);
+        return true;
+    }
     
     void Awake() {
         enemyIO = GetComponentInChildren<EnemyIO>();
@@ -25,21 +34,11 @@ public class EnemyVM : MonoBehaviour {
     void InitializeEvents() {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        enemyEvents.OnDetectorChangedState += OnDetectorChangeState;
+        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
         playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
         playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
         playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
-    }
-
-    public bool GetDistracted() {
-        if (playerDetector.DetectorState != DetectorState.Idle) {
-            return false;
-        }
-
-        playerDetector.SetStateDistracted();
-        enemyIO.SetTextColor(DetectorState.Distracted);
-        return true;
     }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
@@ -53,7 +52,7 @@ public class EnemyVM : MonoBehaviour {
         enemyIO.SetDisplayVisibility(false);
     }
 
-    void OnDetectorChangeState(PlayerDetector playerDetector) {
+    void OnDetectorStateChanged(PlayerDetector playerDetector) {
         if (playerDetector != this.playerDetector)
             return;
         

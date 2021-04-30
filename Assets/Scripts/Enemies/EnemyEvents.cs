@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyEvents : MonoBehaviour {
     public event Action<EnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
-    public event Action<PlayerDetector> OnDetectorChangedState;
+    public event Action<PlayerDetector> OnDetectorStateChanged;
 
     public void CursorEnterEnemy(EnemyVM enemyVM = null) {
         if (OnCursorEnterEnemy == null)
@@ -23,10 +23,10 @@ public class EnemyEvents : MonoBehaviour {
         OnCurserExitEnemy();
     }
 
-    public void DetectorChangedState(PlayerDetector playerDetector) {
-        if (OnDetectorChangedState == null)
+    public void ChangeDetectorState(PlayerDetector playerDetector) {
+        if (OnDetectorStateChanged == null)
             return;
 
-        OnDetectorChangedState(playerDetector);
+        OnDetectorStateChanged(playerDetector);
     }
 }

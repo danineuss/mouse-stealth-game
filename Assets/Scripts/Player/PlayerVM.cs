@@ -31,6 +31,14 @@ public class PlayerVM : MonoBehaviour {
         CheckPlayerInput();
     }
 
+    void CheckPlayerInput() {
+        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
+            if (Input.GetKeyDown(keyCode)) {
+                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
+            }
+        }
+    }
+
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
         targetEnemy = enemyVM;
         if (playerAbilities.RelevantAbilities.Count > 0) {
@@ -47,13 +55,5 @@ public class PlayerVM : MonoBehaviour {
 
     void OnAbilityLearned(IPlayerAbility ability) {
         playerAbilities.LearnAbility(ability);
-    }
-
-    void CheckPlayerInput() {
-        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
-            if (Input.GetKeyDown(keyCode)) {
-                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
-            }
-        }
     }
 }
