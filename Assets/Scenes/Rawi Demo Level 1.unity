@@ -3052,7 +3052,7 @@ Transform:
   - {fileID: 641637627}
   - {fileID: 121005375}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &748723937
 PrefabInstance:
@@ -3456,6 +3456,71 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 131628371}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &918347161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918347163}
+  - component: {fileID: 918347162}
+  m_Layer: 0
+  m_Name: AudioVM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &918347162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918347161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9bb892101a394e923fa43987ba122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerVM: {fileID: 1011678687}
+  Sounds:
+  - Name: Theme
+    Clip: {fileID: 8300000, guid: b05685aa4e82e724b99153c4167ba356, type: 3}
+    Volume: 1
+    Loop: 1
+  - Name: Idle
+    Clip: {fileID: 8300000, guid: bdb6d4e3eb18e2e4495229cd9792f0c2, type: 3}
+    Volume: 1
+    Loop: 0
+  - Name: Searching
+    Clip: {fileID: 8300000, guid: a573c8a676e441f47856d442fb8d1476, type: 3}
+    Volume: 1
+    Loop: 0
+  - Name: Alarmed
+    Clip: {fileID: 8300000, guid: 2f599629769a9ca4a9dc90798a0ec313, type: 3}
+    Volume: 1
+    Loop: 0
+  - Name: Distracted
+    Clip: {fileID: 8300000, guid: 785da0391100a0f49a0adb40d96618b0, type: 3}
+    Volume: 1
+    Loop: 0
+--- !u!4 &918347163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918347161}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &927354980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4314,6 +4379,18 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7935737658638426807, guid: afd11c00dfc42c94ca9c706ecd0a5c78, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: afd11c00dfc42c94ca9c706ecd0a5c78, type: 3}
+--- !u!114 &1011678687 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7935737658638426806, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1011678686}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e752a0019216d594884fe64fa1da278d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1025395837
 GameObject:
   m_ObjectHideFlags: 0
@@ -4690,7 +4767,7 @@ Transform:
   m_Children:
   - {fileID: 1561707638}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1063602621 stripped
 Transform:
@@ -6401,7 +6478,7 @@ Transform:
   - {fileID: 521767397}
   - {fileID: 298009540}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1431638609
 PrefabInstance:
@@ -7677,7 +7754,7 @@ Transform:
   - {fileID: 1708805036}
   - {fileID: 1889935954}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1767376996 stripped
 Transform:

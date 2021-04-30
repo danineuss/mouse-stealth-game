@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyVM : MonoBehaviour {
     [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private AudioVM audioVM;
     public EnemyEvents EnemyEvents { 
         get => enemyEvents;
         private set => enemyEvents = value;
@@ -12,6 +13,8 @@ public class EnemyVM : MonoBehaviour {
     
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
+    private SoundEmitter soundEmitter;
+
     public bool GetDistracted() {
         if (playerDetector.DetectorState != DetectorState.Idle) {
             return false;
@@ -21,10 +24,15 @@ public class EnemyVM : MonoBehaviour {
         enemyIO.SetTextColor(DetectorState.Distracted);
         return true;
     }
+
+    public void PlaySound(Sound sound) {
+        soundEmitter.PlaySound(sound);
+    }
     
     void Awake() {
         enemyIO = GetComponentInChildren<EnemyIO>();
         playerDetector = GetComponentInChildren<PlayerDetector>();
+        soundEmitter = GetComponentInChildren<SoundEmitter>();
     }
 
     void Start() {
@@ -57,6 +65,7 @@ public class EnemyVM : MonoBehaviour {
             return;
         
         enemyIO.SetTextColor(playerDetector.DetectorState);
+        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
     }
 
     void OnReceivePlayerLocation(
