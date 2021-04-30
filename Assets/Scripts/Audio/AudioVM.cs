@@ -14,6 +14,10 @@ public class AudioVM : MonoBehaviour {
         enemyVM.PlaySound(sound);
     }
 
+    public Sound SoundWithName(string name) {
+        return Sounds.Find(s => s.Name == name);
+    }
+
     void Awake() {
         playerSoundEmitter = playerVM.GetComponentInChildren<SoundEmitter>();
     }
