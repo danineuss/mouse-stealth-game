@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Rawi Demo Level 1.unity
+    guid: b6991ba6ea87df74288aef081e892fb3
   m_configObjects: {}

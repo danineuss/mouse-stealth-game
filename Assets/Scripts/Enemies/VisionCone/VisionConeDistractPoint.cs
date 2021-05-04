@@ -13,8 +13,7 @@ public class VisionConeDistractPoint : MonoBehaviour, IVisionConeControlPoint {
         get => transform.position; 
     }
     
-    public void OnDrawGizmos()
-    {
+    public void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, 0.1f);
     }

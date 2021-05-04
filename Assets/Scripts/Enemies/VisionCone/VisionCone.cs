@@ -10,8 +10,7 @@ public enum VisionConeState {
     Distracted
 }
 
-public class VisionCone : MonoBehaviour
-{
+public class VisionCone : MonoBehaviour {
     [SerializeField] private VisionConeControlPoints ControlPoints;
     [SerializeField] private float VisionConePeriod = 5f;
 
@@ -60,8 +59,7 @@ public class VisionCone : MonoBehaviour
         coneVisualizer = GetComponent<ConeVisualizer>();
     }
 
-    void Start()
-    {
+    void Start() {
         InitializeCone();        
         MoveTowardsNextControlPoint();
     }
@@ -88,9 +86,8 @@ public class VisionCone : MonoBehaviour
         var newControlPoint = ControlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
-        if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView) {
+        if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView)
             return;
-        }
 
         currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
         StartCoroutine(currentCoroutine);

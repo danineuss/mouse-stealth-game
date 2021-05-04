@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SceneEvents : MonoBehaviour
-{
-    public event Action OnPlayerEnterDoor;
-    public event Action OnPlayerReachedSceneEnd;
+public class SceneEvents : MonoBehaviour {
+    public event Action<DialogVM> OnDialogOpened;
+    public event Action<DialogVM> OnDialogClosed;
 
-    public void PlayerEnterDoor() {
-        if (OnPlayerEnterDoor == null) {
+    public void DialogOpened(DialogVM dialogVM) {
+        if (OnDialogOpened == null)
             return;
-        }
-        OnPlayerEnterDoor();
+        
+        OnDialogOpened(dialogVM);
     }
 
-    public void PlayerReachedSceneEnd() {
-        if (OnPlayerReachedSceneEnd == null) {
+    public void DialogClosed(DialogVM dialogVM) {
+        if (OnDialogClosed == null)
             return;
-        }
-        OnPlayerReachedSceneEnd();
+        
+        OnDialogClosed(dialogVM);
     }
 }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerVM : MonoBehaviour
-{
+public class PlayerVM : MonoBehaviour {
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private PlayerEvents playerEvents;
     public PlayerEvents PlayerEvents {
@@ -18,15 +17,26 @@ public class PlayerVM : MonoBehaviour
         playerAbilities = GetComponentInChildren<PlayerAbilities>();
     }
     
-    void Start()
-    {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+    void Start() {
+        InitializeEvents();
     }
 
-    void Update()
-    {
+    void InitializeEvents() {
+        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        playerEvents.OnAbilityLearned += OnAbilityLearned;
+    }
+
+    void Update() {
         CheckPlayerInput();
+    }
+
+    void CheckPlayerInput() {
+        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
+            if (Input.GetKeyDown(keyCode)) {
+                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
+            }
+        }
     }
 
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
@@ -43,11 +53,7 @@ public class PlayerVM : MonoBehaviour
         targetEnemy = null;
     }
 
-    void CheckPlayerInput() {
-        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
-            if (Input.GetKeyDown(keyCode)) {
-                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
-            }
-        }
+    void OnAbilityLearned(IPlayerAbility ability) {
+        playerAbilities.LearnAbility(ability);
     }
 }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstPersonCameraController : MonoBehaviour 
-{
+public class FirstPersonCameraController : MonoBehaviour {
     [SerializeField] private float RotationSpeed = 1;
     [SerializeField] private Transform Player;
     
@@ -17,21 +16,17 @@ public class FirstPersonCameraController : MonoBehaviour
         cursorLocked = locked;
     }
 
-    void Start() 
-    {
+    void Start() {
         initialYRotation = Player.localRotation.eulerAngles.y;
     }
 
-    void LateUpdate() 
-    {
+    void LateUpdate() {
         CameraControl();
     }
 
-    void CameraControl() 
-    {
-        if (!cursorLocked) {
+    void CameraControl() {
+        if (!cursorLocked)
             return;
-        }
 
         cursorX += Input.GetAxis("Mouse X") * RotationSpeed;
         cursorY -= Input.GetAxis("Mouse Y") * RotationSpeed;

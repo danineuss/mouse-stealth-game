@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class EnemyIO : MonoBehaviour
-{
+public class EnemyIO : MonoBehaviour {
     [SerializeField] private Color kActiveTextColor = new Color(0, 71, 188, 255);
     [SerializeField] private Color kInactiveTextColor = new Color(0, 75, 75, 75);
 
@@ -79,9 +78,8 @@ public class EnemyIO : MonoBehaviour
     }
 
     void UpdateTextOrientation() {
-        if (playerFollowTransform == null) {
+        if (playerFollowTransform == null)
             return;
-        }
 
         transform.LookAt(playerFollowTransform);
     }

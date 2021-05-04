@@ -9,8 +9,7 @@ public enum DetectorState {
     Distracted
 }
 
-public class PlayerDetector : MonoBehaviour
-{
+public class PlayerDetector : MonoBehaviour {
     [SerializeField] private Transform Player;
     [SerializeField] private LayerMask ObstacleMask;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
@@ -18,8 +17,11 @@ public class PlayerDetector : MonoBehaviour
     public DetectorState DetectorState { 
         get => detectorState;
         private set {
+            if (detectorState == value)
+                return;
+
             detectorState = value;
-            enemyEvents.DetectorChangedState(this);
+            enemyEvents.ChangeDetectorState(this);
         } 
     }
 
@@ -33,9 +35,8 @@ public class PlayerDetector : MonoBehaviour
     private float timeOfLastDistraction = 0f;
 
     public void SetStateDistracted() {
-        if (DetectorState == DetectorState.Searching) {
+        if (DetectorState == DetectorState.Searching)
             return;
-        }
         
         DetectorState = DetectorState.Distracted;
         visionCone.SetStateDistracted(true);    
@@ -45,9 +46,8 @@ public class PlayerDetector : MonoBehaviour
     }
 
     IEnumerator ResetDistraction() {
-        while (Time.time - timeOfLastDistraction < kDistractionDuration) {
+        while (Time.time - timeOfLastDistraction < kDistractionDuration)
             yield return null;
-        }
 
         DetectorState = DetectorState.Idle;
         visionCone.SetStateDistracted(false);
@@ -58,15 +58,13 @@ public class PlayerDetector : MonoBehaviour
         enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
     }
 
-    void Start()
-    {
+    void Start() {
         DetectorState = DetectorState.Idle;
 
         StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
     }
 
-    void Update()
-    {
+    void Update() {
         SetDetectionState();
     }
 
@@ -78,9 +76,8 @@ public class PlayerDetector : MonoBehaviour
     }
 
     void DetectPlayer() {    
-        if (DetectorState == DetectorState.Distracted) {
+        if (DetectorState == DetectorState.Distracted)
             return;
-        }
 
         bool wasPlayerPreviouslyVisible = playerVisible;
         if (PlayerOutsideVisibleCone()) {

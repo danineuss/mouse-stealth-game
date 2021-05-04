@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyVM : MonoBehaviour
-{
+public class EnemyVM : MonoBehaviour {
     [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private AudioVM audioVM;
     public EnemyEvents EnemyEvents { 
         get => enemyEvents;
         private set => enemyEvents = value;
@@ -13,22 +13,7 @@ public class EnemyVM : MonoBehaviour
     
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
-    
-    void Awake() {
-        enemyIO = GetComponentInChildren<EnemyIO>();
-        playerDetector = GetComponentInChildren<PlayerDetector>();
-    }
-
-    void Start()
-    {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        enemyEvents.OnDetectorChangedState += OnDetectorChangeState;
-
-        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
-        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
-    }
+    private SoundEmitter soundEmitter;
 
     public bool GetDistracted() {
         if (playerDetector.DetectorState != DetectorState.Idle) {
@@ -39,11 +24,35 @@ public class EnemyVM : MonoBehaviour
         enemyIO.SetTextColor(DetectorState.Distracted);
         return true;
     }
+
+    public void PlaySound(Sound sound) {
+        soundEmitter.PlaySound(sound);
+    }
+    
+    void Awake() {
+        enemyIO = GetComponentInChildren<EnemyIO>();
+        playerDetector = GetComponentInChildren<PlayerDetector>();
+        soundEmitter = GetComponentInChildren<SoundEmitter>();
+    }
+
+    void Start() {
+        InitializeEvents();
+    }
+
+    void InitializeEvents() {
+        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
+
+        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
+        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+    }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+    
         enemyIO.SetDisplayVisibility(true);
     }
 
@@ -51,27 +60,27 @@ public class EnemyVM : MonoBehaviour
         enemyIO.SetDisplayVisibility(false);
     }
 
-    void OnDetectorChangeState(PlayerDetector playerDetector) {
-        if (playerDetector != this.playerDetector) {
+    void OnDetectorStateChanged(PlayerDetector playerDetector) {
+        if (playerDetector != this.playerDetector)
             return;
-        }
         
         enemyIO.SetTextColor(playerDetector.DetectorState);
+        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
     }
 
     void OnReceivePlayerLocation(
         EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null 
     ) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
     void OnRemovePlayerLocation(EnemyVM enemyVM) {
-        if (enemyVM != this) {
+        if (enemyVM != this)
             return;
-        }
+
         enemyIO.SetTextFollowingPlayer(false);
     }
 

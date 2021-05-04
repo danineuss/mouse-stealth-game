@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAbilityDistract : MonoBehaviour, IPlayerAbility
-{
+public class PlayerAbilityDistract : IPlayerAbility {
     public KeyCode AssociatedKey {
         get => KeyCode.F;
     }
@@ -12,9 +11,8 @@ public class PlayerAbilityDistract : MonoBehaviour, IPlayerAbility
     }
 
     public bool Execute(EnemyVM enemyVM = null) {
-        if (enemyVM == null) {
+        if (enemyVM == null)
             return false;
-        }
 
         return enemyVM.GetDistracted();
     }
