@@ -4,9 +4,8 @@ using UnityEngine.Assertions;
 public class PlayerRoamingArea : MonoBehaviour, IPlayerMovementRestictable {
     private Collider boxCollider;
     
-    void Start() {
+    void Awake() {
         boxCollider = GetComponent<Collider>();
-        Assert.IsNotNull(boxCollider);
     }
 
     public Vector3 RestrictPlayerMovement (Vector3 playerPosition) {

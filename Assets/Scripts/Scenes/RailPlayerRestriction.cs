@@ -3,7 +3,7 @@
 public class RailPlayerRestriction : MonoBehaviour, IPlayerMovementRestictable {
     private Collider railCollider;    
     
-    void Start() {
+    void Awake() {
         railCollider = GetComponent<Collider>();
     }
     public Vector3 RestrictPlayerMovement (Vector3 PlayerPosition) {        
