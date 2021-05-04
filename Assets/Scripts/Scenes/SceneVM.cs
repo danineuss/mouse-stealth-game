@@ -24,11 +24,15 @@ public class SceneVM : MonoBehaviour {
 
     private SceneState sceneState;
     private float timeSinceLastPause;
+    private IPlayerInput playerInput;
 
     public void RestartGame() {
         SceneManager.LoadScene(sceneName);
     }
 
+    void Awake() {
+        playerInput = new PlayerInput();
+    }
     void Start() {
         InitializeEvents();
 
@@ -83,11 +87,7 @@ public class SceneVM : MonoBehaviour {
             return; 
         }
 
-        #if UNITY_EDITOR
-        if(Input.GetKeyDown(KeyCode.E)) {
-        #else
-        if(Input.GetKeyDown(KeyCode.Escape)) {
-        #endif
+        if(playerInput.GetKeyDown(PlayerInput.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ChangeGamePausedState(sceneState == SceneState.Paused);

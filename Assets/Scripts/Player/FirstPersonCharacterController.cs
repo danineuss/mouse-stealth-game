@@ -4,6 +4,13 @@ using UnityEngine;
 public class FirstPersonCharacterController : MonoBehaviour {
     public float speed;
     public IPlayerMovementRestictable currentRestictable = null;
+    //Make Readonly
+    private IPlayerInput playerInput;
+
+    // REMOVE
+    void Awake() {
+        playerInput = new PlayerInput();
+    }
 
     void Update() {
         MovementInput();
@@ -23,10 +30,8 @@ public class FirstPersonCharacterController : MonoBehaviour {
     }
 
     void MovementInput() {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 playerMovement = new Vector3(horizontal, 0f, vertical).normalized * speed * Time.deltaTime;
+        var input = new Vector3(playerInput.Horizontal, 0f, playerInput.Vertical).normalized;
+        Vector3 playerMovement = input * speed * Time.deltaTime;
 
         transform.Translate(playerMovement, Space.Self);
     }

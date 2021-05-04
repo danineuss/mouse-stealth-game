@@ -12,9 +12,12 @@ public class PlayerVM : MonoBehaviour {
 
     private EnemyVM targetEnemy = null;
     private PlayerAbilities playerAbilities;
+    private IPlayerInput playerInput;
 
     void Awake() {
         playerAbilities = GetComponentInChildren<PlayerAbilities>();
+        playerInput = new PlayerInput();
+
     }
     
     void Start() {
@@ -33,9 +36,8 @@ public class PlayerVM : MonoBehaviour {
 
     void CheckPlayerInput() {
         foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
-            if (Input.GetKeyDown(keyCode)) {
+            if (playerInput.GetKeyDown(keyCode)) 
                 playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
-            }
         }
     }
 
