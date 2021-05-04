@@ -10,7 +10,6 @@ public class SoundTrigger : MonoBehaviour
 
     void Awake() {
         soundEmitter = GetComponentInChildren<SoundEmitter>();
-        audioVM = FindObjectOfType<AudioVM>();
     }
 
     void OnTriggerEnter() {

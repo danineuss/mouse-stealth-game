@@ -1657,7 +1657,7 @@ PrefabInstance:
       propertyPath: m_Text
       value: It will grab their awareness for a few seconds until they understand
         its irrelevance. Use this time to move to a more advantageous location. This
-        doesn't work if the human is already suspicious though.
+        only works while the human does not see you though.
       objectReference: {fileID: 0}
     - target: {fileID: 1921680817036474250, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -1773,6 +1773,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Distract 03
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1921680818248305654, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -3190,164 +3195,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 942936702}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &555834459
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1367584622}
-    m_Modifications:
-    - target: {fileID: 1921680817013753879, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_Text
-      value: "Once a human notices you, they will investigate and you have a short
-        time frame until they register that there is an intruder in their \rpremises.
-        Use this time to find cover quickly. Then wait. Humans tend to have a freightfully
-        short memory span and will forget your \rappearance shortly.\r"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680817013753880, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 294.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_Name
-      value: Intro 04
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818248305654, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1367584623}
-    - target: {fileID: 1921680818248305654, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: IterateScreens
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921680818383901875, guid: 7722d46dd6453984093fb19e4c43eb1e,
-        type: 3}
-      propertyPath: m_Text
-      value: Let's go!
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7722d46dd6453984093fb19e4c43eb1e, type: 3}
---- !u!224 &555834460 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
-    type: 3}
-  m_PrefabInstance: {fileID: 555834459}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &571178659
 GameObject:
   m_ObjectHideFlags: 0
@@ -3428,8 +3275,14 @@ PrefabInstance:
     - target: {fileID: 1921680817013753879, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_Text
-      value: Your mission is to traverse the den of these humans without causing
-        an alarm. Stick to the walls of below protective furniture, as by our conditioning.
+      value: "Your mission is to traverse the den of these humans without causing
+        an alarm. Stick to the walls of below furniture. Meet me at the end of this
+        room. \n\nGood luck!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680817013753880, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 230.8
       objectReference: {fileID: 0}
     - target: {fileID: 1921680817013753881, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -3575,6 +3428,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680818383901875, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_Text
+      value: Let's Go!
       objectReference: {fileID: 0}
     - target: {fileID: 1921680818855155209, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -4546,21 +4404,34 @@ PrefabInstance:
     - target: {fileID: 1921680817013753879, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_Text
-      value: "Recent advances in both human and rodent tech made this even easier,
-        let me show you one of the latest breakthroughs - it's a hit! Most humans
-        carry with them at all times what they call \"smart\" phone. Use these circuit
-        boards with a display to send them an intrusive but banal message. Usually
-        promotional mail. \r"
+      value: 'Recent advances in both human and rodent tech made this even easier,
+        let me show you one of the latest breakthroughs: promotional mail - it''s
+        a hit! You can send one to the target human''s "smart" phone. '
       objectReference: {fileID: 0}
     - target: {fileID: 1921680817013753880, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 294.87
       objectReference: {fileID: 0}
+    - target: {fileID: 1921680817013753881, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1921680817036474250, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_Text
       value: 'NEW ABILITY: DISTRACT'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680817036474252, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680817623235971, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1921680818137953357, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -4686,6 +4557,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: IterateScreens
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680818248305656, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680818855155209, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7722d46dd6453984093fb19e4c43eb1e, type: 3}
@@ -5394,7 +5275,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 102}
-  m_SizeDelta: {x: 250, y: 33}
+  m_SizeDelta: {x: 450, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1025395839
 MonoBehaviour:
@@ -5427,7 +5308,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: YOU WON!
+  m_Text: MISSION SUCCESSFUL!
 --- !u!222 &1025395840
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7157,7 +7038,6 @@ Transform:
   - {fileID: 1133266274}
   - {fileID: 365031993}
   - {fileID: 585890237}
-  - {fileID: 555834460}
   m_Father: {fileID: 1428400688}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7177,7 +7057,6 @@ MonoBehaviour:
   - {fileID: 1133266273}
   - {fileID: 365031994}
   - {fileID: 1309970219}
-  - {fileID: 1966272439}
 --- !u!1001 &1372511605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7699,8 +7578,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1367584622}
-  - {fileID: 1703259182}
   - {fileID: 1737403225}
+  - {fileID: 1703259182}
   - {fileID: 1005156261}
   - {fileID: 521767397}
   - {fileID: 298009540}
@@ -8702,8 +8581,14 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: "You managed this far - good. Being attentive, timely and quick certainly
-        are the bread and butter of a successful (alive) Extractor. But over the
-        millenia we learned many techniques to direct humans and their attention.\r"
+        are the bread and butter of a successful (and alive) Extractor. But over
+        the millenia we learned many techniques to direct humans and manipulate their
+        attention.\r"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921680817013753880, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 239.14
       objectReference: {fileID: 0}
     - target: {fileID: 1921680817036474250, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
@@ -9047,7 +8932,7 @@ Transform:
   m_Children:
   - {fileID: 1043970168}
   m_Father: {fileID: 1428400688}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1703259183
 MonoBehaviour:
@@ -9139,7 +9024,7 @@ Transform:
   - {fileID: 936222452}
   - {fileID: 328774610}
   m_Father: {fileID: 1428400688}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1737403226
 MonoBehaviour:
@@ -9661,6 +9546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59697faa6de3bf44a801c688969ff72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisableAfterDisplay: 0
   dialogVM: {fileID: 1703259183}
   sceneVM: {fileID: 622300479}
 --- !u!114 &1817229982
@@ -9957,6 +9843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59697faa6de3bf44a801c688969ff72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisableAfterDisplay: 1
   dialogVM: {fileID: 1737403226}
   sceneVM: {fileID: 622300479}
 --- !u!65 &1897082987
@@ -10064,12 +9951,6 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1966272439 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1921680818137953358, guid: 7722d46dd6453984093fb19e4c43eb1e,
-    type: 3}
-  m_PrefabInstance: {fileID: 555834459}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1974005560
 GameObject:
   m_ObjectHideFlags: 0
@@ -10718,6 +10599,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1367584622}
     m_Modifications:
+    - target: {fileID: 1921680817013753879, guid: 7722d46dd6453984093fb19e4c43eb1e,
+        type: 3}
+      propertyPath: m_Text
+      value: "Welcome! So you want to join the Extractors and become yourself part
+        of our illustrious group of Recon Scouts and Tech Snatchers? \n\nWell, let's
+        start with the basics then."
+      objectReference: {fileID: 0}
     - target: {fileID: 1921680817013753881, guid: 7722d46dd6453984093fb19e4c43eb1e,
         type: 3}
       propertyPath: m_IsActive
