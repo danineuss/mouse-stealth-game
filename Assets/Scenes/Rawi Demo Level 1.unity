@@ -1631,7 +1631,7 @@ PrefabInstance:
         type: 3}
       propertyPath: FirstPersonCameraController
       value: 
-      objectReference: {fileID: 364768347}
+      objectReference: {fileID: 0}
     - target: {fileID: 8484407314933834035, guid: ba57957757ec0f1469a4ea8cdc3a9d3a,
         type: 3}
       propertyPath: sceneEvents
@@ -2008,18 +2008,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c4ca216dcfdedb4bbe1c9d6e0c707b1, type: 3}
---- !u!114 &364768347 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7935737657334744320, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
-    type: 3}
-  m_PrefabInstance: {fileID: 1011678686}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d89e98baf77fe4daf5a667f07192c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &365031992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3635,9 +3623,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UICoordinator: {fileID: 1428400687}
-  FirstPersonCameraController: {fileID: 364768347}
   enemyEvents: {fileID: 786321557}
   sceneEvents: {fileID: 331622347}
+  playerVM: {fileID: 1011678687}
   sceneName: Rawi Demo Level 1
 --- !u!4 &627275061 stripped
 Transform:
@@ -5041,6 +5029,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 699009812}
     m_Modifications:
+    - target: {fileID: 7935737657334744322, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7935737658638426806, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: enemyEvents
@@ -5138,6 +5131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7935737658638426807, guid: afd11c00dfc42c94ca9c706ecd0a5c78, type: 3}
+    - {fileID: 7935737657334744320, guid: afd11c00dfc42c94ca9c706ecd0a5c78, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: afd11c00dfc42c94ca9c706ecd0a5c78, type: 3}
 --- !u!114 &1011678687 stripped
 MonoBehaviour:

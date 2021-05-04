@@ -13,9 +13,9 @@ public enum SceneState {
 
 public class SceneVM : MonoBehaviour {
     [SerializeField] private UICoordinator UICoordinator;
-    [SerializeField] private FirstPersonCameraController FirstPersonCameraController;
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private SceneEvents sceneEvents;
+    [SerializeField] private PlayerVM playerVM;
     [SerializeField] private string sceneName;
     public SceneEvents SceneEvents{
         get => sceneEvents;
@@ -24,15 +24,11 @@ public class SceneVM : MonoBehaviour {
 
     private SceneState sceneState;
     private float timeSinceLastPause;
-    private IPlayerInput playerInput;
 
     public void RestartGame() {
         SceneManager.LoadScene(sceneName);
     }
 
-    void Awake() {
-        playerInput = new PlayerInput();
-    }
     void Start() {
         InitializeEvents();
 
@@ -56,10 +52,10 @@ public class SceneVM : MonoBehaviour {
     void ChangeGamePausedState(bool paused) {
         if (paused) {
             Time.timeScale = 0f;
-            FirstPersonCameraController.ChangeCursorLockedState(false);
+            playerVM.CameraController.ChangeCursorLockedState(false);
         } else {
             Time.timeScale = 1f;
-            FirstPersonCameraController.ChangeCursorLockedState(true);
+            playerVM.CameraController.ChangeCursorLockedState(true);
         }
     }
 
@@ -87,7 +83,7 @@ public class SceneVM : MonoBehaviour {
             return; 
         }
 
-        if(playerInput.GetKeyDown(PlayerInput.Escape)) {
+        if(playerVM.PlayerInput.GetKeyDown(PlayerInput.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ChangeGamePausedState(sceneState == SceneState.Paused);

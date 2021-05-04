@@ -1,46 +1,50 @@
 
 using UnityEngine;
 
-public class FirstPersonCharacterController : MonoBehaviour {
-    public float speed;
-    public IPlayerMovementRestictable currentRestictable = null;
-    //Make Readonly
-    private IPlayerInput playerInput;
+public interface IFirstPersonCharacterController
+{
+    void MoveCharacter();
+    void RestrictCharacterMovement();
+    void OnTriggerEnter(Collider collider);
+}
 
-    // REMOVE
-    void Awake() {
-        playerInput = new PlayerInput();
+public class FirstPersonCharacterController : IFirstPersonCharacterController
+{
+    private Transform characterTransform;
+    private readonly IPlayerInput playerInput;
+    private IPlayerMovementRestictable currentRestictable;
+    private float movementSpeed;
+
+    public FirstPersonCharacterController(Transform character, IPlayerInput playerInput, float movementSpeed) 
+    {
+        characterTransform = character;
+        this.playerInput = playerInput;
+        currentRestictable = null;
     }
 
-    void Update() {
-        MovementInput();
-    }
-
-    void LateUpdate() {
-        RestrictPlayerMovement();        
-    }
-
-    void OnTriggerEnter (Collider collider) {
-        IPlayerMovementRestictable restictable = collider.GetComponentInParent<IPlayerMovementRestictable>();
-        if (restictable == null || restictable == currentRestictable) { 
-            return; 
-        }
-
-        currentRestictable = restictable;
-    }
-
-    void MovementInput() {
+    public void MoveCharacter()
+    {
         var input = new Vector3(playerInput.Horizontal, 0f, playerInput.Vertical).normalized;
-        Vector3 playerMovement = input * speed * Time.deltaTime;
+        Vector3 playerMovement = input * movementSpeed * Time.deltaTime;
 
-        transform.Translate(playerMovement, Space.Self);
+        characterTransform.Translate(playerMovement, Space.Self);
     }
 
-    void RestrictPlayerMovement() {
+    public void RestrictCharacterMovement()
+    {
         if (currentRestictable == null)
             return;
-        
-        var newPosition = currentRestictable.RestrictPlayerMovement(transform.position);
-        transform.position = newPosition;
+
+        var newPosition = currentRestictable.RestrictPlayerMovement(characterTransform.position);
+        characterTransform.position = newPosition;
+    }
+    
+    public void OnTriggerEnter(Collider collider)
+    {
+        IPlayerMovementRestictable restictable = collider.GetComponentInParent<IPlayerMovementRestictable>();
+        if (restictable == null || restictable == currentRestictable)
+            return;
+
+        currentRestictable = restictable;
     }
 }

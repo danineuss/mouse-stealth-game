@@ -194,7 +194,6 @@ GameObject:
   - component: {fileID: 7935737657334744323}
   - component: {fileID: 7935737657334744326}
   - component: {fileID: 7935737657334744321}
-  - component: {fileID: 7935737657334744320}
   m_Layer: 8
   m_Name: First Person Camera
   m_TagString: MainCamera
@@ -267,20 +266,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7935737657334744322}
   m_Enabled: 1
---- !u!114 &7935737657334744320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7935737657334744322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d89e98baf77fe4daf5a667f07192c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RotationSpeed: 2
-  Player: {fileID: 7939834745407043162}
 --- !u!1 &7936507694457688780
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +278,6 @@ GameObject:
   - component: {fileID: 8030835049467093928}
   - component: {fileID: 7935737658861407984}
   - component: {fileID: 7935737658861407985}
-  - component: {fileID: 7935737658861407996}
   - component: {fileID: 7935737658638426806}
   m_Layer: 8
   m_Name: Rat Grey
@@ -369,19 +353,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0.13277143, z: 0}
---- !u!114 &7935737658861407996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7936507694457688780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9372b42f76d224fb15840242ed6e93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
 --- !u!114 &7935737658638426806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,6 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyEvents: {fileID: 0}
   playerEvents: {fileID: 0}
+  movementSpeed: 1
 --- !u!1 &7936927917546303542
 GameObject:
   m_ObjectHideFlags: 0
