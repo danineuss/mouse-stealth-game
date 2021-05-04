@@ -368,6 +368,7 @@ MonoBehaviour:
   enemyEvents: {fileID: 0}
   playerEvents: {fileID: 0}
   movementSpeed: 1
+  rotationSpeed: 2
 --- !u!1 &7936927917546303542
 GameObject:
   m_ObjectHideFlags: 0

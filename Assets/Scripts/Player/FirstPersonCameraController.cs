@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IFirstPersonCameraController {
-    void CameraControl();
+    void RotateForPlayerInput();
     void ChangeCursorLockedState(bool locked);
 }
 
@@ -12,27 +10,37 @@ public class FirstPersonCameraController : IFirstPersonCameraController
     private Transform playerTransform;
     private Transform cameraTransform;
     private readonly IPlayerInput playerInput;
-    private readonly float RotationSpeed = 1;
+    private readonly float rotationSpeed;
+
     private float cursorX, cursorY;
     private float initialYRotation;
     private bool cursorLocked;
 
-    public FirstPersonCameraController(Transform player, Transform camera, IPlayerInput playerInput)
+    public FirstPersonCameraController(
+        Transform player, Transform camera, IPlayerInput playerInput, float rotationSpeed)
     {
         playerTransform = player;
         cameraTransform = camera;
         this.playerInput = playerInput;
-        
+        this.rotationSpeed = rotationSpeed;
+
+        InitializeValues();
+    }
+
+    void InitializeValues() {
+        cursorX = 0f; 
+        cursorY = 0f;
         initialYRotation = playerTransform.localRotation.eulerAngles.y;
+        cursorLocked = true;
     }
     
-    public void CameraControl()
+    public void RotateForPlayerInput()
     {
         if (!cursorLocked)
             return;
 
-        cursorX += playerInput.CursorX * RotationSpeed;
-        cursorY -= playerInput.CursorY * RotationSpeed;
+        cursorX += playerInput.CursorX * rotationSpeed;
+        cursorY -= playerInput.CursorY * rotationSpeed;
         cursorY = Mathf.Clamp(cursorY, -35, 60);
 
         playerTransform.rotation = Quaternion.Euler(0, initialYRotation + cursorX, 0);

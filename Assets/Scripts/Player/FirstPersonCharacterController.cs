@@ -12,13 +12,14 @@ public class FirstPersonCharacterController : IFirstPersonCharacterController
 {
     private Transform characterTransform;
     private readonly IPlayerInput playerInput;
-    private IPlayerMovementRestictable currentRestictable;
     private float movementSpeed;
+    private IPlayerMovementRestictable currentRestictable;
 
     public FirstPersonCharacterController(Transform character, IPlayerInput playerInput, float movementSpeed) 
     {
         characterTransform = character;
         this.playerInput = playerInput;
+        this.movementSpeed = movementSpeed;
         currentRestictable = null;
     }
 

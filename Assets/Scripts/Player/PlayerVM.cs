@@ -5,6 +5,7 @@ public class PlayerVM : MonoBehaviour
     [SerializeField] private EnemyEvents enemyEvents;
     [SerializeField] private PlayerEvents playerEvents;
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float rotationSpeed;
     public PlayerEvents PlayerEvents => playerEvents;
     public IFirstPersonCameraController CameraController => cameraController;
     public IPlayerInput PlayerInput => playerInput;
@@ -22,7 +23,7 @@ public class PlayerVM : MonoBehaviour
         playerInput = new PlayerInput();
 
         var cameraTransform = GetComponentInChildren<Camera>().gameObject.transform;
-        cameraController = new FirstPersonCameraController(transform, cameraTransform, playerInput);
+        cameraController = new FirstPersonCameraController(transform, cameraTransform, playerInput, rotationSpeed);
         characterController = new FirstPersonCharacterController(transform, playerInput, movementSpeed);
 
         targetEnemy = null;
@@ -48,7 +49,7 @@ public class PlayerVM : MonoBehaviour
 
     void LateUpdate() 
     {
-        cameraController.CameraControl();
+        cameraController.RotateForPlayerInput();
         characterController.RestrictCharacterMovement();
     }
 
