@@ -42,7 +42,7 @@ public class FirstPersonCharacterController : IFirstPersonCharacterController
     
     public void OnTriggerEnter(Collider collider)
     {
-        IPlayerMovementRestictable restictable = collider.GetComponentInParent<IPlayerMovementRestictable>();
+        IPlayerMovementRestictable restictable = collider.GetComponent<IPlayerMovementRestictable>();
         if (restictable == null || restictable == currentRestictable)
             return;
 

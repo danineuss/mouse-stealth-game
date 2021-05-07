@@ -42,4 +42,9 @@ public class PlayerMono_Mock : MonoBehaviour {
     {
         PlayerVM.LateUpdate();
     }
+
+    public void OnTriggerEnter(Collider collider) 
+    {
+        PlayerVM.OnTriggerEnter(collider);
+    }
 }
