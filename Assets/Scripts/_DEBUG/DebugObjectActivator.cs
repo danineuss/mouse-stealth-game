@@ -5,10 +5,10 @@ using UnityEngine;
 public class DebugObjectActivator : MonoBehaviour {
     public GameObject Object;
     public bool DesiredStateAfterTrigger;
-    public PlayerEvents PlayerEvents;
+    public PlayerEventsMono PlayerEventsMono;
     
     void OnTriggerEnter() {
         Object.SetActive(DesiredStateAfterTrigger);
-        PlayerEvents.AbilityLearned(new PlayerAbilityDistract());
+        PlayerEventsMono.PlayerEvents.AbilityLearned(new PlayerAbilityDistract());
     }
 }

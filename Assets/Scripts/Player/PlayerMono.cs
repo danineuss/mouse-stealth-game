@@ -21,15 +21,15 @@ using UnityEngine;
 
 public class PlayerMono: MonoBehaviour 
 {
-    [SerializeField] private EnemyEvents enemyEvents;
-    [SerializeField] private PlayerEvents playerEvents;
+    [SerializeField] private EnemyEventsMono enemyEventsMono;
+    [SerializeField] private PlayerEventsMono playerEventsMono;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
     public PlayerVM PlayerVM;
 
     void Awake() 
     {
-        var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+        var playerAbilities = new PlayerAbilities(playerEventsMono.PlayerEvents, new Dictionary<KeyCode, IPlayerAbility>());
         var playerInput = new PlayerInput();
 
         var cameraTransform = GetComponentInChildren<Camera>().gameObject.transform;
@@ -37,7 +37,13 @@ public class PlayerMono: MonoBehaviour
         var characterController = new FirstPersonCharacterController(transform, playerInput, movementSpeed);
 
         PlayerVM = new PlayerVM(
-            gameObject, cameraController, characterController, playerInput, playerAbilities, playerEvents, enemyEvents);
+            gameObject.transform, 
+            cameraController, 
+            characterController, 
+            playerInput, 
+            playerAbilities, 
+            playerEventsMono.PlayerEvents, 
+            enemyEventsMono.EnemyEvents);
     }
 
     public virtual void Update() 

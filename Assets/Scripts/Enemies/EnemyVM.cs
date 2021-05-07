@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyVM : MonoBehaviour {
-    [SerializeField] private PlayerEvents playerEvents;
-    [SerializeField] private EnemyEvents enemyEvents;
+    [SerializeField] private PlayerEventsMono playerEventsMono;
+    [SerializeField] private EnemyEventsMono enemyEventsMono;
     [SerializeField] private AudioVM audioVM;
-    public EnemyEvents EnemyEvents { 
-        get => enemyEvents;
-        private set => enemyEvents = value;
-    }
-    
+    public EnemyEvents EnemyEvents => enemyEventsMono.EnemyEvents;
+
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
     private SoundEmitter soundEmitter;
@@ -40,13 +37,13 @@ public class EnemyVM : MonoBehaviour {
     }
 
     void InitializeEvents() {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
+        enemyEventsMono.EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEventsMono.EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEventsMono.EnemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
-        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
-        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        playerEventsMono.PlayerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
+        playerEventsMono.PlayerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        playerEventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
     
     void OnCursorEnterEnemy(EnemyVM enemyVM) {

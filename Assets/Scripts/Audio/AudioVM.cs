@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 using UnityEngine;
 
 public class AudioVM : MonoBehaviour {
-    [SerializeField] private PlayerVM playerVM;
+    [SerializeField] private PlayerMono playerMono;
     [SerializeField] private List<Sound> Sounds;
     private SoundEmitter playerSoundEmitter;
 
@@ -19,7 +19,7 @@ public class AudioVM : MonoBehaviour {
     }
 
     void Awake() {
-        playerSoundEmitter = playerVM.GetComponentInChildren<SoundEmitter>();
+        playerSoundEmitter = playerMono.GetComponentInChildren<SoundEmitter>();
     }
 
     void Start() {
