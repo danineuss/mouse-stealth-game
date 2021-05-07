@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerEvents : MonoBehaviour {
+public class PlayerEvents {
     public event Action<EnemyVM, bool, Transform> OnSendPlayerLocation;
     public event Action<EnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;

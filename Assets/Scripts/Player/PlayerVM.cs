@@ -1,36 +1,41 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerVM : MonoBehaviour 
+public class PlayerVM 
 {
-    [SerializeField] private EnemyEvents enemyEvents;
-    [SerializeField] private PlayerEvents playerEvents;
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private float rotationSpeed;
     public PlayerEvents PlayerEvents => playerEvents;
     public IFirstPersonCameraController CameraController => cameraController;
     public IPlayerInput PlayerInput => playerInput;
 
-    private EnemyVM targetEnemy;
-    private PlayerAbilities playerAbilities;
+    private Transform playerTransform;
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
     private IPlayerInput playerInput;
+    private IPlayerAbilities playerAbilities;
+    private EnemyEvents enemyEvents;
+    private PlayerEvents playerEvents;
+    private EnemyVM targetEnemy;
 
-    void Awake() 
+    // TODO: make playerEvents Iplayerevents
+    public PlayerVM(
+        Transform playerTransform,
+        IFirstPersonCameraController cameraController, 
+        IFirstPersonCharacterController characterController,
+        IPlayerInput playerInput, 
+        IPlayerAbilities playerAbilities,
+        PlayerEvents playerEvents, 
+        EnemyEvents enemyEvents)
     {
-        // Make non-monobehaviour
-        playerAbilities = GetComponentInChildren<PlayerAbilities>();
-        playerInput = new PlayerInput();
-
-        var cameraTransform = GetComponentInChildren<Camera>().gameObject.transform;
-        cameraController = new FirstPersonCameraController(transform, cameraTransform, playerInput, rotationSpeed);
-        characterController = new FirstPersonCharacterController(transform, playerInput, movementSpeed);
+        this.playerTransform = playerTransform;
+        this.cameraController = cameraController;
+        this.characterController = characterController;
+        this.playerInput = playerInput;
+        this.playerAbilities = playerAbilities;
+        this.playerEvents = playerEvents;
+        this.enemyEvents = enemyEvents;
 
         targetEnemy = null;
-    }
-    
-    void Start() 
-    {
+        
         InitializeEvents();
     }
 
@@ -41,19 +46,19 @@ public class PlayerVM : MonoBehaviour
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
-    void Update() 
+    public void Update() 
     {
-        CheckPlayerInput();
+        ApplyPlayerAbilityInput();
         characterController.MoveCharacter();
     }
 
-    void LateUpdate() 
+    public void LateUpdate() 
     {
         cameraController.RotateForPlayerInput();
         characterController.RestrictCharacterMovement();
     }
 
-    void CheckPlayerInput() 
+    void ApplyPlayerAbilityInput() 
     {
         foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
             if (playerInput.GetKeyDown(keyCode)) 
@@ -65,7 +70,7 @@ public class PlayerVM : MonoBehaviour
     {
         targetEnemy = enemyVM;
         if (playerAbilities.RelevantAbilities.Count > 0) {
-            playerEvents.SendPlayerLocation(enemyVM, true, transform);
+            playerEvents.SendPlayerLocation(enemyVM, true, playerTransform);
         } else {
             playerEvents.SendPlayerLocation(enemyVM, false, null);
         }
@@ -82,8 +87,9 @@ public class PlayerVM : MonoBehaviour
         playerAbilities.LearnAbility(ability);
     }
 
-    void OnTriggerEnter(Collider collider) 
-    {
-        characterController.OnTriggerEnter(collider);
-    }
+    // TODO: check that irrelevant.
+    // void OnTriggerEnter(Collider collider) 
+    // {
+    //     characterController.OnTriggerEnter(collider);
+    // }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class EnemyEvents : MonoBehaviour {
+public class EnemyEvents {
     public event Action<EnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
     public event Action<PlayerDetector> OnDetectorStateChanged;
