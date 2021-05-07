@@ -31,15 +31,9 @@ public class PlayerAbilities : IPlayerAbilities
         timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
     }
 
-    public List<KeyCode> RelevantKeyPresses
-    {
-        get => Abilities.Select(x => x.Value.AssociatedKey).ToList();
-    }
+    public List<KeyCode> RelevantKeyPresses => Abilities.Select(x => x.Value.AssociatedKey).ToList();
 
-    public List<IPlayerAbility> RelevantAbilities
-    {
-        get => Abilities.Select(x => x.Value).ToList();
-    }
+    public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
 
     public void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null)
     {

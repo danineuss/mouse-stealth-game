@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerVM 
+public class PlayerVM
 {
     public IPlayerInput PlayerInput => playerInput;
 
@@ -17,11 +17,11 @@ public class PlayerVM
 
     public PlayerVM(
         Transform playerTransform,
-        IFirstPersonCameraController cameraController, 
+        IFirstPersonCameraController cameraController,
         IFirstPersonCharacterController characterController,
-        IPlayerInput playerInput, 
+        IPlayerInput playerInput,
         IPlayerAbilities playerAbilities,
-        IPlayerEvents playerEvents, 
+        IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents)
     {
         this.playerTransform = playerTransform;
@@ -33,11 +33,11 @@ public class PlayerVM
         this.enemyEvents = enemyEvents;
 
         targetEnemy = null;
-        
+
         InitializeEvents();
     }
 
-    void InitializeEvents() 
+    void InitializeEvents()
     {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
@@ -45,13 +45,13 @@ public class PlayerVM
     }
 
 
-    public void Update() 
+    public void Update()
     {
         ApplyPlayerAbilityInput();
         characterController.MoveCharacter();
     }
 
-    public void LateUpdate() 
+    public void LateUpdate()
     {
         cameraController.RotateForPlayerInput();
         characterController.RestrictCharacterMovement();
@@ -67,34 +67,38 @@ public class PlayerVM
         cameraController.ChangeCursorLockedState(locked);
     }
 
-    void ApplyPlayerAbilityInput() 
+    void ApplyPlayerAbilityInput()
     {
         if (playerAbilities.Abilities.Count == 0)
             return;
 
-        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
-            if (playerInput.GetKeyDown(keyCode)) 
+        foreach (var keyCode in playerAbilities.RelevantKeyPresses)
+        {
+            if (playerInput.GetKeyDown(keyCode))
                 playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
         }
     }
 
-    void OnCursorEnterEnemy(EnemyVM enemyVM) 
+    void OnCursorEnterEnemy(EnemyVM enemyVM)
     {
         targetEnemy = enemyVM;
-        if (playerAbilities.RelevantAbilities.Count > 0) {
+        if (playerAbilities.RelevantAbilities.Count > 0)
+        {
             playerEvents.SendPlayerLocation(enemyVM, true, playerTransform);
-        } else {
+        }
+        else
+        {
             playerEvents.SendPlayerLocation(enemyVM, false, null);
         }
     }
 
-    void OnCurserExitEnemy() 
+    void OnCurserExitEnemy()
     {
         playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
     }
 
-    void OnAbilityLearned(IPlayerAbility ability) 
+    void OnAbilityLearned(IPlayerAbility ability)
     {
         playerAbilities.LearnAbility(ability);
     }

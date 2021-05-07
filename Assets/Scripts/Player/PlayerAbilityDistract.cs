@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAbilityDistract : IPlayerAbility {
-    public KeyCode AssociatedKey {
-        get => KeyCode.F;
-    }
-    public float CoolDown {
-        get => 10f;
-    }
+    public KeyCode AssociatedKey => KeyCode.F;
+    public float CoolDown => 10f;
 
     public bool Execute(EnemyVM enemyVM = null) {
         if (enemyVM == null)
