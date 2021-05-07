@@ -1,30 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerVM 
 {
-    public PlayerEvents PlayerEvents => playerEvents;
-    public IFirstPersonCameraController CameraController => cameraController;
     public IPlayerInput PlayerInput => playerInput;
 
     private Transform playerTransform;
+    private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
-    private IPlayerInput playerInput;
     private IPlayerAbilities playerAbilities;
-    private EnemyEvents enemyEvents;
-    private PlayerEvents playerEvents;
+    private IPlayerEvents playerEvents;
+    private IEnemyEvents enemyEvents;
     private EnemyVM targetEnemy;
 
-    // TODO: make playerEvents Iplayerevents
     public PlayerVM(
         Transform playerTransform,
         IFirstPersonCameraController cameraController, 
         IFirstPersonCharacterController characterController,
         IPlayerInput playerInput, 
         IPlayerAbilities playerAbilities,
-        PlayerEvents playerEvents, 
-        EnemyEvents enemyEvents)
+        IPlayerEvents playerEvents, 
+        IEnemyEvents enemyEvents)
     {
         this.playerTransform = playerTransform;
         this.cameraController = cameraController;
@@ -46,6 +44,7 @@ public class PlayerVM
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
+
     public void Update() 
     {
         ApplyPlayerAbilityInput();
@@ -58,8 +57,21 @@ public class PlayerVM
         characterController.RestrictCharacterMovement();
     }
 
+    public void OnTriggerEnter(Collider collider)
+    {
+        characterController.OnTriggerEnter(collider);
+    }
+
+    public void ChangeCursorLockedState(bool locked)
+    {
+        cameraController.ChangeCursorLockedState(locked);
+    }
+
     void ApplyPlayerAbilityInput() 
     {
+        if (playerAbilities.Abilities.Count == 0)
+            return;
+
         foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
             if (playerInput.GetKeyDown(keyCode)) 
                 playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
@@ -86,10 +98,4 @@ public class PlayerVM
     {
         playerAbilities.LearnAbility(ability);
     }
-
-    // TODO: check that irrelevant.
-    // void OnTriggerEnter(Collider collider) 
-    // {
-    //     characterController.OnTriggerEnter(collider);
-    // }
 }

@@ -10,33 +10,59 @@ namespace Tests
     public class FirstPersonCharacterController_Tests
     {
         [UnityTest]
-        public IEnumerator should_move_forward_when_vertical_is_pressed()
+        public IEnumerator should_only_move_forward_when_vertical_is_positive()
         {
-            GameObject playerGameObject = new GameObject("Player");
-            PlayerMono playerMono = playerGameObject.AddComponent<PlayerMono>();
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var playerAbilities = Substitute.For<IPlayerAbilities>();
-            // TODO; make events into interfaces
-            var playerEvents = new PlayerEvents();
-            var enemyEvents = new EnemyEvents();
-
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(1f);
-            var characterController = new FirstPersonCharacterController(playerGameObject.transform, playerInput, 1f);
-            playerMono.PlayerVM = new PlayerVM(
-                playerGameObject.transform, 
-                cameraController, 
-                characterController,
-                playerInput,
-                playerAbilities, 
-                playerEvents,
-                enemyEvents);
+            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
             
             yield return new WaitForSeconds(1f);
 
-            Assert.Greater(playerMono.transform.position.z, 0f);
-            Assert.AreEqual(0f, playerMono.transform.position.x);
-            Assert.AreEqual(0f, playerMono.transform.position.y);
+            Assert.Greater(playerGameObject.transform.position.z, 0f);
+            Assert.AreEqual(0f, playerGameObject.transform.position.x);
+            Assert.AreEqual(0f, playerGameObject.transform.position.y);
+        }
+
+        [UnityTest]
+        public IEnumerator should_only_move_backwards_when_vertical_is_negative()
+        {
+            var playerInput = Substitute.For<IPlayerInput>();
+            playerInput.Vertical.Returns(-1f);
+            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            
+            yield return new WaitForSeconds(1f);
+
+            Assert.Greater(0f, playerGameObject.transform.position.z);
+            Assert.AreEqual(0f, playerGameObject.transform.position.x);
+            Assert.AreEqual(0f, playerGameObject.transform.position.y);
+        }
+
+        [UnityTest]
+        public IEnumerator should_only_move_right_when_horizontal_is_positive()
+        {
+            var playerInput = Substitute.For<IPlayerInput>();
+            playerInput.Horizontal.Returns(1f);
+            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            
+            yield return new WaitForSeconds(1f);
+
+            Assert.Greater(playerGameObject.transform.position.x, 0f);
+            Assert.AreEqual(0f, playerGameObject.transform.position.y);
+            Assert.AreEqual(0f, playerGameObject.transform.position.z);
+        }
+
+        [UnityTest]
+        public IEnumerator should_only_move_left_when_horizontal_is_negative()
+        {
+            var playerInput = Substitute.For<IPlayerInput>();
+            playerInput.Horizontal.Returns(-1f);
+            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            
+            yield return new WaitForSeconds(1f);
+
+            Assert.Greater(0f, playerGameObject.transform.position.x);
+            Assert.AreEqual(0f, playerGameObject.transform.position.y);
+            Assert.AreEqual(0f, playerGameObject.transform.position.z);
         }
     }
 }

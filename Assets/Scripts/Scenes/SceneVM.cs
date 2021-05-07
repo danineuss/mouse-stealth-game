@@ -52,10 +52,10 @@ public class SceneVM : MonoBehaviour {
     void ChangeGamePausedState(bool paused) {
         if (paused) {
             Time.timeScale = 0f;
-            playerMono.PlayerVM.CameraController.ChangeCursorLockedState(false);
+            playerMono.PlayerVM.ChangeCursorLockedState(false);
         } else {
             Time.timeScale = 1f;
-            playerMono.PlayerVM.CameraController.ChangeCursorLockedState(true);
+            playerMono.PlayerVM.ChangeCursorLockedState(true);
         }
     }
 

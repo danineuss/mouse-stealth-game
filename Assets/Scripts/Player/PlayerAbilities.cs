@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public interface IPlayerAbilities
+{
+    Dictionary<KeyCode, IPlayerAbility> Abilities { get; }
+    List<KeyCode> RelevantKeyPresses { get; }
+    List<IPlayerAbility> RelevantAbilities { get; }
+
+    void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null);
+    void LearnAbility(IPlayerAbility ability);
+}
+
 public class PlayerAbilities : IPlayerAbilities
 {
     public Dictionary<KeyCode, IPlayerAbility> Abilities
@@ -11,11 +21,10 @@ public class PlayerAbilities : IPlayerAbilities
     }
 
     private Dictionary<IPlayerAbility, float> timesSinceLastExecute;
-    private PlayerEvents playerEvents;
+    private IPlayerEvents playerEvents;
 
-    //TODO: make playerEvents non-monobehaviour
     public PlayerAbilities(
-        PlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 
+        IPlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 
     {
         this.playerEvents = playerEvents;
         Abilities = abilities;
