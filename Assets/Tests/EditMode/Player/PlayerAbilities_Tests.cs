@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,10 +18,11 @@ namespace Tests
             this.keyCode = keyCode;
             this.coolDown = coolDown;
         }
+        public void SetTarget(EnemyVM target = null) {}
 
-        public bool Execute(EnemyVM enemyVM = null)
+        public void Execute(EnemyVM enemyVM = null)
         {
-            return true;
+            return;
         }
     }
 
@@ -73,5 +75,22 @@ namespace Tests
             Assert.AreEqual(new List<IPlayerAbility>() { firstAbility }, relevantAbilities);
             Assert.AreEqual(new List<KeyCode>() { firstAbility.AssociatedKey }, relevantKeyPresses);
         }
+        
+        [Test]
+        public void should_fire_event_on_ability_executed()
+        {
+            var playerEvents = Substitute.For<IPlayerEvents>();
+            var abilityDictionary = new Dictionary<KeyCode, IPlayerAbility> {
+                { KeyCode.A, firstAbility }
+            };
+            var playerAbilities = new PlayerAbilities(playerEvents, abilityDictionary);
+
+            playerAbilities.ExecuteAbility(firstAbility);
+
+            playerEvents.Received().AbilityExecuted(firstAbility);
+        }
+
+        //TODO: test trying to fire an ability that is not learned
+        //TODO: test trying to fire an ability right after another
     }
 }

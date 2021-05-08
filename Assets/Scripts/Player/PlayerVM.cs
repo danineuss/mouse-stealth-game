@@ -2,7 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerVM
+public interface IPlayerVM
+{
+    IPlayerInput PlayerInput { get; }
+
+    void Update();
+    void LateUpdate();
+    void ChangeCursorLockedState(bool locked);
+    void OnTriggerEnter(Collider collider);
+}
+
+public class PlayerVM : IPlayerVM
 {
     public IPlayerInput PlayerInput => playerInput;
 
