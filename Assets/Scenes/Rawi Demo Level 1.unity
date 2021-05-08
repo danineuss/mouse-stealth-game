@@ -530,12 +530,17 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
     - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1783130274}
+    - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: playerEvents
@@ -555,12 +560,17 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 2651617555995060777, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: patrolPoints.Array.size
@@ -1678,7 +1688,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneEvents
       value: 
-      objectReference: {fileID: 331622347}
+      objectReference: {fileID: 0}
     - target: {fileID: 8484407314933834061, guid: ba57957757ec0f1469a4ea8cdc3a9d3a,
         type: 3}
       propertyPath: m_Name
@@ -1850,22 +1860,16 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 328774609}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &331622346 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6874613040735221451, guid: 35594d7a48ba03141a04a9a8c63ba5fa,
+--- !u!114 &331622347 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2629710228448126127, guid: 35594d7a48ba03141a04a9a8c63ba5fa,
     type: 3}
   m_PrefabInstance: {fileID: 1159619684}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &331622347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331622346}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2602a9b4b9e63149afbc84f9f221084, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c7de170513729246a9b811d429f568d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &354835614
@@ -3677,8 +3681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UICoordinator: {fileID: 1428400687}
-  enemyEventsMono: {fileID: 1159619685}
-  sceneEvents: {fileID: 331622347}
+  eventsMono: {fileID: 331622347}
   playerMono: {fileID: 1011678687}
   sceneName: Rawi Demo Level 1
 --- !u!4 &627275061 stripped
@@ -4687,7 +4690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Object: {fileID: 368052426}
   DesiredStateAfterTrigger: 1
-  PlayerEventsMono: {fileID: 1159619686}
+  EventsMono: {fileID: 331622347}
 --- !u!1001 &942936702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5075,12 +5078,12 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 504715406182728465, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
     - target: {fileID: 504715406182728465, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: movementSpeed
@@ -5091,6 +5094,11 @@ PrefabInstance:
       propertyPath: rotationSpeed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 504715406182728465, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 7935737657334744322, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: m_IsActive
@@ -6025,31 +6033,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6874613040735221440, guid: 35594d7a48ba03141a04a9a8c63ba5fa, type: 3}
+    - {fileID: 1281846396214901451, guid: 35594d7a48ba03141a04a9a8c63ba5fa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 35594d7a48ba03141a04a9a8c63ba5fa, type: 3}
---- !u!114 &1159619685 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7639175370906221587, guid: 35594d7a48ba03141a04a9a8c63ba5fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 1159619684}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331622346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d24cbd12e89de49b7f0021cb047e2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1159619686 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1281846396214901451, guid: 35594d7a48ba03141a04a9a8c63ba5fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 1159619684}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331622346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e08ff3548a671246b6b12462344fb17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1161725890
 GameObject:
   m_ObjectHideFlags: 0
@@ -6616,12 +6601,17 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
     - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1783130274}
+    - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: playerEvents
@@ -6641,12 +6631,17 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 2651617555995060777, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: patrolPoints.Array.size
@@ -6775,12 +6770,17 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
     - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1783130274}
+    - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: playerEvents
@@ -6800,12 +6800,17 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 2651617555995060777, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: patrolPoints.Array.size
@@ -7260,7 +7265,12 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: playerEvents
@@ -7280,12 +7290,17 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 2651617555995060777, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -8582,12 +8597,17 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
     - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1783130274}
+    - target: {fileID: 1408422342615835598, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 1558739450960892359, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_Layer
@@ -8612,12 +8632,17 @@ PrefabInstance:
         type: 3}
       propertyPath: playerEventsMono
       value: 
-      objectReference: {fileID: 1159619686}
+      objectReference: {fileID: 0}
     - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: enemyEventsMono
       value: 
-      objectReference: {fileID: 1159619685}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561507039903289398, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: eventsMono
+      value: 
+      objectReference: {fileID: 331622347}
     - target: {fileID: 2124754023439019386, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_Layer

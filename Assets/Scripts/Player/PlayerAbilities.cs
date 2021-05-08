@@ -35,18 +35,15 @@ public class PlayerAbilities : IPlayerAbilities
 
     public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
 
-    public void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null)
+    public void ExecuteAbility(IPlayerAbility ability, EnemyVM target = null)
     {
         var lastExecute = timesSinceLastExecute[ability];
         if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
             return;
 
-        var executed = ability.Execute(enemyVM);
-        if (executed)
-        {
-            timesSinceLastExecute[ability] = Time.time;
-            playerEvents.AbilityExecuted(ability);
-        }
+        timesSinceLastExecute[ability] = Time.time;
+        ability.SetTarget(target);
+        playerEvents.AbilityExecuted(ability);
     }
 
     public void LearnAbility(IPlayerAbility ability)

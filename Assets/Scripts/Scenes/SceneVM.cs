@@ -13,14 +13,10 @@ public enum SceneState {
 
 public class SceneVM : MonoBehaviour {
     [SerializeField] private UICoordinator UICoordinator;
-    [SerializeField] private EnemyEventsMono enemyEventsMono;
-    [SerializeField] private SceneEvents sceneEvents;
+    [SerializeField] private EventsMono eventsMono;
     [SerializeField] private PlayerMono playerMono;
     [SerializeField] private string sceneName;
-    public SceneEvents SceneEvents{
-        get => sceneEvents;
-        private set => sceneEvents = value;
-    }
+    public SceneEvents SceneEvents => eventsMono.SceneEvents;
 
     private SceneState sceneState;
     private float timeSinceLastPause;
@@ -39,9 +35,9 @@ public class SceneVM : MonoBehaviour {
     }
 
     void InitializeEvents() {
-        enemyEventsMono.EnemyEvents.OnDetectorStateChanged += CheckForFailedGame;
-        sceneEvents.OnDialogOpened += OpenDialog;
-        sceneEvents.OnDialogClosed += CloseDialog;
+        eventsMono.EnemyEvents.OnDetectorStateChanged += CheckForFailedGame;
+        eventsMono.SceneEvents.OnDialogOpened += OpenDialog;
+        eventsMono.SceneEvents.OnDialogClosed += CloseDialog;
     }
 
     void Update() {

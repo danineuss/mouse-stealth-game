@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAbilityDistract : IPlayerAbility {
+public class PlayerAbilityDistract : IPlayerAbility 
+{
     public KeyCode AssociatedKey => KeyCode.F;
     public float CoolDown => 10f;
 
-    public bool Execute(EnemyVM enemyVM = null) {
-        if (enemyVM == null)
-            return false;
+    private EnemyVM targetEnemy;
 
-        return enemyVM.GetDistracted();
+    public void SetTarget(EnemyVM target)
+    {
+        this.targetEnemy = target;
+    }
+
+    public void Execute(EnemyVM enemyVM = null) 
+    {
+        if (enemyVM == null || enemyVM != targetEnemy)
+            return;
+
+        enemyVM.GetDistracted();
     }
 }

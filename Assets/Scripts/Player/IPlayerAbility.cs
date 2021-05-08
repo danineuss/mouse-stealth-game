@@ -8,5 +8,8 @@ public interface IPlayerAbility {
         get;
     }
 
-    bool Execute(EnemyVM enemyVM = null);
+    //TODO: change to targetID
+    void SetTarget(EnemyVM target = null);
+
+    void Execute(EnemyVM enemyVM = null);
 }

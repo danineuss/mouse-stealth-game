@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class PlayerMono: MonoBehaviour 
 {
-    [SerializeField] private EnemyEventsMono enemyEventsMono;
-    [SerializeField] private PlayerEventsMono playerEventsMono;
+    [SerializeField] private EventsMono eventsMono;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
     public PlayerVM PlayerVM => playerVM;
@@ -14,7 +13,7 @@ public class PlayerMono: MonoBehaviour
     void Awake() 
     {
         var playerAbilities = new PlayerAbilities(
-            playerEventsMono.PlayerEvents, new Dictionary<KeyCode, IPlayerAbility>()
+            eventsMono.PlayerEvents, new Dictionary<KeyCode, IPlayerAbility>()
         );
         var playerInput = new PlayerInput();
 
@@ -32,8 +31,8 @@ public class PlayerMono: MonoBehaviour
             characterController, 
             playerInput, 
             playerAbilities, 
-            playerEventsMono.PlayerEvents, 
-            enemyEventsMono.EnemyEvents
+            eventsMono.PlayerEvents, 
+            eventsMono.EnemyEvents
         );
     }
 

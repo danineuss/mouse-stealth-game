@@ -11,7 +11,7 @@ public enum DetectorState {
 
 public class PlayerDetector : MonoBehaviour {
     [SerializeField] private Transform player;
-    [SerializeField] private EnemyEventsMono enemyEventsMono;
+    [SerializeField] private EventsMono eventsMono;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
@@ -22,7 +22,7 @@ public class PlayerDetector : MonoBehaviour {
                 return;
 
             detectorState = value;
-            enemyEventsMono.EnemyEvents.ChangeDetectorState(this);
+            eventsMono.EnemyEvents.ChangeDetectorState(this);
         } 
     }
 
