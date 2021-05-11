@@ -8,10 +8,11 @@ namespace Tests
 {
     public class PlayerVM_Tests
     {
+        private GameObject gameObject = new GameObject("Player");
+
         [Test]
         public void should_send_player_location_with_abilities_non_empty()
         {
-            GameObject gameObject = new GameObject("Player");
             var cameraController = Substitute.For<IFirstPersonCameraController>();
             var characterController = Substitute.For<IFirstPersonCharacterController>();
             var playerInput = Substitute.For<IPlayerInput>();
@@ -41,7 +42,6 @@ namespace Tests
         [Test]
         public void should_not_send_player_location_with_abilities_empty()
         {
-            GameObject gameObject = new GameObject("Player");
             var cameraController = Substitute.For<IFirstPersonCameraController>();
             var characterController = Substitute.For<IFirstPersonCharacterController>();
             var playerInput = Substitute.For<IPlayerInput>();
@@ -70,7 +70,6 @@ namespace Tests
         [Test]
         public void should_remove_player_location_for_enemy()
         {
-            GameObject gameObject = new GameObject("Player");
             var cameraController = Substitute.For<IFirstPersonCameraController>();
             var characterController = Substitute.For<IFirstPersonCharacterController>();
             var playerInput = Substitute.For<IPlayerInput>();
@@ -99,7 +98,6 @@ namespace Tests
         [Test]
         public void should_not_remove_player_location_for_enemy_iff_no_enemy()
         {
-            GameObject gameObject = new GameObject("Player");
             var cameraController = Substitute.For<IFirstPersonCameraController>();
             var characterController = Substitute.For<IFirstPersonCharacterController>();
             var playerInput = Substitute.For<IPlayerInput>();
@@ -121,6 +119,76 @@ namespace Tests
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
             
             playerEvents.DidNotReceiveWithAnyArgs().RemovePlayerLocation(default);
+        }
+
+        [Test]
+        public void should_pass_along_ability_for_abiltiy_learned_event()
+        {
+            var cameraController = Substitute.For<IFirstPersonCameraController>();
+            var characterController = Substitute.For<IFirstPersonCharacterController>();
+            var playerInput = Substitute.For<IPlayerInput>();
+            var playerAbilities = Substitute.For<IPlayerAbilities>();
+            var playerEvents = Substitute.For<IPlayerEvents>();
+            var enemyEvents = Substitute.For<IEnemyEvents>();
+            var playerVM = new PlayerVM(
+                gameObject.transform, 
+                cameraController,
+                characterController,
+                playerInput,
+                playerAbilities,
+                playerEvents,
+                enemyEvents
+            );
+            var ability = new DummyAbility(KeyCode.A, 10f);
+
+            playerEvents.OnAbilityLearned += Raise.Event<Action<IPlayerAbility>>(ability);
+
+            playerAbilities.Received().LearnAbility(ability);
+        }
+
+        [Test]
+        public void should_trigger_ability_only_for_correct_input()
+        {
+            var ability = new DummyAbility(KeyCode.A, 10f);
+            var cameraController = Substitute.For<IFirstPersonCameraController>();
+            var characterController = Substitute.For<IFirstPersonCharacterController>();
+            var playerEvents = Substitute.For<IPlayerEvents>();
+            var enemyEvents = Substitute.For<IEnemyEvents>();
+
+            var playerInput = Substitute.For<IPlayerInput>();
+            playerInput.GetKeyDown(default).ReturnsForAnyArgs(false);
+            var playerAbilities = Substitute.For<IPlayerAbilities>();
+            playerAbilities.Abilities.Returns(new Dictionary<KeyCode, IPlayerAbility>() { 
+                { ability.AssociatedKey, ability } 
+            });
+            playerAbilities.RelevantKeyPresses.Returns(new List<KeyCode>(){ ability.AssociatedKey });
+            var playerVM = new PlayerVM(
+                gameObject.transform, 
+                cameraController,
+                characterController,
+                playerInput,
+                playerAbilities,
+                playerEvents,
+                enemyEvents
+            );
+
+            playerVM.Update();
+
+            playerAbilities.DidNotReceiveWithAnyArgs().ExecuteAbility(default);
+
+            playerInput.GetKeyDown(ability.AssociatedKey).Returns(true);
+            playerVM = new PlayerVM(
+                gameObject.transform, 
+                cameraController,
+                characterController,
+                playerInput,
+                playerAbilities,
+                playerEvents,
+                enemyEvents
+            );
+
+            playerVM.Update();
+            playerAbilities.Received().ExecuteAbility(ability);
         }
     }
 }
