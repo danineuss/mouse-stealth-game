@@ -1,0 +1,15 @@
+{
+    "name": "Helpers",
+    "references": [
+        "GUID:9796e597f6dea4e49a59cbbe99b97635"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
