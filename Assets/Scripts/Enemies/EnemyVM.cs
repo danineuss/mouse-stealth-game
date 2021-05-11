@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemyVM
+public interface IEnemyVM: IIdentifiable
 {
     EnemyEvents EnemyEvents { get; }
 
@@ -17,9 +18,12 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
     //TODO: maybe remove this public property
     public EnemyEvents EnemyEvents => eventsMono.EnemyEvents;
 
+    public Guid ID => id;
+
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
     private SoundEmitter soundEmitter;
+    private Guid id;
 
     public bool GetDistracted()
     {
@@ -43,6 +47,7 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         enemyIO = GetComponentInChildren<EnemyIO>();
         playerDetector = GetComponentInChildren<PlayerDetector>();
         soundEmitter = GetComponentInChildren<SoundEmitter>();
+        id = new Guid();
     }
 
     void Start()
@@ -61,9 +66,9 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         eventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
 
-    void OnCursorEnterEnemy(EnemyVM enemyVM)
+    void OnCursorEnterEnemy(IEnemyVM enemyVM)
     {
-        if (enemyVM != this)
+        if (enemyVM.ID != this.ID)
             return;
 
         enemyIO.SetDisplayVisibility(true);
@@ -84,18 +89,18 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
     }
 
     void OnReceivePlayerLocation(
-        EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null
+        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null
     )
     {
-        if (enemyVM != this)
+        if (enemyVM.ID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
-    void OnRemovePlayerLocation(EnemyVM enemyVM)
+    void OnRemovePlayerLocation(IEnemyVM enemyVM)
     {
-        if (enemyVM != this)
+        if (enemyVM.ID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(false);

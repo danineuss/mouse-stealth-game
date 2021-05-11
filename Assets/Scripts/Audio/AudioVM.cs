@@ -9,7 +9,7 @@ public class AudioVM : MonoBehaviour {
     [SerializeField] private List<Sound> Sounds;
     private SoundEmitter playerSoundEmitter;
 
-    public void PlaySoundAtEnemy(EnemyVM enemyVM, DetectorState detectorState) {
+    public void PlaySoundAtEnemy(IEnemyVM enemyVM, DetectorState detectorState) {
         Sound sound = SoundMapping(detectorState);
         enemyVM.PlaySound(sound);
     }

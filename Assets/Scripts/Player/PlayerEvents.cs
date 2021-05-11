@@ -5,26 +5,26 @@ using UnityEngine;
 
 public interface IPlayerEvents
 {
-    event Action<EnemyVM, bool, Transform> OnSendPlayerLocation;
-    event Action<EnemyVM> OnRemovePlayerLocation;
+    event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
+    event Action<IEnemyVM> OnRemovePlayerLocation;
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
 
     void AbilityExecuted(IPlayerAbility ability);
     void AbilityLearned(IPlayerAbility ability);
-    void RemovePlayerLocation(EnemyVM enemyVM);
-    void SendPlayerLocation(EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform);
+    void RemovePlayerLocation(IEnemyVM enemyVM);
+    void SendPlayerLocation(IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform);
 }
 
 public class PlayerEvents : IPlayerEvents
 {
-    public event Action<EnemyVM, bool, Transform> OnSendPlayerLocation;
-    public event Action<EnemyVM> OnRemovePlayerLocation;
+    public event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
+    public event Action<IEnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
 
     public void SendPlayerLocation(
-        EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
+        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
     )
     {
         if (OnSendPlayerLocation == null)
@@ -33,7 +33,7 @@ public class PlayerEvents : IPlayerEvents
         OnSendPlayerLocation(enemyVM, shouldDisplayText, playerTransform);
     }
 
-    public void RemovePlayerLocation(EnemyVM enemyVM)
+    public void RemovePlayerLocation(IEnemyVM enemyVM)
     {
         if (OnRemovePlayerLocation == null)
             return;

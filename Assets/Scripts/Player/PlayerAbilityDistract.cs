@@ -7,14 +7,14 @@ public class PlayerAbilityDistract : IPlayerAbility
     public KeyCode AssociatedKey => KeyCode.F;
     public float CoolDown => 10f;
 
-    private EnemyVM targetEnemy;
+    private IEnemyVM targetEnemy;
 
-    public void SetTarget(EnemyVM target)
+    public void SetTarget(IEnemyVM target)
     {
         this.targetEnemy = target;
     }
 
-    public void Execute(EnemyVM enemyVM = null) 
+    public void Execute(IEnemyVM enemyVM = null) 
     {
         if (enemyVM == null || enemyVM != targetEnemy)
             return;

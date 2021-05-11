@@ -1,22 +1,22 @@
 ﻿using System;
 public interface IEnemyEvents
 {
-    event Action<EnemyVM> OnCursorEnterEnemy;
+    event Action<IEnemyVM> OnCursorEnterEnemy;
     event Action OnCurserExitEnemy;
     event Action<PlayerDetector> OnDetectorStateChanged;
 
     void ChangeDetectorState(PlayerDetector playerDetector);
-    void CursorEnterEnemy(EnemyVM enemyVM = null);
+    void CursorEnterEnemy(IEnemyVM enemyVM = null);
     void CursorExitEnemy();
 }
 
 public class EnemyEvents : IEnemyEvents
 {
-    public event Action<EnemyVM> OnCursorEnterEnemy;
+    public event Action<IEnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
     public event Action<PlayerDetector> OnDetectorStateChanged;
 
-    public void CursorEnterEnemy(EnemyVM enemyVM = null)
+    public void CursorEnterEnemy(IEnemyVM enemyVM = null)
     {
         if (OnCursorEnterEnemy == null)
             return;

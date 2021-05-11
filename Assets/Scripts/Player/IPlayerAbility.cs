@@ -9,7 +9,7 @@ public interface IPlayerAbility {
     }
 
     //TODO: change to targetID
-    void SetTarget(EnemyVM target = null);
+    void SetTarget(IEnemyVM target = null);
 
-    void Execute(EnemyVM enemyVM = null);
+    void Execute(IEnemyVM enemyVM = null);
 }

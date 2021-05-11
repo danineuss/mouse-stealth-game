@@ -23,7 +23,7 @@ public class PlayerVM : IPlayerVM
     private IPlayerAbilities playerAbilities;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
-    private EnemyVM targetEnemy;
+    private IEnemyVM targetEnemy;
 
     public PlayerVM(
         Transform playerTransform,
@@ -89,7 +89,7 @@ public class PlayerVM : IPlayerVM
         }
     }
 
-    void OnCursorEnterEnemy(EnemyVM enemyVM)
+    void OnCursorEnterEnemy(IEnemyVM enemyVM)
     {
         targetEnemy = enemyVM;
         if (playerAbilities.RelevantAbilities.Count > 0)
@@ -104,6 +104,9 @@ public class PlayerVM : IPlayerVM
 
     void OnCurserExitEnemy()
     {
+        if(targetEnemy == null)
+            return;
+
         playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
     }

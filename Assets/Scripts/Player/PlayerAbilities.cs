@@ -9,7 +9,7 @@ public interface IPlayerAbilities
     List<KeyCode> RelevantKeyPresses { get; }
     List<IPlayerAbility> RelevantAbilities { get; }
 
-    void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null);
+    void ExecuteAbility(IPlayerAbility ability, IEnemyVM enemyVM = null);
     void LearnAbility(IPlayerAbility ability);
 }
 
@@ -35,7 +35,7 @@ public class PlayerAbilities : IPlayerAbilities
 
     public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
 
-    public void ExecuteAbility(IPlayerAbility ability, EnemyVM target = null)
+    public void ExecuteAbility(IPlayerAbility ability, IEnemyVM target = null)
     {
         if (!Abilities.ContainsValue(ability))
             return;

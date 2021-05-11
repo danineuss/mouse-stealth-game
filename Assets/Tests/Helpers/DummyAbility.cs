@@ -14,9 +14,9 @@ namespace Tests
             this.keyCode = keyCode;
             this.coolDown = coolDown;
         }
-        public void SetTarget(EnemyVM target = null) {}
+        public void SetTarget(IEnemyVM target = null) {}
 
-        public void Execute(EnemyVM enemyVM = null)
+        public void Execute(IEnemyVM enemyVM = null)
         {
             return;
         }
