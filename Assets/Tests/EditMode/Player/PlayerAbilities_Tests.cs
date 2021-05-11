@@ -6,26 +6,6 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class DummyAbility : IPlayerAbility
-    {
-        public KeyCode AssociatedKey => keyCode;
-        public float CoolDown => coolDown;
-        private KeyCode keyCode;
-        private float coolDown;
-
-        public DummyAbility(KeyCode keyCode, float coolDown)
-        {
-            this.keyCode = keyCode;
-            this.coolDown = coolDown;
-        }
-        public void SetTarget(EnemyVM target = null) {}
-
-        public void Execute(EnemyVM enemyVM = null)
-        {
-            return;
-        }
-    }
-
     public class PlayerAbilities_Tests
     {
         private IPlayerAbility firstAbility = new DummyAbility(KeyCode.A, 1f);
@@ -62,11 +42,27 @@ namespace Tests
         }
 
         [Test]
-        public void should_have_show_abilities_after_having_learned_them() 
+        public void should_show_abilities_after_having_learned_them() 
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
             var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
+            playerAbilities.LearnAbility(firstAbility);
+
+            var relevantAbilities = playerAbilities.RelevantAbilities;
+            var relevantKeyPresses = playerAbilities.RelevantKeyPresses;
+
+            Assert.AreEqual(new List<IPlayerAbility>() { firstAbility }, relevantAbilities);
+            Assert.AreEqual(new List<KeyCode>() { firstAbility.AssociatedKey }, relevantKeyPresses);
+        }
+
+        [Test]
+        public void should_not_learn_ability_twice()
+        {
+             var playerEvents = Substitute.For<IPlayerEvents>();
+            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+
+            playerAbilities.LearnAbility(firstAbility);
             playerAbilities.LearnAbility(firstAbility);
 
             var relevantAbilities = playerAbilities.RelevantAbilities;
@@ -90,7 +86,15 @@ namespace Tests
             playerEvents.Received().AbilityExecuted(firstAbility);
         }
 
-        //TODO: test trying to fire an ability that is not learned
-        //TODO: test trying to fire an ability right after another
+        [Test]
+        public void should_not_fire_event_if_no_ability_learned()
+        {
+            var playerEvents = Substitute.For<IPlayerEvents>();
+            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+
+            playerAbilities.ExecuteAbility(firstAbility);
+
+            playerEvents.DidNotReceive().AbilityExecuted(firstAbility);
+        }
     }
 }

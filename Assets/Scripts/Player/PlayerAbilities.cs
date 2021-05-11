@@ -37,6 +37,9 @@ public class PlayerAbilities : IPlayerAbilities
 
     public void ExecuteAbility(IPlayerAbility ability, EnemyVM target = null)
     {
+        if (!Abilities.ContainsValue(ability))
+            return;
+
         var lastExecute = timesSinceLastExecute[ability];
         if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
             return;
