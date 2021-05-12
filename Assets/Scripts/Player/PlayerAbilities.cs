@@ -3,48 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerAbilities : MonoBehaviour {   
-    public Dictionary<KeyCode, IPlayerAbility> Abilities {
+public interface IPlayerAbilities
+{
+    Dictionary<KeyCode, IPlayerAbility> Abilities { get; }
+    List<KeyCode> RelevantKeyPresses { get; }
+    List<IPlayerAbility> RelevantAbilities { get; }
+
+    void ExecuteAbility(IPlayerAbility ability, IEnemyVM enemyVM = null);
+    void LearnAbility(IPlayerAbility ability);
+}
+
+public class PlayerAbilities : IPlayerAbilities
+{
+    public Dictionary<KeyCode, IPlayerAbility> Abilities
+    {
         get; private set;
     }
 
     private Dictionary<IPlayerAbility, float> timesSinceLastExecute;
-    private PlayerEvents playerEvents;
+    private IPlayerEvents playerEvents;
 
-    public List<KeyCode> RelevantKeyPresses {
-        get => Abilities.Select(x => x.Value.AssociatedKey).ToList();
+    public PlayerAbilities(
+        IPlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 
+    {
+        this.playerEvents = playerEvents;
+        Abilities = abilities;
+        timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
     }
 
-    public List<IPlayerAbility> RelevantAbilities {
-        get => Abilities.Select(x => x.Value).ToList();
-    }
-    
-    public void ExecuteAbility(IPlayerAbility ability, EnemyVM enemyVM = null) {
+    public List<KeyCode> RelevantKeyPresses => Abilities.Select(x => x.Value.AssociatedKey).ToList();
+
+    public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
+
+    public void ExecuteAbility(IPlayerAbility ability, IEnemyVM target = null)
+    {
+        if (!Abilities.ContainsValue(ability))
+            return;
+
         var lastExecute = timesSinceLastExecute[ability];
         if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
             return;
 
-        var executed = ability.Execute(enemyVM);
-        if (executed) {
-            timesSinceLastExecute[ability] = Time.time;
-            playerEvents.AbilityExecuted(ability);
-        }
+        timesSinceLastExecute[ability] = Time.time;
+        ability.SetTarget(target);
+        playerEvents.AbilityExecuted(ability);
     }
 
-    public void LearnAbility(IPlayerAbility ability) {
+    public void LearnAbility(IPlayerAbility ability)
+    {
         if (Abilities.ContainsValue(ability))
             return;
-        
+
         Abilities.Add(ability.AssociatedKey, ability);
         timesSinceLastExecute.Add(ability, -1f);
-    }
-
-    void Awake() {
-        Abilities = new Dictionary<KeyCode, IPlayerAbility>();
-    }
-
-    void Start() {
-        timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
-        playerEvents = GetComponentInParent<PlayerVM>().PlayerEvents;
     }
 }

@@ -142,8 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e868a8868e5bd3944b8a558e863a4e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  ObstacleMask:
+  player: {fileID: 0}
+  enemyEventsMono: {fileID: 0}
+  obstacleMask:
     serializedVersion: 2
     m_Bits: 512
   kDetectionEscalationSpeed: 0.5

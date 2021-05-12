@@ -1,29 +1,39 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+public interface IEnemyEvents
+{
+    event Action<IEnemyVM> OnCursorEnterEnemy;
+    event Action OnCurserExitEnemy;
+    event Action<PlayerDetector> OnDetectorStateChanged;
 
-[System.Serializable]
-public class EnemyEvents : MonoBehaviour {
-    public event Action<EnemyVM> OnCursorEnterEnemy;
+    void ChangeDetectorState(PlayerDetector playerDetector);
+    void CursorEnterEnemy(IEnemyVM enemyVM = null);
+    void CursorExitEnemy();
+}
+
+public class EnemyEvents : IEnemyEvents
+{
+    public event Action<IEnemyVM> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
     public event Action<PlayerDetector> OnDetectorStateChanged;
 
-    public void CursorEnterEnemy(EnemyVM enemyVM = null) {
+    public void CursorEnterEnemy(IEnemyVM enemyVM = null)
+    {
         if (OnCursorEnterEnemy == null)
             return;
 
         OnCursorEnterEnemy(enemyVM);
     }
-    
-    public void CursorExitEnemy() {
+
+    public void CursorExitEnemy()
+    {
         if (OnCurserExitEnemy == null)
             return;
 
         OnCurserExitEnemy();
     }
 
-    public void ChangeDetectorState(PlayerDetector playerDetector) {
+    public void ChangeDetectorState(PlayerDetector playerDetector)
+    {
         if (OnDetectorStateChanged == null)
             return;
 

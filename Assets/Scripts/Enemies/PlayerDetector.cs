@@ -10,8 +10,9 @@ public enum DetectorState {
 }
 
 public class PlayerDetector : MonoBehaviour {
-    [SerializeField] private Transform Player;
-    [SerializeField] private LayerMask ObstacleMask;
+    [SerializeField] private Transform player;
+    [SerializeField] private EventsMono eventsMono;
+    [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
     public DetectorState DetectorState { 
@@ -21,12 +22,11 @@ public class PlayerDetector : MonoBehaviour {
                 return;
 
             detectorState = value;
-            enemyEvents.ChangeDetectorState(this);
+            eventsMono.EnemyEvents.ChangeDetectorState(this);
         } 
     }
 
     private DetectorState detectorState;
-    private EnemyEvents enemyEvents;
     private VisionCone visionCone;
     private bool playerVisible;
     private float detectionEscalationMeter = 0.5f;
@@ -55,7 +55,6 @@ public class PlayerDetector : MonoBehaviour {
 
     void Awake() {
         visionCone = GetComponent<VisionCone>();
-        enemyEvents = GetComponentInParent<EnemyVM>().EnemyEvents;
     }
 
     void Start() {
@@ -90,9 +89,9 @@ public class PlayerDetector : MonoBehaviour {
         
         bool playerObstructed = Physics.Raycast(
             transform.position, 
-            (Player.transform.position - transform.position).normalized, 
-            Vector3.Distance(Player.transform.position, transform.position), 
-            ObstacleMask
+            (player.transform.position - transform.position).normalized, 
+            Vector3.Distance(player.transform.position, transform.position), 
+            obstacleMask
         );
 
         if (playerObstructed) {
@@ -104,13 +103,13 @@ public class PlayerDetector : MonoBehaviour {
         } 
         
         playerVisible = true;
-        visionCone.SetPlayerAsTarget(Player);
+        visionCone.SetPlayerAsTarget(player);
     }
 
     bool PlayerOutsideVisibleCone() {
         float angleToPlayer = Vector3.Angle(visionCone.CurrentLookatTarget - transform.position, 
-                                            Player.transform.position - transform.position);
-        float distanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
+                                            player.transform.position - transform.position);
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
         return (angleToPlayer > visionCone.FieldOfView / 2 || distanceToPlayer > visionCone.Range);
     }
 

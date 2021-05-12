@@ -1,22 +1,34 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyVM : MonoBehaviour {
-    [SerializeField] private PlayerEvents playerEvents;
-    [SerializeField] private EnemyEvents enemyEvents;
+public interface IEnemyVM: IIdentifiable
+{
+    EnemyEvents EnemyEvents { get; }
+
+    bool GetDistracted();
+    void PlaySound(Sound sound);
+}
+
+public class EnemyVM : MonoBehaviour, IEnemyVM
+{
+    [SerializeField] private EventsMono eventsMono;
     [SerializeField] private AudioVM audioVM;
-    public EnemyEvents EnemyEvents { 
-        get => enemyEvents;
-        private set => enemyEvents = value;
-    }
-    
+    //TODO: maybe remove this public property
+    public EnemyEvents EnemyEvents => eventsMono.EnemyEvents;
+
+    public Guid ID => id;
+
     private EnemyIO enemyIO;
     private PlayerDetector playerDetector;
     private SoundEmitter soundEmitter;
+    private Guid id;
 
-    public bool GetDistracted() {
-        if (playerDetector.DetectorState != DetectorState.Idle) {
+    public bool GetDistracted()
+    {
+        if (playerDetector.DetectorState != DetectorState.Idle)
+        {
             return false;
         }
 
@@ -25,66 +37,78 @@ public class EnemyVM : MonoBehaviour {
         return true;
     }
 
-    public void PlaySound(Sound sound) {
+    public void PlaySound(Sound sound)
+    {
         soundEmitter.PlaySound(sound);
     }
-    
-    void Awake() {
+
+    void Awake()
+    {
         enemyIO = GetComponentInChildren<EnemyIO>();
         playerDetector = GetComponentInChildren<PlayerDetector>();
         soundEmitter = GetComponentInChildren<SoundEmitter>();
+        id = new Guid();
     }
 
-    void Start() {
+    void Start()
+    {
         InitializeEvents();
     }
 
-    void InitializeEvents() {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
+    void InitializeEvents()
+    {
+        eventsMono.EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        eventsMono.EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        eventsMono.EnemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
-        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
-        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        eventsMono.PlayerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
+        eventsMono.PlayerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        eventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
-    
-    void OnCursorEnterEnemy(EnemyVM enemyVM) {
-        if (enemyVM != this)
+
+    void OnCursorEnterEnemy(IEnemyVM enemyVM)
+    {
+        if (enemyVM.ID != this.ID)
             return;
-    
+
         enemyIO.SetDisplayVisibility(true);
     }
 
-    void OnCurserExitEnemy() {
+    void OnCurserExitEnemy()
+    {
         enemyIO.SetDisplayVisibility(false);
     }
 
-    void OnDetectorStateChanged(PlayerDetector playerDetector) {
+    void OnDetectorStateChanged(PlayerDetector playerDetector)
+    {
         if (playerDetector != this.playerDetector)
             return;
-        
+
         enemyIO.SetTextColor(playerDetector.DetectorState);
         audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
     }
 
     void OnReceivePlayerLocation(
-        EnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null 
-    ) {
-        if (enemyVM != this)
+        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null
+    )
+    {
+        if (enemyVM.ID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
-    void OnRemovePlayerLocation(EnemyVM enemyVM) {
-        if (enemyVM != this)
+    void OnRemovePlayerLocation(IEnemyVM enemyVM)
+    {
+        if (enemyVM.ID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(false);
     }
 
-    void OnPlayerAbilityExecuted(IPlayerAbility ability) {
+    void OnPlayerAbilityExecuted(IPlayerAbility ability)
+    {
+        ability.Execute(this);
         enemyIO.UpdateCooldownForAbility(ability);
     }
 }

@@ -13,14 +13,10 @@ public enum SceneState {
 
 public class SceneVM : MonoBehaviour {
     [SerializeField] private UICoordinator UICoordinator;
-    [SerializeField] private EnemyEvents enemyEvents;
-    [SerializeField] private SceneEvents sceneEvents;
-    [SerializeField] private PlayerVM playerVM;
+    [SerializeField] private EventsMono eventsMono;
+    [SerializeField] private PlayerMono playerMono;
     [SerializeField] private string sceneName;
-    public SceneEvents SceneEvents{
-        get => sceneEvents;
-        private set => sceneEvents = value;
-    }
+    public SceneEvents SceneEvents => eventsMono.SceneEvents;
 
     private SceneState sceneState;
     private float timeSinceLastPause;
@@ -39,9 +35,9 @@ public class SceneVM : MonoBehaviour {
     }
 
     void InitializeEvents() {
-        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
-        sceneEvents.OnDialogOpened += OpenDialog;
-        sceneEvents.OnDialogClosed += CloseDialog;
+        eventsMono.EnemyEvents.OnDetectorStateChanged += CheckForFailedGame;
+        eventsMono.SceneEvents.OnDialogOpened += OpenDialog;
+        eventsMono.SceneEvents.OnDialogClosed += CloseDialog;
     }
 
     void Update() {
@@ -52,10 +48,10 @@ public class SceneVM : MonoBehaviour {
     void ChangeGamePausedState(bool paused) {
         if (paused) {
             Time.timeScale = 0f;
-            playerVM.CameraController.ChangeCursorLockedState(false);
+            playerMono.PlayerVM.ChangeCursorLockedState(false);
         } else {
             Time.timeScale = 1f;
-            playerVM.CameraController.ChangeCursorLockedState(true);
+            playerMono.PlayerVM.ChangeCursorLockedState(true);
         }
     }
 
@@ -83,7 +79,7 @@ public class SceneVM : MonoBehaviour {
             return; 
         }
 
-        if(playerVM.PlayerInput.GetKeyDown(PlayerInput.Escape)) {
+        if(playerMono.PlayerVM.PlayerInput.GetKeyDown(PlayerInput.Escape)) {
             timeSinceLastPause = Time.unscaledTime;
             sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
             ChangeGamePausedState(sceneState == SceneState.Paused);

@@ -1,89 +1,118 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerVM : MonoBehaviour 
+public interface IPlayerVM
 {
-    [SerializeField] private EnemyEvents enemyEvents;
-    [SerializeField] private PlayerEvents playerEvents;
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private float rotationSpeed;
-    public PlayerEvents PlayerEvents => playerEvents;
-    public IFirstPersonCameraController CameraController => cameraController;
+    IPlayerInput PlayerInput { get; }
+
+    void Update();
+    void LateUpdate();
+    void ChangeCursorLockedState(bool locked);
+    void OnTriggerEnter(Collider collider);
+}
+
+public class PlayerVM : IPlayerVM
+{
     public IPlayerInput PlayerInput => playerInput;
 
-    private EnemyVM targetEnemy;
-    private PlayerAbilities playerAbilities;
+    private Transform playerTransform;
+    private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
-    private IPlayerInput playerInput;
+    private IPlayerAbilities playerAbilities;
+    private IPlayerEvents playerEvents;
+    private IEnemyEvents enemyEvents;
+    private IEnemyVM targetEnemy;
 
-    void Awake() 
+    public PlayerVM(
+        Transform playerTransform,
+        IFirstPersonCameraController cameraController,
+        IFirstPersonCharacterController characterController,
+        IPlayerInput playerInput,
+        IPlayerAbilities playerAbilities,
+        IPlayerEvents playerEvents,
+        IEnemyEvents enemyEvents)
     {
-        // Make non-monobehaviour
-        playerAbilities = GetComponentInChildren<PlayerAbilities>();
-        playerInput = new PlayerInput();
-
-        var cameraTransform = GetComponentInChildren<Camera>().gameObject.transform;
-        cameraController = new FirstPersonCameraController(transform, cameraTransform, playerInput, rotationSpeed);
-        characterController = new FirstPersonCharacterController(transform, playerInput, movementSpeed);
+        this.playerTransform = playerTransform;
+        this.cameraController = cameraController;
+        this.characterController = characterController;
+        this.playerInput = playerInput;
+        this.playerAbilities = playerAbilities;
+        this.playerEvents = playerEvents;
+        this.enemyEvents = enemyEvents;
 
         targetEnemy = null;
-    }
-    
-    void Start() 
-    {
+
         InitializeEvents();
     }
 
-    void InitializeEvents() 
+    void InitializeEvents()
     {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
-    void Update() 
+
+    public void Update()
     {
-        CheckPlayerInput();
+        ApplyPlayerAbilityInput();
         characterController.MoveCharacter();
     }
 
-    void LateUpdate() 
+    public void LateUpdate()
     {
         cameraController.RotateForPlayerInput();
         characterController.RestrictCharacterMovement();
     }
 
-    void CheckPlayerInput() 
+    public void OnTriggerEnter(Collider collider)
     {
-        foreach (var keyCode in playerAbilities.RelevantKeyPresses) {
-            if (playerInput.GetKeyDown(keyCode)) 
+        characterController.OnTriggerEnter(collider);
+    }
+
+    public void ChangeCursorLockedState(bool locked)
+    {
+        cameraController.ChangeCursorLockedState(locked);
+    }
+
+    void ApplyPlayerAbilityInput()
+    {
+        if (playerAbilities.Abilities.Count == 0)
+            return;
+
+        foreach (var keyCode in playerAbilities.RelevantKeyPresses)
+        {
+            if (playerInput.GetKeyDown(keyCode))
                 playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
         }
     }
 
-    void OnCursorEnterEnemy(EnemyVM enemyVM) 
+    void OnCursorEnterEnemy(IEnemyVM enemyVM)
     {
         targetEnemy = enemyVM;
-        if (playerAbilities.RelevantAbilities.Count > 0) {
-            playerEvents.SendPlayerLocation(enemyVM, true, transform);
-        } else {
+        if (playerAbilities.RelevantAbilities.Count > 0)
+        {
+            playerEvents.SendPlayerLocation(enemyVM, true, playerTransform);
+        }
+        else
+        {
             playerEvents.SendPlayerLocation(enemyVM, false, null);
         }
     }
 
-    void OnCurserExitEnemy() 
+    void OnCurserExitEnemy()
     {
+        if(targetEnemy == null)
+            return;
+
         playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
     }
 
-    void OnAbilityLearned(IPlayerAbility ability) 
+    void OnAbilityLearned(IPlayerAbility ability)
     {
         playerAbilities.LearnAbility(ability);
-    }
-
-    void OnTriggerEnter(Collider collider) 
-    {
-        characterController.OnTriggerEnter(collider);
     }
 }

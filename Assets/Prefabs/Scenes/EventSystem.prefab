@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 6874613040735221446}
   - component: {fileID: 6874613040735221445}
   - component: {fileID: 6874613040735221444}
-  - component: {fileID: 6874613040735221447}
-  - component: {fileID: 6874613040735221440}
+  - component: {fileID: 2629710228448126127}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -68,7 +67,7 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
---- !u!114 &6874613040735221447
+--- !u!114 &2629710228448126127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,18 +76,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6874613040735221451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55047b1029ff27341aa68c44ad97982b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6874613040735221440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874613040735221451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f855c589ff34464abeb611e020d1d19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c7de170513729246a9b811d429f568d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

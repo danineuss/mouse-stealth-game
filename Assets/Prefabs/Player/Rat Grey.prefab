@@ -1,48 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4805761632679774570
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4053211852693006992}
-  - component: {fileID: 6586819954884723104}
-  m_Layer: 0
-  m_Name: PlayerAbilities
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4053211852693006992
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4805761632679774570}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 7939834745407043162}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6586819954884723104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4805761632679774570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aec2e54c1825d349afb53c268a69724, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5058439047437989959
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +30,7 @@ Transform:
   m_LocalScale: {x: 9.999997, y: 10, z: 9.999997}
   m_Children: []
   m_Father: {fileID: 7939834745407043162}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &7531276315883125055
 AudioSource:
@@ -278,7 +235,7 @@ GameObject:
   - component: {fileID: 8030835049467093928}
   - component: {fileID: 7935737658861407984}
   - component: {fileID: 7935737658861407985}
-  - component: {fileID: 7935737658638426806}
+  - component: {fileID: 504715406182728465}
   m_Layer: 8
   m_Name: Rat Grey
   m_TagString: Player
@@ -299,7 +256,6 @@ Transform:
   m_Children:
   - {fileID: 7940402299186242334}
   - {fileID: 7935737657334744323}
-  - {fileID: 4053211852693006992}
   - {fileID: 7482409017882712510}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -353,7 +309,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0.13277143, z: 0}
---- !u!114 &7935737658638426806
+--- !u!114 &504715406182728465
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -362,13 +318,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7936507694457688780}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e752a0019216d594884fe64fa1da278d, type: 3}
+  m_Script: {fileID: 11500000, guid: b00346a27cdeba34488cae06af799ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyEvents: {fileID: 0}
   playerEvents: {fileID: 0}
-  movementSpeed: 1
-  rotationSpeed: 2
+  movementSpeed: 0
+  rotationSpeed: 0
+  PlayerVM: {fileID: 0}
 --- !u!1 &7936927917546303542
 GameObject:
   m_ObjectHideFlags: 0
