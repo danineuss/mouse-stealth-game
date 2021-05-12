@@ -1,106 +1,176 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneState {
+public enum SceneStateEnum {
     Idle,
     Paused,
     InDialog,
     Failed
 }
 
-public class SceneVM : MonoBehaviour {
-    [SerializeField] private UICoordinator UICoordinator;
-    [SerializeField] private EventsMono eventsMono;
-    [SerializeField] private PlayerMono playerMono;
-    [SerializeField] private string sceneName;
-    public SceneEvents SceneEvents => eventsMono.SceneEvents;
+public abstract class SceneState
+{
+    protected SceneVM sceneVM;
 
-    private SceneState sceneState;
-    private float timeSinceLastPause;
-
-    public void RestartGame() {
-        SceneManager.LoadScene(sceneName);
+    public void SetSceneVM(SceneVM sceneVM)
+    {
+        this.sceneVM = sceneVM;
     }
 
-    void Start() {
+    public abstract void UpdateGamePausedState();
+}
+
+public class SceneStateIdle : SceneState
+{
+    public override void UpdateGamePausedState()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class SceneStateInDialog : SceneState
+{
+    public override void UpdateGamePausedState()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public interface ISceneVM
+{
+    ISceneEvents SceneEvents { get; }
+    void TransitionTo(SceneState sceneState);
+    void Update();
+}
+
+public class SceneVM: ISceneVM
+{
+    public ISceneEvents SceneEvents => sceneEvents;
+
+    private SceneStateEnum sceneStateEnum;
+    private float timeSinceLastPause;
+    private IPlayerVM playerVM;
+    private IEnemyEvents enemyEvents;
+    private ISceneEvents sceneEvents;
+    private SceneState sceneState;
+    private string sceneName;
+
+    public SceneVM(
+        IPlayerVM playerVM, 
+        IEnemyEvents enemyEvents, 
+        ISceneEvents sceneEvents, 
+        SceneState sceneState, 
+        string sceneName)
+    {
+        this.playerVM = playerVM;
+        this.enemyEvents = enemyEvents;
+        this.sceneEvents = sceneEvents;
+        this.sceneState = sceneState;
+        this.sceneName = sceneName;
+
         InitializeEvents();
 
-        sceneState = SceneState.InDialog;
+        sceneStateEnum = SceneStateEnum.InDialog;
         timeSinceLastPause = Time.time;
 
         ChangeGamePausedState(true);
     }
 
-    void InitializeEvents() {
-        eventsMono.EnemyEvents.OnDetectorStateChanged += CheckForFailedGame;
-        eventsMono.SceneEvents.OnDialogOpened += OpenDialog;
-        eventsMono.SceneEvents.OnDialogClosed += CloseDialog;
+    void InitializeEvents()
+    {
+        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
+        sceneEvents.OnDialogOpened += OpenDialog;
+        sceneEvents.OnDialogClosed += CloseDialog;
+        sceneEvents.OnGameRestarted += RestartGame;
     }
 
-    void Update() {
+
+    public void TransitionTo(SceneState sceneState)
+    {
+
+    }
+
+    public void Update()
+    {
         CheckGamePaused();
         UpdateUI();
     }
 
-    void ChangeGamePausedState(bool paused) {
-        if (paused) {
+    void ChangeGamePausedState(bool paused)
+    {
+        if (paused)
+        {
             Time.timeScale = 0f;
-            playerMono.PlayerVM.ChangeCursorLockedState(false);
-        } else {
+            playerVM.ChangeCursorLockedState(false);
+        }
+        else
+        {
             Time.timeScale = 1f;
-            playerMono.PlayerVM.ChangeCursorLockedState(true);
+            playerVM.ChangeCursorLockedState(true);
         }
     }
 
-    void CheckForFailedGame(PlayerDetector playerDetector) {
-        if (playerDetector.DetectorState == DetectorState.Alarmed) {
-            sceneState = SceneState.Failed;
+    void CheckForFailedGame(PlayerDetector playerDetector)
+    {
+        if (playerDetector.DetectorState == DetectorState.Alarmed)
+        {
+            sceneStateEnum = SceneStateEnum.Failed;
             ChangeGamePausedState(true);
         }
     }
 
-    void OpenDialog(DialogVM dialogVM) {
-        sceneState = SceneState.InDialog;
+    void RestartGame()
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    void OpenDialog(DialogVM dialogVM)
+    {
+        sceneStateEnum = SceneStateEnum.InDialog;
         ChangeGamePausedState(true);
     }
 
-    void CloseDialog(DialogVM dialogVM) {
-        sceneState = SceneState.Idle;
+    void CloseDialog(DialogVM dialogVM)
+    {
+        sceneStateEnum = SceneStateEnum.Idle;
         ChangeGamePausedState(false);
     }
 
-    void CheckGamePaused() {
-        if (sceneState == SceneState.Failed || 
-            sceneState == SceneState.InDialog ||
-            Time.unscaledTime - timeSinceLastPause < 0.2f) {
-            return; 
+    void CheckGamePaused()
+    {
+        if (sceneStateEnum == SceneStateEnum.Failed ||
+            sceneStateEnum == SceneStateEnum.InDialog ||
+            Time.unscaledTime - timeSinceLastPause < 0.2f)
+        {
+            return;
         }
 
-        if(playerMono.PlayerVM.PlayerInput.GetKeyDown(PlayerInput.Escape)) {
+        if (playerVM.PlayerInput.GetKeyDown(PlayerInput.Escape))
+        {
             timeSinceLastPause = Time.unscaledTime;
-            sceneState = (sceneState == SceneState.Idle) ? SceneState.Paused : SceneState.Idle;
-            ChangeGamePausedState(sceneState == SceneState.Paused);
+            sceneStateEnum = (sceneStateEnum == SceneStateEnum.Idle) ? SceneStateEnum.Paused : SceneStateEnum.Idle;
+            ChangeGamePausedState(sceneStateEnum == SceneStateEnum.Paused);
         }
     }
 
-    void UpdateUI() {
-        switch (sceneState) {
-            case SceneState.Idle:
-                UICoordinator.ShowGamePaused(false);
+    void UpdateUI()
+    {
+        switch (sceneStateEnum)
+        {
+            case SceneStateEnum.Idle:
+                sceneEvents.PauseGame(false);
                 break;
-            case SceneState.Paused:
-                UICoordinator.ShowGamePaused(true);
+            case SceneStateEnum.Paused:
+                sceneEvents.PauseGame(true);
                 break;
-            case SceneState.InDialog:
+            case SceneStateEnum.InDialog:
                 break;
-            case SceneState.Failed:
-                UICoordinator.ShowGameFailed();
+            case SceneStateEnum.Failed:
+                sceneEvents.FailGame();
                 break;
             default:
-                throw new InvalidOperationException("Switch case not exhaustive: " + sceneState);
+                throw new InvalidOperationException("Switch case not exhaustive: " + sceneStateEnum);
         }
     }
 }

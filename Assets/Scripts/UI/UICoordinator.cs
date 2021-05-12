@@ -1,20 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class UICoordinator : MonoBehaviour
 {
-    [SerializeField] private SceneVM sceneVM;
+    [SerializeField] private EventsMono eventsMono;
     [SerializeField] private GameObject failedScreen;
     [SerializeField] private GameObject pausedScreen;
     [SerializeField] private DialogVM introScreen;
     [SerializeField] private DialogVM distractAbilityScreen;
     [SerializeField] private DialogVM victoryScreen;
     [SerializeField] private GameObject headsUpDisplay;
-    public SceneEvents SceneEvents {
-        get => sceneVM.SceneEvents;
-    }
+    public ISceneEvents SceneEvents => eventsMono.SceneEvents;
 
     void Start() {
         InitializeScreens();
@@ -32,22 +27,24 @@ public class UICoordinator : MonoBehaviour
     }
 
     void InitializeEvents() {
-        sceneVM.SceneEvents.OnDialogOpened += OpenDialog;
-        sceneVM.SceneEvents.OnDialogClosed += CloseDialog;
+        eventsMono.SceneEvents.OnDialogOpened += OpenDialog;
+        eventsMono.SceneEvents.OnDialogClosed += CloseDialog;
+        eventsMono.SceneEvents.OnGamePaused += ShowGamePaused;
+        eventsMono.SceneEvents.OnGameFailed += ShowGameFailed;
     }
 
-    public void ShowGamePaused(bool paused) {
+    public void SendRestartGameCommand() {
+        eventsMono.SceneEvents.RestartGame();
+    }
+
+    void ShowGamePaused(bool paused) {
         pausedScreen.SetActive(paused);
         headsUpDisplay.SetActive(!paused);
     }
 
-    public void ShowGameFailed() {
+    void ShowGameFailed() {
         failedScreen.SetActive(true);
         headsUpDisplay.SetActive(false);
-    }
-
-    public void SendRestartGameCommand() {
-        sceneVM.RestartGame();
     }
 
     void OpenDialog(DialogVM dialogVM) {
