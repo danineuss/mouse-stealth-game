@@ -1,13 +1,14 @@
 using UnityEngine;
 
+//TODO: make interface
 public class UICoordinator : MonoBehaviour
 {
     [SerializeField] private EventsMono eventsMono;
     [SerializeField] private GameObject failedScreen;
     [SerializeField] private GameObject pausedScreen;
-    [SerializeField] private DialogVM introScreen;
-    [SerializeField] private DialogVM distractAbilityScreen;
-    [SerializeField] private DialogVM victoryScreen;
+    [SerializeField] private DialogMono introScreen;
+    [SerializeField] private DialogMono distractAbilityScreen;
+    [SerializeField] private DialogMono victoryScreen;
     [SerializeField] private GameObject headsUpDisplay;
     public ISceneEvents SceneEvents => eventsMono.SceneEvents;
 
@@ -30,7 +31,7 @@ public class UICoordinator : MonoBehaviour
         eventsMono.SceneEvents.OnDialogOpened += OpenDialog;
         eventsMono.SceneEvents.OnDialogClosed += CloseDialog;
         eventsMono.SceneEvents.OnGamePaused += ShowGamePaused;
-        eventsMono.SceneEvents.OnGameFailed += ShowGameFailed;
+        eventsMono.EnemyEvents.OnGameFailed += ShowGameFailed;
     }
 
     public void SendRestartGameCommand() {
@@ -47,13 +48,13 @@ public class UICoordinator : MonoBehaviour
         headsUpDisplay.SetActive(false);
     }
 
-    void OpenDialog(DialogVM dialogVM) {
-        dialogVM.gameObject.SetActive(true);
+    void OpenDialog(IDialogVM dialogVM) {
+        dialogVM.SetActive(true);
         headsUpDisplay.SetActive(false);
     }
 
-    void CloseDialog(DialogVM dialogVM) {
-        dialogVM.gameObject.SetActive(false);
+    void CloseDialog(IDialogVM dialogVM) {
+        dialogVM.SetActive(false);
         headsUpDisplay.SetActive(true);
     }
 }

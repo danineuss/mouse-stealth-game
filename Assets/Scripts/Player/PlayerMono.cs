@@ -32,7 +32,8 @@ public class PlayerMono: MonoBehaviour
             playerInput, 
             playerAbilities, 
             eventsMono.PlayerEvents, 
-            eventsMono.EnemyEvents
+            eventsMono.EnemyEvents,
+            eventsMono.SceneEvents
         );
     }
 

@@ -1,45 +1,35 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public interface ISceneVM
 {
-    ISceneEvents SceneEvents { get; }
     void TransitionTo(SceneState sceneState);
 }
 
 public class SceneVM: ISceneVM
 {
-    public ISceneEvents SceneEvents => sceneEvents;
-    public SceneState SceneState {
+    private SceneState SceneState {
         get => sceneState;
-        private set {
+        set {
             sceneState = value;
             sceneState.BroadcastSceneState(sceneEvents);
         }
     }
 
-    private IPlayerVM playerVM;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
     private ISceneEvents sceneEvents;
     private SceneState sceneState;
-    private string sceneName;
 
     public SceneVM(
-        IPlayerVM playerVM, 
         IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents, 
-        ISceneEvents sceneEvents, 
-        SceneState sceneState, 
-        string sceneName)
+        ISceneEvents sceneEvents)
     {
-        this.playerVM = playerVM;
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;
-        this.sceneName = sceneName;
-        TransitionTo(sceneState);
+        TransitionTo(new SceneStateIdle());
 
         InitializeEvents();
     }
@@ -50,7 +40,7 @@ public class SceneVM: ISceneVM
         sceneEvents.OnDialogClosed += ToggleDialogOpen;
         sceneEvents.OnGameRestarted += RestartGame;
         playerEvents.OnPauseButtonPressed += HandlePauseButtonPressed;
-        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
+        enemyEvents.OnGameFailed += FailGame;
     }
 
     public void TransitionTo(SceneState sceneState)
@@ -61,42 +51,27 @@ public class SceneVM: ISceneVM
 
     public void PauseGame(bool paused)
     {
-        if (paused)
-        {
-            Time.timeScale = 0f;
-            playerVM.LockCursor(false);
-        }
-        else
-        {
-            Time.timeScale = 1f;
-            playerVM.LockCursor(true);
-        }
-    }
-
-    void CheckForFailedGame(PlayerDetector playerDetector)
-    {
-        if (playerDetector.DetectorState == DetectorState.Alarmed)
-        {
-            TransitionTo(new SceneStateInFailed());
-            sceneState.ToggleGamePaused();
-        }
+        Time.timeScale = paused ? 0f : 1f;
     }
 
     void RestartGame()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void ToggleDialogOpen(DialogVM dialogVM)
+    void ToggleDialogOpen(IDialogVM dialogVM)
     {
         sceneState.ToggleDialogOpen();
     }
 
     void HandlePauseButtonPressed()
     {
-        if (!sceneState.EligibleForPausingGame)
-            return;
+        sceneState.ToggleGamePaused();
+    }
 
+    void FailGame()
+    {
+        TransitionTo(new SceneStateInFailed());
         sceneState.ToggleGamePaused();
     }
 }

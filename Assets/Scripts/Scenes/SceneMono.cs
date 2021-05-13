@@ -4,18 +4,15 @@ public class SceneMono: MonoBehaviour
 {
     [SerializeField] private EventsMono eventsMono;
     [SerializeField] private PlayerMono playerMono;
-    [SerializeField] private string sceneName;
-    public ISceneVM SceneVM { get; private set; }
+
+    private ISceneVM sceneVM;
 
     void Awake()
     {
-        SceneVM = new SceneVM(
-            playerMono.PlayerVM,
+        sceneVM = new SceneVM(
             eventsMono.PlayerEvents, 
             eventsMono.EnemyEvents, 
-            eventsMono.SceneEvents, 
-            new SceneStateIdle(), 
-            sceneName
+            eventsMono.SceneEvents
         );
     }
 }

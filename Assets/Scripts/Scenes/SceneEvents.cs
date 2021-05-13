@@ -2,28 +2,25 @@
 
 public interface ISceneEvents
 {
-    event Action<DialogVM> OnDialogOpened;
-    event Action<DialogVM> OnDialogClosed;
+    event Action<IDialogVM> OnDialogOpened;
+    event Action<IDialogVM> OnDialogClosed;
     event Action OnGameRestarted;
     event Action<bool> OnGamePaused;
-    event Action OnGameFailed;
 
-    void DialogClosed(DialogVM dialogVM);
-    void DialogOpened(DialogVM dialogVM);
+    void CloseDialog(IDialogVM dialogVM);
+    void OpenDialog(IDialogVM dialogVM);
     void RestartGame();
     void PauseGame(bool paused);
-    void FailGame();
 }
 
 public class SceneEvents : ISceneEvents
 {
-    public event Action<DialogVM> OnDialogOpened;
-    public event Action<DialogVM> OnDialogClosed;
+    public event Action<IDialogVM> OnDialogOpened;
+    public event Action<IDialogVM> OnDialogClosed;
     public event Action OnGameRestarted;
     public event Action<bool> OnGamePaused;
-    public event Action OnGameFailed;
 
-    public void DialogOpened(DialogVM dialogVM)
+    public void OpenDialog(IDialogVM dialogVM)
     {
         if (OnDialogOpened == null)
             return;
@@ -31,7 +28,7 @@ public class SceneEvents : ISceneEvents
         OnDialogOpened(dialogVM);
     }
 
-    public void DialogClosed(DialogVM dialogVM)
+    public void CloseDialog(IDialogVM dialogVM)
     {
         if (OnDialogClosed == null)
             return;
@@ -53,13 +50,5 @@ public class SceneEvents : ISceneEvents
             return;
         
         OnGamePaused(paused);
-    }
-
-    public void FailGame()
-    {
-        if (OnGameFailed == null)
-            return;
-        
-        OnGameFailed();
     }
 }

@@ -86,6 +86,9 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
 
         enemyIO.SetTextColor(playerDetector.DetectorState);
         audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
+
+        if (playerDetector.DetectorState == DetectorState.Alarmed)
+            EnemyEvents.FailGame();
     }
 
     void OnReceivePlayerLocation(

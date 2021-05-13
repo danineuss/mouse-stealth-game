@@ -9,7 +9,6 @@ public abstract class SceneState
     {
         this.sceneVM = sceneVM;
     }
-    public abstract bool EligibleForPausingGame { get; }
     public abstract void BroadcastSceneState(ISceneEvents sceneEvents);
     public abstract void ToggleDialogOpen();
     public abstract void ToggleGamePaused();
@@ -17,8 +16,6 @@ public abstract class SceneState
 
 public class SceneStateIdle : SceneState
 {
-    public override bool EligibleForPausingGame => true;
-
     public override void BroadcastSceneState(ISceneEvents sceneEvents)
     {
         sceneEvents.PauseGame(false);
@@ -39,8 +36,6 @@ public class SceneStateIdle : SceneState
 
 public class SceneStatePaused : SceneState
 {
-    public override bool EligibleForPausingGame => true;
-
     public override void BroadcastSceneState(ISceneEvents sceneEvents)
     {
         sceneEvents.PauseGame(true);
@@ -57,8 +52,6 @@ public class SceneStatePaused : SceneState
 
 public class SceneStateInDialog : SceneState
 {
-    public override bool EligibleForPausingGame => false;
-
     public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
 
     public override void ToggleDialogOpen()
@@ -72,12 +65,7 @@ public class SceneStateInDialog : SceneState
 
 public class SceneStateInFailed : SceneState
 {
-    public override bool EligibleForPausingGame => false;
-
-    public override void BroadcastSceneState(ISceneEvents sceneEvents)
-    {
-        sceneEvents.FailGame();
-    }
+    public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
 
     public override void ToggleDialogOpen() {}
 
