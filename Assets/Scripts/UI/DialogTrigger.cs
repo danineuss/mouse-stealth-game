@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogTrigger : MonoBehaviour {
-    public bool DisableAfterDisplay = false;
-    private Collider triggerCollider;
     [SerializeField] private DialogVM dialogVM;
-    [SerializeField] private SceneVM sceneVM;
+    [SerializeField] private EventsMono eventsMono;
+    public bool DisableAfterDisplay = false;
+    
+    private Collider triggerCollider;
     
     void Awake() {
         triggerCollider = GetComponent<Collider>();
     }
 
     void OnTriggerEnter() {
-        sceneVM.SceneEvents.DialogOpened(dialogVM);
+        eventsMono.SceneEvents.DialogOpened(dialogVM);
 
         if (DisableAfterDisplay) {
             triggerCollider.gameObject.SetActive(false);

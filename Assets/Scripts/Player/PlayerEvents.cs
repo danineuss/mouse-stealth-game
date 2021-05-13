@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IPlayerEvents
@@ -9,11 +7,13 @@ public interface IPlayerEvents
     event Action<IEnemyVM> OnRemovePlayerLocation;
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
+    event Action OnPauseButtonPressed;
 
     void AbilityExecuted(IPlayerAbility ability);
     void AbilityLearned(IPlayerAbility ability);
     void RemovePlayerLocation(IEnemyVM enemyVM);
     void SendPlayerLocation(IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform);
+    void PressPauseButton();
 }
 
 public class PlayerEvents : IPlayerEvents
@@ -22,6 +22,7 @@ public class PlayerEvents : IPlayerEvents
     public event Action<IEnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
+    public event Action OnPauseButtonPressed;
 
     public void SendPlayerLocation(
         IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
@@ -55,5 +56,13 @@ public class PlayerEvents : IPlayerEvents
             return;
 
         OnAbilityLearned(ability);
+    }
+
+    public void PressPauseButton()
+    {
+        if (OnPauseButtonPressed == null)
+            return;
+        
+        OnPauseButtonPressed();
     }
 }

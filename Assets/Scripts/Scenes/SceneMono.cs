@@ -10,16 +10,12 @@ public class SceneMono: MonoBehaviour
     void Awake()
     {
         SceneVM = new SceneVM(
-            playerMono.PlayerVM, 
+            playerMono.PlayerVM,
+            eventsMono.PlayerEvents, 
             eventsMono.EnemyEvents, 
             eventsMono.SceneEvents, 
-            new SceneStateInDialog(), 
+            new SceneStateIdle(), 
             sceneName
         );
-    }
-    
-    void Update()
-    {
-        SceneVM.Update();
     }
 }

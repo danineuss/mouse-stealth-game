@@ -2,55 +2,25 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneStateEnum {
-    Idle,
-    Paused,
-    InDialog,
-    Failed
-}
-
-public abstract class SceneState
-{
-    protected SceneVM sceneVM;
-
-    public void SetSceneVM(SceneVM sceneVM)
-    {
-        this.sceneVM = sceneVM;
-    }
-
-    public abstract void UpdateGamePausedState();
-}
-
-public class SceneStateIdle : SceneState
-{
-    public override void UpdateGamePausedState()
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public class SceneStateInDialog : SceneState
-{
-    public override void UpdateGamePausedState()
-    {
-        throw new NotImplementedException();
-    }
-}
-
 public interface ISceneVM
 {
     ISceneEvents SceneEvents { get; }
     void TransitionTo(SceneState sceneState);
-    void Update();
 }
 
 public class SceneVM: ISceneVM
 {
     public ISceneEvents SceneEvents => sceneEvents;
+    public SceneState SceneState {
+        get => sceneState;
+        private set {
+            sceneState = value;
+            sceneState.BroadcastSceneState(sceneEvents);
+        }
+    }
 
-    private SceneStateEnum sceneStateEnum;
-    private float timeSinceLastPause;
     private IPlayerVM playerVM;
+    private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
     private ISceneEvents sceneEvents;
     private SceneState sceneState;
@@ -58,46 +28,38 @@ public class SceneVM: ISceneVM
 
     public SceneVM(
         IPlayerVM playerVM, 
+        IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents, 
         ISceneEvents sceneEvents, 
         SceneState sceneState, 
         string sceneName)
     {
         this.playerVM = playerVM;
+        this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;
-        this.sceneState = sceneState;
         this.sceneName = sceneName;
+        TransitionTo(sceneState);
 
         InitializeEvents();
-
-        sceneStateEnum = SceneStateEnum.InDialog;
-        timeSinceLastPause = Time.time;
-
-        ChangeGamePausedState(true);
     }
 
     void InitializeEvents()
     {
-        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
-        sceneEvents.OnDialogOpened += OpenDialog;
-        sceneEvents.OnDialogClosed += CloseDialog;
+        sceneEvents.OnDialogOpened += ToggleDialogOpen;
+        sceneEvents.OnDialogClosed += ToggleDialogOpen;
         sceneEvents.OnGameRestarted += RestartGame;
+        playerEvents.OnPauseButtonPressed += HandlePauseButtonPressed;
+        enemyEvents.OnDetectorStateChanged += CheckForFailedGame;
     }
-
 
     public void TransitionTo(SceneState sceneState)
     {
-
+        SceneState = sceneState;
+        this.sceneState.SetSceneVM(this);
     }
 
-    public void Update()
-    {
-        CheckGamePaused();
-        UpdateUI();
-    }
-
-    void ChangeGamePausedState(bool paused)
+    public void PauseGame(bool paused)
     {
         if (paused)
         {
@@ -115,8 +77,8 @@ public class SceneVM: ISceneVM
     {
         if (playerDetector.DetectorState == DetectorState.Alarmed)
         {
-            sceneStateEnum = SceneStateEnum.Failed;
-            ChangeGamePausedState(true);
+            TransitionTo(new SceneStateInFailed());
+            sceneState.ToggleGamePaused();
         }
     }
 
@@ -125,52 +87,16 @@ public class SceneVM: ISceneVM
         SceneManager.LoadScene(sceneName);
     }
 
-    void OpenDialog(DialogVM dialogVM)
+    void ToggleDialogOpen(DialogVM dialogVM)
     {
-        sceneStateEnum = SceneStateEnum.InDialog;
-        ChangeGamePausedState(true);
+        sceneState.ToggleDialogOpen();
     }
 
-    void CloseDialog(DialogVM dialogVM)
+    void HandlePauseButtonPressed()
     {
-        sceneStateEnum = SceneStateEnum.Idle;
-        ChangeGamePausedState(false);
-    }
-
-    void CheckGamePaused()
-    {
-        if (sceneStateEnum == SceneStateEnum.Failed ||
-            sceneStateEnum == SceneStateEnum.InDialog ||
-            Time.unscaledTime - timeSinceLastPause < 0.2f)
-        {
+        if (!sceneState.EligibleForPausingGame)
             return;
-        }
 
-        if (playerVM.PlayerInput.GetKeyDown(PlayerInput.Escape))
-        {
-            timeSinceLastPause = Time.unscaledTime;
-            sceneStateEnum = (sceneStateEnum == SceneStateEnum.Idle) ? SceneStateEnum.Paused : SceneStateEnum.Idle;
-            ChangeGamePausedState(sceneStateEnum == SceneStateEnum.Paused);
-        }
-    }
-
-    void UpdateUI()
-    {
-        switch (sceneStateEnum)
-        {
-            case SceneStateEnum.Idle:
-                sceneEvents.PauseGame(false);
-                break;
-            case SceneStateEnum.Paused:
-                sceneEvents.PauseGame(true);
-                break;
-            case SceneStateEnum.InDialog:
-                break;
-            case SceneStateEnum.Failed:
-                sceneEvents.FailGame();
-                break;
-            default:
-                throw new InvalidOperationException("Switch case not exhaustive: " + sceneStateEnum);
-        }
+        sceneState.ToggleGamePaused();
     }
 }
