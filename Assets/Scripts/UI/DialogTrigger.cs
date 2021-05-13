@@ -1,22 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class DialogTrigger : MonoBehaviour {
-    public bool DisableAfterDisplay = false;
-    private Collider triggerCollider;
-    [SerializeField] private DialogVM dialogVM;
-    [SerializeField] private SceneVM sceneVM;
+public class DialogTrigger : MonoBehaviour 
+{
+    [SerializeField] private DialogMono dialogMono;
+    [SerializeField] private EventsMono eventsMono;
+    [SerializeField] private bool disableAfterDisplay = false;
+    [SerializeField] private bool triggerUponStart = false;
     
-    void Awake() {
+    private Collider triggerCollider;
+    
+    void Awake() 
+    {
         triggerCollider = GetComponent<Collider>();
     }
 
-    void OnTriggerEnter() {
-        sceneVM.SceneEvents.DialogOpened(dialogVM);
+    void Start()
+    {
+        if (triggerUponStart)
+            TriggerDialog();
+    }
+    void OnTriggerEnter() 
+    {
+        if (!triggerUponStart)
+            TriggerDialog();
+    }
 
-        if (DisableAfterDisplay) {
+    void TriggerDialog()
+    {
+        eventsMono.SceneEvents.OpenDialog(dialogMono.DialogVM);
+
+        if (disableAfterDisplay)
             triggerCollider.gameObject.SetActive(false);
-        }
     }
 }

@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public interface ISceneEvents
 {
-    event Action<DialogVM> OnDialogOpened;
-    event Action<DialogVM> OnDialogClosed;
+    event Action<IDialogVM> OnDialogOpened;
+    event Action<IDialogVM> OnDialogClosed;
+    event Action OnGameRestarted;
+    event Action<bool> OnGamePaused;
 
-    void DialogClosed(DialogVM dialogVM);
-    void DialogOpened(DialogVM dialogVM);
+    void CloseDialog(IDialogVM dialogVM);
+    void OpenDialog(IDialogVM dialogVM);
+    void RestartGame();
+    void PauseGame(bool paused);
 }
 
 public class SceneEvents : ISceneEvents
 {
-    public event Action<DialogVM> OnDialogOpened;
-    public event Action<DialogVM> OnDialogClosed;
+    public event Action<IDialogVM> OnDialogOpened;
+    public event Action<IDialogVM> OnDialogClosed;
+    public event Action OnGameRestarted;
+    public event Action<bool> OnGamePaused;
 
-    public void DialogOpened(DialogVM dialogVM)
+    public void OpenDialog(IDialogVM dialogVM)
     {
         if (OnDialogOpened == null)
             return;
@@ -25,11 +28,27 @@ public class SceneEvents : ISceneEvents
         OnDialogOpened(dialogVM);
     }
 
-    public void DialogClosed(DialogVM dialogVM)
+    public void CloseDialog(IDialogVM dialogVM)
     {
         if (OnDialogClosed == null)
             return;
 
         OnDialogClosed(dialogVM);
+    }
+
+    public void RestartGame()
+    {
+        if (OnGameRestarted == null)
+            return;
+        
+        OnGameRestarted();
+    }
+
+    public void PauseGame(bool paused)
+    {
+        if (OnGamePaused == null)
+            return;
+        
+        OnGamePaused(paused);
     }
 }

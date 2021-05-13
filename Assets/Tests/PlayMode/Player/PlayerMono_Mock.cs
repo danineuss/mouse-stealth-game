@@ -18,6 +18,7 @@ public class PlayerMono_Mock : MonoBehaviour {
         playerAbilities.Abilities.Returns(new Dictionary<KeyCode, IPlayerAbility>());
         var playerEvents = Substitute.For<IPlayerEvents>();
         var enemyEvents = Substitute.For<IEnemyEvents>();
+        var sceneEvents = Substitute.For<ISceneEvents>(); 
 
         var characterController = new FirstPersonCharacterController(playerGameObject.transform, playerInput, 1f);
         playerMono.PlayerVM = new PlayerVM(
@@ -27,7 +28,8 @@ public class PlayerMono_Mock : MonoBehaviour {
             playerInput,
             playerAbilities, 
             playerEvents,
-            enemyEvents
+            enemyEvents,
+            sceneEvents
         );
         
         return playerGameObject;

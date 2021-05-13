@@ -105,7 +105,7 @@ namespace Tests
             playerInput.CursorY.Returns(20);
             SetupCameraController(playerInput, 1f);
 
-            cameraController.ChangeCursorLockedState(false);
+            cameraController.LockCursor(false);
             cameraController.RotateForPlayerInput();
 
             Assert.AreEqual(0f, playerTransform.eulerAngles.y, floatingPointDelta);

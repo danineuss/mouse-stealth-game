@@ -4,18 +4,13 @@ using UnityEngine;
 
 public interface IPlayerVM
 {
-    IPlayerInput PlayerInput { get; }
-
     void Update();
     void LateUpdate();
-    void ChangeCursorLockedState(bool locked);
     void OnTriggerEnter(Collider collider);
 }
 
 public class PlayerVM : IPlayerVM
 {
-    public IPlayerInput PlayerInput => playerInput;
-
     private Transform playerTransform;
     private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
@@ -23,6 +18,7 @@ public class PlayerVM : IPlayerVM
     private IPlayerAbilities playerAbilities;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
+    private ISceneEvents sceneEvents;
     private IEnemyVM targetEnemy;
 
     public PlayerVM(
@@ -32,7 +28,8 @@ public class PlayerVM : IPlayerVM
         IPlayerInput playerInput,
         IPlayerAbilities playerAbilities,
         IPlayerEvents playerEvents,
-        IEnemyEvents enemyEvents)
+        IEnemyEvents enemyEvents,
+        ISceneEvents sceneEvents)
     {
         this.playerTransform = playerTransform;
         this.cameraController = cameraController;
@@ -41,6 +38,7 @@ public class PlayerVM : IPlayerVM
         this.playerAbilities = playerAbilities;
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
+        this.sceneEvents = sceneEvents;
 
         targetEnemy = null;
 
@@ -51,6 +49,9 @@ public class PlayerVM : IPlayerVM
     {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        sceneEvents.OnGamePaused += ToggleCursorLockForGamePaused;
+        sceneEvents.OnDialogOpened += UnlockCursorForOpenDialog;
+        sceneEvents.OnDialogClosed += LockCursorForClosedDialog;
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
@@ -58,23 +59,8 @@ public class PlayerVM : IPlayerVM
     public void Update()
     {
         ApplyPlayerAbilityInput();
+        playerInput.HandleGenericPlayerInput();
         characterController.MoveCharacter();
-    }
-
-    public void LateUpdate()
-    {
-        cameraController.RotateForPlayerInput();
-        characterController.RestrictCharacterMovement();
-    }
-
-    public void OnTriggerEnter(Collider collider)
-    {
-        characterController.OnTriggerEnter(collider);
-    }
-
-    public void ChangeCursorLockedState(bool locked)
-    {
-        cameraController.ChangeCursorLockedState(locked);
     }
 
     void ApplyPlayerAbilityInput()
@@ -87,6 +73,17 @@ public class PlayerVM : IPlayerVM
             if (playerInput.GetKeyDown(keyCode))
                 playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
         }
+    }
+
+    public void LateUpdate()
+    {
+        cameraController.RotateForPlayerInput();
+        characterController.RestrictCharacterMovement();
+    }
+
+    public void OnTriggerEnter(Collider collider)
+    {
+        characterController.OnTriggerEnter(collider);
     }
 
     void OnCursorEnterEnemy(IEnemyVM enemyVM)
@@ -109,6 +106,21 @@ public class PlayerVM : IPlayerVM
 
         playerEvents.RemovePlayerLocation(targetEnemy);
         targetEnemy = null;
+    }
+
+    void ToggleCursorLockForGamePaused(bool gamePaused)
+    {
+        cameraController.LockCursor(!gamePaused);
+    }
+
+    void UnlockCursorForOpenDialog(IDialogVM dialogVM)
+    {
+        cameraController.LockCursor(false);
+    }
+
+    void LockCursorForClosedDialog(IDialogVM dialogVM)
+    {
+        cameraController.LockCursor(true);
     }
 
     void OnAbilityLearned(IPlayerAbility ability)
