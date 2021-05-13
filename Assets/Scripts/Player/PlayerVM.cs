@@ -4,8 +4,6 @@ using UnityEngine;
 
 public interface IPlayerVM
 {
-    IPlayerInput PlayerInput { get; }
-
     void Update();
     void LateUpdate();
     void LockCursor(bool locked);
@@ -14,8 +12,6 @@ public interface IPlayerVM
 
 public class PlayerVM : IPlayerVM
 {
-    public IPlayerInput PlayerInput => playerInput;
-
     private Transform playerTransform;
     private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
@@ -58,6 +54,7 @@ public class PlayerVM : IPlayerVM
     public void Update()
     {
         ApplyPlayerAbilityInput();
+        playerInput.HandleGenericPlayerInput();
         characterController.MoveCharacter();
     }
 

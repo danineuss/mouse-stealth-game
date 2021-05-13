@@ -15,7 +15,7 @@ public class PlayerMono: MonoBehaviour
         var playerAbilities = new PlayerAbilities(
             eventsMono.PlayerEvents, new Dictionary<KeyCode, IPlayerAbility>()
         );
-        var playerInput = new PlayerInput();
+        var playerInput = new PlayerInput(eventsMono.PlayerEvents);
 
         var cameraTransform = GetComponentInChildren<Camera>().gameObject.transform;
         var cameraController = new FirstPersonCameraController(
