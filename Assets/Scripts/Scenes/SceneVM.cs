@@ -102,12 +102,12 @@ public class SceneVM: ISceneVM
         if (paused)
         {
             Time.timeScale = 0f;
-            playerVM.ChangeCursorLockedState(false);
+            playerVM.LockCursor(false);
         }
         else
         {
             Time.timeScale = 1f;
-            playerVM.ChangeCursorLockedState(true);
+            playerVM.LockCursor(true);
         }
     }
 

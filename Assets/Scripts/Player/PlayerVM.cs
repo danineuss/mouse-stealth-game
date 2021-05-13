@@ -8,7 +8,7 @@ public interface IPlayerVM
 
     void Update();
     void LateUpdate();
-    void ChangeCursorLockedState(bool locked);
+    void LockCursor(bool locked);
     void OnTriggerEnter(Collider collider);
 }
 
@@ -72,9 +72,9 @@ public class PlayerVM : IPlayerVM
         characterController.OnTriggerEnter(collider);
     }
 
-    public void ChangeCursorLockedState(bool locked)
+    public void LockCursor(bool locked)
     {
-        cameraController.ChangeCursorLockedState(locked);
+        cameraController.LockCursor(locked);
     }
 
     void ApplyPlayerAbilityInput()

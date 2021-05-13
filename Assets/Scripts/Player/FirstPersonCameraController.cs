@@ -2,7 +2,7 @@
 
 public interface IFirstPersonCameraController {
     void RotateForPlayerInput();
-    void ChangeCursorLockedState(bool locked);
+    void LockCursor(bool locked);
 }
 
 public class FirstPersonCameraController : IFirstPersonCameraController
@@ -47,7 +47,7 @@ public class FirstPersonCameraController : IFirstPersonCameraController
         cameraTransform.rotation = Quaternion.Euler(cursorY, initialYRotation + cursorX, 0);
     }
 
-    public void ChangeCursorLockedState(bool locked)
+    public void LockCursor(bool locked)
     {
         Cursor.visible = !locked;
         Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
