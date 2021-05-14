@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class VisionConeMono: MonoBehaviour
 {
+    [Header("Detection")]
+    [SerializeField] private Transform player = null;
+    [SerializeField] private EventsMono eventsMono = null;
+    [SerializeField] private LayerMask obstacleMask = new LayerMask();
+    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
+    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
+
     [Header("Control Points")]
-    [SerializeField] private VisionConeControlPoints ControlPoints = null;
-    [SerializeField] private float VisionConePeriod = 5f;
+    [SerializeField] private VisionConeControlPoints controlPoints = null;
+    [SerializeField] private float visionConePeriod = 5f;
 
     [Header("Visualization")]
     [SerializeField] private float kConeRangeMultiplier = 1.5f;
@@ -17,8 +24,10 @@ public class VisionConeMono: MonoBehaviour
     [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
     [SerializeField] private Color kSpotLightBlue = new Color(0f, 23f, 183f, 1f);
 
+    public IPlayerDetector PlayerDetector => playerDetector;
+
     private IVisionConeVM visionConeVM;
-    private IConeVisualizer coneVisualizer;
+    private IPlayerDetector playerDetector;
 
     void Awake()
     {
@@ -31,7 +40,7 @@ public class VisionConeMono: MonoBehaviour
         var coneScaleAnchor = GetComponentsInChildren<Transform>()
                             .Where(x => x.CompareTag("ScaleAnchor"))
                             .First();
-        coneVisualizer = new ConeVisualizer(
+        var coneVisualizer = new ConeVisualizer(
             transform,
             coneScaleParent,
             coneScaleAnchor,
@@ -46,5 +55,28 @@ public class VisionConeMono: MonoBehaviour
             kSpotLightRed,
             kSpotLightBlue
         );
+
+        visionConeVM = new VisionConeVM(
+            controlPoints,
+            visionConePeriod, 
+            coneVisualizer, 
+            transform, 
+            eventsMono
+        );
+        playerDetector = new PlayerDetector(
+            visionConeVM,
+            eventsMono,
+            obstacleMask,
+            player,
+            transform,
+            kDetectionEscalationSpeed,
+            kDetectionDeescalationSpeed
+        );
+    }
+
+    void Update()
+    {
+        visionConeVM.Update();
+        playerDetector.Update();
     }
 }

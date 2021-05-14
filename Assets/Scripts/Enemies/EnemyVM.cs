@@ -21,7 +21,7 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
     public Guid ID => id;
 
     private EnemyIO enemyIO;
-    private PlayerDetector playerDetector;
+    private IPlayerDetector playerDetector;
     private SoundEmitter soundEmitter;
     private Guid id;
 
@@ -45,7 +45,7 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
     void Awake()
     {
         enemyIO = GetComponentInChildren<EnemyIO>();
-        playerDetector = GetComponentInChildren<PlayerDetector>();
+        playerDetector = GetComponentInChildren<VisionConeMono>().PlayerDetector;
         soundEmitter = GetComponentInChildren<SoundEmitter>();
         id = new Guid();
     }

@@ -19,15 +19,11 @@ public interface IPlayerDetector
     DetectorStateEnum DetectorStateEnum { get; }
 
     void SetStateDistracted();
+    void Update();
 }
 
-public class PlayerDetector : MonoBehaviour, IPlayerDetector
+public class PlayerDetector : IPlayerDetector
 {
-    [SerializeField] private Transform player = null;
-    [SerializeField] private EventsMono eventsMono = null;
-    [SerializeField] private LayerMask obstacleMask = new LayerMask();
-    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
-    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
     public DetectorStateEnum DetectorStateEnum
     {
         get => detectorStateEnum;
@@ -41,8 +37,15 @@ public class PlayerDetector : MonoBehaviour, IPlayerDetector
         }
     }
 
+    private IVisionConeVM visionConeVM;
+    private EventsMono eventsMono;
+    private LayerMask obstacleMask;
+    private Transform player;
+    private Transform detectorTransform;
+    private float kDetectionEscalationSpeed;
+    private float kDetectionDeescalationSpeed;
+
     private DetectorStateEnum detectorStateEnum;
-    private VisionConeVM visionConeVM;
     private bool playerVisible;
     private float detectionEscalationMeter = 0.5f;
     private float kDetectPlayerRepetitionDelay = 0.075f;
@@ -58,9 +61,35 @@ public class PlayerDetector : MonoBehaviour, IPlayerDetector
         visionConeVM.SetStateDistracted(true);
 
         timeOfLastDistraction = Time.time;
-        StartCoroutine(ResetDistraction());
+        eventsMono.StartCoroutine(ResetDistraction());
     }
 
+    public void Update()
+    {
+        SetDetectionState();
+    }
+
+    public PlayerDetector(
+        IVisionConeVM visionConeVM,
+        EventsMono eventsMono,
+        LayerMask obstacleMask,
+        Transform player,
+        Transform detectorTransform,
+        float kDetectionEscalationSpeed,
+        float kDetectionDeescalationSpeed)
+    {
+        this.visionConeVM = visionConeVM;
+        this.eventsMono = eventsMono;
+        this.obstacleMask = obstacleMask;
+        this.player = player;
+        this.detectorTransform = detectorTransform;
+        this.kDetectionEscalationSpeed = kDetectionEscalationSpeed;
+        this.kDetectionDeescalationSpeed = kDetectionDeescalationSpeed;
+
+        DetectorStateEnum = DetectorStateEnum.Idle;
+
+        eventsMono.StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
+    }
     IEnumerator ResetDistraction()
     {
         while (Time.time - timeOfLastDistraction < kDistractionDuration)
@@ -68,23 +97,6 @@ public class PlayerDetector : MonoBehaviour, IPlayerDetector
 
         DetectorStateEnum = DetectorStateEnum.Idle;
         visionConeVM.SetStateDistracted(false);
-    }
-
-    void Awake()
-    {
-        visionConeVM = GetComponent<VisionConeVM>();
-    }
-
-    void Start()
-    {
-        DetectorStateEnum = DetectorStateEnum.Idle;
-
-        StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
-    }
-
-    void Update()
-    {
-        SetDetectionState();
     }
 
     IEnumerator DetectPlayerWithDelay(float seconds)
@@ -111,9 +123,9 @@ public class PlayerDetector : MonoBehaviour, IPlayerDetector
         }
 
         bool playerObstructed = Physics.Raycast(
-            transform.position,
-            (player.transform.position - transform.position).normalized,
-            Vector3.Distance(player.transform.position, transform.position),
+            detectorTransform.position,
+            (player.transform.position - detectorTransform.position).normalized,
+            Vector3.Distance(player.transform.position, detectorTransform.position),
             obstacleMask
         );
 
@@ -131,9 +143,11 @@ public class PlayerDetector : MonoBehaviour, IPlayerDetector
 
     bool PlayerOutsideVisibleCone()
     {
-        float angleToPlayer = Vector3.Angle(visionConeVM.CurrentLookatTarget - transform.position,
-                                            player.transform.position - transform.position);
-        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        float angleToPlayer = Vector3.Angle(
+            visionConeVM.CurrentLookatTarget - detectorTransform.position,
+            player.transform.position - detectorTransform.position
+        );
+        float distanceToPlayer = Vector3.Distance(player.transform.position, detectorTransform.position);
         return (angleToPlayer > visionConeVM.FieldOfView / 2 || distanceToPlayer > visionConeVM.Range);
     }
 

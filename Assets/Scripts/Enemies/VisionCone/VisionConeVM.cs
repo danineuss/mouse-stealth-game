@@ -23,20 +23,51 @@ public interface IVisionConeVM
     void Update();
 }
 
-public class VisionConeVM : MonoBehaviour, IVisionConeVM
+public class VisionConeVM : IVisionConeVM
 {
-
     public Vector3 CurrentLookatTarget { get; private set; }
     public float FieldOfView { get; private set; }
-    public float Range => (CurrentLookatTarget - transform.position).magnitude;
+    public float Range => (CurrentLookatTarget - coneTransform.position).magnitude;
 
     private VisionConeControlPoints controlPoints;
     private float visionConePeriod;
     private IConeVisualizer coneVisualizer;
+    private Transform coneTransform;
+    private EventsMono eventsMono;
+
     private IEnumerator currentCoroutine;
     private int controlPointIndex = 0;
     private VisionConeState visionConeState;
     private float kFollowPlayerClampValue = 0.1f;
+
+    public VisionConeVM(
+        VisionConeControlPoints controlPoints,
+        float visionConePeriod,
+        IConeVisualizer coneVisualizer,
+        Transform coneTransform,
+        EventsMono eventsMono)
+    {
+        this.controlPoints = controlPoints;
+        this.visionConePeriod = visionConePeriod;
+        this.coneVisualizer = coneVisualizer;
+        this.coneTransform = coneTransform;
+        this.eventsMono = eventsMono;
+
+        InitializeCone();
+        MoveTowardsNextControlPoint();
+    }
+
+    void InitializeCone()
+    {
+        var currentControlPoint = controlPoints.patrolPoints[controlPointIndex];
+        CurrentLookatTarget = currentControlPoint.transform.position;
+        FieldOfView = currentControlPoint.FieldOfView;
+        IterateControlPointIndex();
+
+        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
+
+        visionConeState = VisionConeState.Idle;
+    }
 
     public void Update()
     {
@@ -63,16 +94,16 @@ public class VisionConeVM : MonoBehaviour, IVisionConeVM
 
         visionConeState = VisionConeState.Distracted;
         StartNewCoroutine(ObserveDistraction());
-        StopCoroutine(currentCoroutine);
+        eventsMono.StopCoroutine(currentCoroutine);
         currentCoroutine = ObserveDistraction();
-        StartCoroutine(currentCoroutine);
+        eventsMono.StartCoroutine(currentCoroutine);
     }
 
     public void ResetToPatrolling()
     {
         if (currentCoroutine != null)
         {
-            StopCoroutine(currentCoroutine);
+            eventsMono.StopCoroutine(currentCoroutine);
         }
         visionConeState = VisionConeState.Idle;
     }
@@ -80,29 +111,6 @@ public class VisionConeVM : MonoBehaviour, IVisionConeVM
     public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
     {
         coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
-    }
-
-    void Awake()
-    {
-        coneVisualizer = GetComponent<ConeVisualizer>();
-    }
-
-    void Start()
-    {
-        InitializeCone();
-        MoveTowardsNextControlPoint();
-    }
-
-    void InitializeCone()
-    {
-        var currentControlPoint = controlPoints.patrolPoints[controlPointIndex];
-        CurrentLookatTarget = currentControlPoint.transform.position;
-        FieldOfView = currentControlPoint.FieldOfView;
-        IterateControlPointIndex();
-
-        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
-
-        visionConeState = VisionConeState.Idle;
     }
 
     void MoveTowardsNextControlPoint()
@@ -114,7 +122,7 @@ public class VisionConeVM : MonoBehaviour, IVisionConeVM
             return;
 
         currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, visionConePeriod / 2);
-        StartCoroutine(currentCoroutine);
+        eventsMono.StartCoroutine(currentCoroutine);
     }
 
     IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds)
@@ -150,10 +158,10 @@ public class VisionConeVM : MonoBehaviour, IVisionConeVM
     {
         if (currentCoroutine != null)
         {
-            StopCoroutine(currentCoroutine);
+            eventsMono.StopCoroutine(currentCoroutine);
         }
         currentCoroutine = newCoroutine;
-        StartCoroutine(currentCoroutine);
+        eventsMono.StartCoroutine(currentCoroutine);
     }
 
     IEnumerator FollowPlayer(Transform player)

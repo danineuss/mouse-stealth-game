@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class EventsMono : MonoBehaviour
 {
@@ -14,5 +15,15 @@ public class EventsMono : MonoBehaviour
         playerEvents = new PlayerEvents();
         enemyEvents = new EnemyEvents();
         sceneEvents = new SceneEvents();
+    }
+
+    public new void StartCoroutine(IEnumerator coroutine)
+    {
+        base.StartCoroutine(coroutine);
+    }
+
+    public new void StopCoroutine(IEnumerator coroutine)
+    {
+        base.StopCoroutine(coroutine);
     }
 }
