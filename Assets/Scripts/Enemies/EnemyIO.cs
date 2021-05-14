@@ -29,8 +29,8 @@ public class EnemyIO : MonoBehaviour {
         }
     }
 
-    public void SetTextColor(DetectorState detectorState) {
-        if (detectorState == DetectorState.Idle) { 
+    public void SetTextColor(DetectorStateEnum detectorState) {
+        if (detectorState == DetectorStateEnum.Idle) { 
             textDisplay.color = kActiveTextColor;
         } else {
             textDisplay.color = kInactiveTextColor;

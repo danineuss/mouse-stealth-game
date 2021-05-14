@@ -32,20 +32,22 @@ public class ConeVisualizer : MonoBehaviour {
         coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
     }
 
-    public void SetSpotState(DetectorState newDetectorState, float lerpDuration = 0f) {
-        switch (newDetectorState) {
-            case DetectorState.Idle:
+    public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
+    {
+        switch (newDetectorState)
+        {
+            case DetectorStateEnum.Idle:
                 spotLight.color = Color.LerpUnclamped(kSpotLightGreen, kSpotLightOrange, lerpDuration);
                 coneMeshRenderer.material = greenMaterial;
                 coneOutline.OutlineColor = kSpotLightGreen;
                 break;
-            case DetectorState.Searching:
+            case DetectorStateEnum.Searching:
                 spotLight.color = Color.LerpUnclamped(kSpotLightOrange, kSpotLightRed, lerpDuration);
                 break;
-            case DetectorState.Alarmed:
+            case DetectorStateEnum.Alarmed:
                 spotLight.color = kSpotLightRed;
                 break;
-            case DetectorState.Distracted:
+            case DetectorStateEnum.Distracted:
                 spotLight.color = kSpotLightBlue;
                 coneMeshRenderer.material = blueMaterial;
                 coneOutline.OutlineColor = kSpotLightBlue;

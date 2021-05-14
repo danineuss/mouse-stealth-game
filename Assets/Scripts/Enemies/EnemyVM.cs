@@ -27,13 +27,13 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
 
     public bool GetDistracted()
     {
-        if (playerDetector.DetectorState != DetectorState.Idle)
+        if (playerDetector.DetectorStateEnum != DetectorStateEnum.Idle)
         {
             return false;
         }
 
         playerDetector.SetStateDistracted();
-        enemyIO.SetTextColor(DetectorState.Distracted);
+        enemyIO.SetTextColor(DetectorStateEnum.Distracted);
         return true;
     }
 
@@ -84,10 +84,10 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         if (playerDetector != this.playerDetector)
             return;
 
-        enemyIO.SetTextColor(playerDetector.DetectorState);
-        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
+        enemyIO.SetTextColor(playerDetector.DetectorStateEnum);
+        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorStateEnum);
 
-        if (playerDetector.DetectorState == DetectorState.Alarmed)
+        if (playerDetector.DetectorStateEnum == DetectorStateEnum.Alarmed)
             EnemyEvents.FailGame();
     }
 
