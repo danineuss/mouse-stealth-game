@@ -9,20 +9,30 @@ namespace Tests
     public class PlayerVM_Tests
     {
         private GameObject gameObject = new GameObject("Player");
+        private IFirstPersonCameraController cameraController;
+        private IFirstPersonCharacterController characterController;
+        private IPlayerInput playerInput;
+        private IPlayerAbilities playerAbilities;
+        private IPlayerEvents playerEvents;
+        private IEnemyEvents enemyEvents;
+        private ISceneEvents sceneEvents;
+        private PlayerVM playerVM;
 
-        [Test]
-        public void should_send_player_location_with_abilities_non_empty()
+        private void SetupDependecies()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
-            var playerAbilities = Substitute.For<IPlayerAbilities>();
-            var relevantAbilities = new List<IPlayerAbility>() { new DummyAbility(KeyCode.A, 10f) };
-            playerAbilities.RelevantAbilities.Returns(relevantAbilities);
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
+            cameraController = Substitute.For<IFirstPersonCameraController>();
+            characterController = Substitute.For<IFirstPersonCharacterController>();
+            playerInput = Substitute.For<IPlayerInput>();
+            playerAbilities = Substitute.For<IPlayerAbilities>();
+            playerEvents = Substitute.For<IPlayerEvents>();
+            enemyEvents = Substitute.For<IEnemyEvents>();
+            sceneEvents = Substitute.For<ISceneEvents>(); 
+        }
+
+        private void SetupPlayerVM()
+        {
+            SetupDependecies(); 
+            playerVM = new PlayerVM(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -32,8 +42,32 @@ namespace Tests
                 enemyEvents,
                 sceneEvents
             );
+        }
+
+        private void SetupPlayerVM(IPlayerAbilities playerAbilities)
+        {
+            SetupDependecies(); 
+            playerVM = new PlayerVM(
+                gameObject.transform, 
+                cameraController,
+                characterController,
+                playerInput,
+                playerAbilities,
+                playerEvents,
+                enemyEvents,
+                sceneEvents
+            );
+        }
+
+        [Test]
+        public void should_send_player_location_with_abilities_non_empty()
+        {
+            var playerAbilities = Substitute.For<IPlayerAbilities>();
+            var relevantAbilities = new List<IPlayerAbility>() { new DummyAbility(KeyCode.A, 10f) };
+            playerAbilities.RelevantAbilities.Returns(relevantAbilities);
             var enemyVM = Substitute.For<IEnemyVM>();
             enemyVM.ID.Returns(new Guid());
+            SetupPlayerVM(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
             
@@ -44,26 +78,11 @@ namespace Tests
         [Test]
         public void should_not_send_player_location_with_abilities_empty()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
             var enemyVM = Substitute.For<IEnemyVM>();
             enemyVM.ID.Returns(new Guid());
+            SetupPlayerVM(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
             
@@ -74,26 +93,11 @@ namespace Tests
         [Test]
         public void should_remove_player_location_for_enemy()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
             var enemyVM = Substitute.For<IEnemyVM>();
             enemyVM.ID.Returns(new Guid());
+            SetupPlayerVM(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
@@ -104,25 +108,9 @@ namespace Tests
         [Test]
         public void should_not_remove_player_location_for_enemy_iff_no_enemy()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
-            var playerAbilities = Substitute.For<IPlayerAbilities>();
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
             var enemyVM = Substitute.For<IEnemyVM>();
             enemyVM.ID.Returns(new Guid());
+            SetupPlayerVM();
             
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
             
@@ -132,23 +120,7 @@ namespace Tests
         [Test]
         public void should_pass_along_ability_for_abiltiy_learned_event()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
-            var playerAbilities = Substitute.For<IPlayerAbilities>();
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
+            SetupPlayerVM();
             var ability = new DummyAbility(KeyCode.A, 10f);
 
             playerEvents.OnAbilityLearned += Raise.Event<Action<IPlayerAbility>>(ability);
@@ -159,13 +131,8 @@ namespace Tests
         [Test]
         public void should_trigger_ability_only_for_correct_input()
         {
+            SetupPlayerVM();
             var ability = new DummyAbility(KeyCode.A, 10f);
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.GetKeyDown(default).ReturnsForAnyArgs(false);
             var playerAbilities = Substitute.For<IPlayerAbilities>();
@@ -173,7 +140,7 @@ namespace Tests
                 { ability.AssociatedKey, ability } 
             });
             playerAbilities.RelevantKeyPresses.Returns(new List<KeyCode>(){ ability.AssociatedKey });
-            var playerVM = new PlayerVM(
+            playerVM = new PlayerVM(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -207,24 +174,9 @@ namespace Tests
         [Test]
         public void should_lock_cursor_when_game_paused_and_reverse()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
+            SetupPlayerVM(playerAbilities);
             
             sceneEvents.OnGamePaused += Raise.Event<Action<bool>>(true);
             
@@ -238,24 +190,7 @@ namespace Tests
         [Test]
         public void should_lock_cursor_when_dialog_opened_and_reverse()
         {
-            var cameraController = Substitute.For<IFirstPersonCameraController>();
-            var characterController = Substitute.For<IFirstPersonCharacterController>();
-            var playerInput = Substitute.For<IPlayerInput>();
-            var playerAbilities = Substitute.For<IPlayerAbilities>();
-            playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var playerEvents = Substitute.For<IPlayerEvents>();
-            var enemyEvents = Substitute.For<IEnemyEvents>();
-            var sceneEvents = Substitute.For<ISceneEvents>(); 
-            var playerVM = new PlayerVM(
-                gameObject.transform, 
-                cameraController,
-                characterController,
-                playerInput,
-                playerAbilities,
-                playerEvents,
-                enemyEvents,
-                sceneEvents
-            );
+            SetupPlayerVM();
             
             var dialogVM = Substitute.For<IDialogVM>();
             sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogVM>>(dialogVM);
@@ -265,6 +200,20 @@ namespace Tests
             sceneEvents.OnDialogClosed += Raise.Event<Action<IDialogVM>>(dialogVM);
             
             cameraController.Received().LockCursor(true);
+        }
+
+        [Test]
+        public void should_lock_cursor_when_game_failed()
+        {
+            SetupPlayerVM();
+            
+            enemyEvents.OnGameFailed += Raise.Event<Action>();
+            
+            cameraController.Received().LockCursor(false);
+
+            enemyEvents.OnGameFailed += Raise.Event<Action>();
+            
+            cameraController.Received().LockCursor(false);
         }
     }
 }

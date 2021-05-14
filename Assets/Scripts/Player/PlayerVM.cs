@@ -49,9 +49,10 @@ public class PlayerVM : IPlayerVM
     {
         enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnGameFailed += delegate{ cameraController.LockCursor(false); };
         sceneEvents.OnGamePaused += ToggleCursorLockForGamePaused;
-        sceneEvents.OnDialogOpened += UnlockCursorForOpenDialog;
-        sceneEvents.OnDialogClosed += LockCursorForClosedDialog;
+        sceneEvents.OnDialogOpened += delegate{ cameraController.LockCursor(false); };
+        sceneEvents.OnDialogClosed += delegate{ cameraController.LockCursor(true); };
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
 
@@ -111,16 +112,6 @@ public class PlayerVM : IPlayerVM
     void ToggleCursorLockForGamePaused(bool gamePaused)
     {
         cameraController.LockCursor(!gamePaused);
-    }
-
-    void UnlockCursorForOpenDialog(IDialogVM dialogVM)
-    {
-        cameraController.LockCursor(false);
-    }
-
-    void LockCursorForClosedDialog(IDialogVM dialogVM)
-    {
-        cameraController.LockCursor(true);
     }
 
     void OnAbilityLearned(IPlayerAbility ability)
