@@ -71,9 +71,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6846961827733443580}
-  - component: {fileID: 8555367425154196634}
-  - component: {fileID: 6223248139054407913}
   - component: {fileID: 4267857605575633841}
+  - component: {fileID: 6008217981795349970}
+  - component: {fileID: 8996808756254921792}
   m_Layer: 0
   m_Name: Vision Cone
   m_TagString: Untagged
@@ -97,39 +97,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8555367425154196634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6846961827733443583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddceabc7bff38e94d9de971d18c23b90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ControlPoints: {fileID: 0}
-  VisionConePeriod: 5
---- !u!114 &6223248139054407913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6846961827733443583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 504e0d4b928b6fd46af233c873654569, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  kSpotLightGreen: {r: 0, g: 0.46226418, b: 0.045744855, a: 1}
-  kSpotLightOrange: {r: 0.8207547, g: 0.4631998, b: 0.0077429875, a: 1}
-  kSpotLightRed: {r: 0.764151, g: 0, b: 0.04000771, a: 1}
-  kSpotLightBlue: {r: 0, g: 0.09755037, b: 0.745283, a: 1}
-  greenMaterial: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
-  blueMaterial: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
-  kConeRangeMultiplier: 1.5
 --- !u!114 &4267857605575633841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,12 +110,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  enemyEventsMono: {fileID: 0}
+  eventsMono: {fileID: 0}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512
   kDetectionEscalationSpeed: 0.5
   kDetectionDeescalationSpeed: 0.075
+--- !u!114 &6008217981795349970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6846961827733443583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87348bee98fe97a47b528acfbb15d773, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlPoints: {fileID: 0}
+  VisionConePeriod: 5
+--- !u!114 &8996808756254921792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6846961827733443583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c5cb1f7c83ac8448a0cb554ff22eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlPoints: {fileID: 0}
+  VisionConePeriod: 5
+  kConeRangeMultiplier: 1.5
+  greenMaterial: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
+  blueMaterial: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
+  kSpotLightGreen: {r: 0, g: 0.754717, b: 0.07507648, a: 1}
+  kSpotLightOrange: {r: 0.754717, g: 0.42279956, b: 0, a: 1}
+  kSpotLightRed: {r: 0.764151, g: 0.0036044943, b: 0.04342349, a: 1}
+  kSpotLightBlue: {r: 0.0035599943, g: 0.10187921, b: 0.754717, a: 1}
 --- !u!1 &6846961827758018529
 GameObject:
   m_ObjectHideFlags: 0

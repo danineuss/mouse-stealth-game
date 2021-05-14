@@ -1,0 +1,50 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class VisionConeMono: MonoBehaviour
+{
+    [Header("Control Points")]
+    [SerializeField] private VisionConeControlPoints ControlPoints = null;
+    [SerializeField] private float VisionConePeriod = 5f;
+
+    [Header("Visualization")]
+    [SerializeField] private float kConeRangeMultiplier = 1.5f;
+    [SerializeField] private Material greenMaterial = null;
+    [SerializeField] private Material blueMaterial = null;
+    [SerializeField] private Color kSpotLightGreen = new Color(0f, 183f, 18f, 1f);
+    [SerializeField] private Color kSpotLightOrange = new Color(183f, 102f, 0f, 1f);
+    [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
+    [SerializeField] private Color kSpotLightBlue = new Color(0f, 23f, 183f, 1f);
+
+    private IVisionConeVM visionConeVM;
+    private IConeVisualizer coneVisualizer;
+
+    void Awake()
+    {
+        var spotLight = GetComponentInChildren<Light>();
+        var coneMeshRenderer = GetComponentInChildren<MeshRenderer>();
+        var coneOutline = GetComponentInChildren<Outline>();
+        var coneScaleParent = GetComponentsInChildren<Transform>()
+                                .Where(x => x.CompareTag("ScaleParent"))
+                                .First();
+        var coneScaleAnchor = GetComponentsInChildren<Transform>()
+                            .Where(x => x.CompareTag("ScaleAnchor"))
+                            .First();
+        coneVisualizer = new ConeVisualizer(
+            transform,
+            coneScaleParent,
+            coneScaleAnchor,
+            kConeRangeMultiplier,
+            coneMeshRenderer,
+            greenMaterial,
+            blueMaterial,
+            coneOutline,
+            spotLight,
+            kSpotLightGreen,
+            kSpotLightOrange,
+            kSpotLightRed,
+            kSpotLightBlue
+        );
+    }
+}

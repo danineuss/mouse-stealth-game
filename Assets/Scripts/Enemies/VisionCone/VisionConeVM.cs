@@ -10,33 +10,57 @@ public enum VisionConeState {
     Distracted
 }
 
-public class VisionCone : MonoBehaviour {
-    [SerializeField] private VisionConeControlPoints ControlPoints = null;
-    [SerializeField] private float VisionConePeriod = 5f;
+public interface IVisionConeVM
+{
+    Vector3 CurrentLookatTarget { get; }
+    float FieldOfView { get; }
+    float Range { get; }
+
+    void ResetToPatrolling();
+    void SetPlayerAsTarget(Transform player);
+    void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0);
+    void SetStateDistracted(bool distracted);
+    void Update();
+}
+
+public class VisionConeVM : MonoBehaviour, IVisionConeVM
+{
 
     public Vector3 CurrentLookatTarget { get; private set; }
     public float FieldOfView { get; private set; }
-    public float Range { 
-        get => (CurrentLookatTarget - transform.position).magnitude;
-    }
- 
-    private ConeVisualizer coneVisualizer;
+    public float Range => (CurrentLookatTarget - transform.position).magnitude;
+
+    private VisionConeControlPoints controlPoints;
+    private float visionConePeriod;
+    private IConeVisualizer coneVisualizer;
     private IEnumerator currentCoroutine;
     private int controlPointIndex = 0;
     private VisionConeState visionConeState;
     private float kFollowPlayerClampValue = 0.1f;
 
-    public void SetPlayerAsTarget(Transform player) {
+    public void Update()
+    {
+        if (visionConeState == VisionConeState.Idle)
+        {
+            MoveTowardsNextControlPoint();
+        }
+        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
+    }
+
+    public void SetPlayerAsTarget(Transform player)
+    {
         visionConeState = VisionConeState.FollowingPlayer;
         StartNewCoroutine(FollowPlayer(player));
     }
 
-    public void SetStateDistracted(bool distracted) {
-        if (!distracted) {
+    public void SetStateDistracted(bool distracted)
+    {
+        if (!distracted)
+        {
             visionConeState = VisionConeState.Idle;
             return;
         }
-        
+
         visionConeState = VisionConeState.Distracted;
         StartNewCoroutine(ObserveDistraction());
         StopCoroutine(currentCoroutine);
@@ -44,64 +68,66 @@ public class VisionCone : MonoBehaviour {
         StartCoroutine(currentCoroutine);
     }
 
-    public void ResetToPatrolling() {
-        if (currentCoroutine != null) {
+    public void ResetToPatrolling()
+    {
+        if (currentCoroutine != null)
+        {
             StopCoroutine(currentCoroutine);
         }
         visionConeState = VisionConeState.Idle;
     }
 
-    public void SetSpotState(DetectorState newDetectorState, float lerpDuration = 0f) {
+    public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
+    {
         coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
     }
 
-    void Awake() {
+    void Awake()
+    {
         coneVisualizer = GetComponent<ConeVisualizer>();
     }
 
-    void Start() {
-        InitializeCone();        
+    void Start()
+    {
+        InitializeCone();
         MoveTowardsNextControlPoint();
     }
 
-    void InitializeCone() {
-        var currentControlPoint = ControlPoints.patrolPoints[controlPointIndex];
+    void InitializeCone()
+    {
+        var currentControlPoint = controlPoints.patrolPoints[controlPointIndex];
         CurrentLookatTarget = currentControlPoint.transform.position;
         FieldOfView = currentControlPoint.FieldOfView;
         IterateControlPointIndex();
 
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
-        
+
         visionConeState = VisionConeState.Idle;
     }
 
-    void Update() {
-        if (visionConeState == VisionConeState.Idle) {
-            MoveTowardsNextControlPoint();
-        }
-        coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
-    }
-
-    void MoveTowardsNextControlPoint() {
-        var newControlPoint = ControlPoints.patrolPoints[controlPointIndex];
+    void MoveTowardsNextControlPoint()
+    {
+        var newControlPoint = controlPoints.patrolPoints[controlPointIndex];
         var newTarget = newControlPoint.transform.position;
         var newFieldOfView = newControlPoint.FieldOfView;
         if (newTarget == CurrentLookatTarget && newFieldOfView == FieldOfView)
             return;
 
-        currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, VisionConePeriod / 2);
+        currentCoroutine = LerpLookatTarget(newTarget, newFieldOfView, visionConePeriod / 2);
         StartCoroutine(currentCoroutine);
     }
 
-    IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds) {
+    IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds)
+    {
         visionConeState = VisionConeState.Patrolling;
 
         float elapsedTime = 0f;
         float startFieldOfView = FieldOfView;
         Vector3 startLookatTarget = CurrentLookatTarget;
-        while (elapsedTime < durationSeconds) {
+        while (elapsedTime < durationSeconds)
+        {
             FieldOfView = Mathf.Lerp(startFieldOfView, newFieldOfView, elapsedTime / durationSeconds);
-            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, newLookatTarget, 
+            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, newLookatTarget,
                                                 elapsedTime / durationSeconds);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -110,26 +136,33 @@ public class VisionCone : MonoBehaviour {
         IterateControlPointIndex();
         visionConeState = VisionConeState.Idle;
     }
-    
+
     // Currently supports one or two Control Points: iterate iff Count == 2, otherwise stay.
-    void IterateControlPointIndex() {
-        if (ControlPoints.patrolPoints.Count == 2) {
+    void IterateControlPointIndex()
+    {
+        if (controlPoints.patrolPoints.Count == 2)
+        {
             controlPointIndex = 1 - controlPointIndex;
         }
     }
 
-    void StartNewCoroutine(IEnumerator newCoroutine) {
-        if (currentCoroutine != null) {
+    void StartNewCoroutine(IEnumerator newCoroutine)
+    {
+        if (currentCoroutine != null)
+        {
             StopCoroutine(currentCoroutine);
         }
         currentCoroutine = newCoroutine;
         StartCoroutine(currentCoroutine);
     }
 
-    IEnumerator FollowPlayer(Transform player) {
-        while (true) {
+    IEnumerator FollowPlayer(Transform player)
+    {
+        while (true)
+        {
             var deltaVector = player.position - CurrentLookatTarget;
-            if (deltaVector.magnitude > kFollowPlayerClampValue) {
+            if (deltaVector.magnitude > kFollowPlayerClampValue)
+            {
                 deltaVector *= kFollowPlayerClampValue / deltaVector.magnitude;
             }
             CurrentLookatTarget += deltaVector;
@@ -137,16 +170,18 @@ public class VisionCone : MonoBehaviour {
         }
     }
 
-    IEnumerator ObserveDistraction() {
+    IEnumerator ObserveDistraction()
+    {
         float elapsedTime = 0f;
         float lerpDuration = 1f;
         float startFieldOfView = FieldOfView;
         Vector3 startLookatTarget = CurrentLookatTarget;
 
-        while (elapsedTime < lerpDuration) {
-            FieldOfView = Mathf.Lerp(startFieldOfView, ControlPoints.distractPoint.FieldOfView, 
+        while (elapsedTime < lerpDuration)
+        {
+            FieldOfView = Mathf.Lerp(startFieldOfView, controlPoints.distractPoint.FieldOfView,
                                         elapsedTime / lerpDuration);
-            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, ControlPoints.distractPoint.Position, 
+            CurrentLookatTarget = Vector3.Slerp(startLookatTarget, controlPoints.distractPoint.Position,
                                                 elapsedTime / lerpDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
