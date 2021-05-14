@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class SceneMono: MonoBehaviour
 {
-    [SerializeField] private EventsMono eventsMono;
-    [SerializeField] private PlayerMono playerMono;
+    [SerializeField] private EventsMono eventsMono = null;
 
     private ISceneVM sceneVM;
 

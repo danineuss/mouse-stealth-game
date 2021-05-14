@@ -10,9 +10,9 @@ public enum DetectorState {
 }
 
 public class PlayerDetector : MonoBehaviour {
-    [SerializeField] private Transform player;
-    [SerializeField] private EventsMono eventsMono;
-    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private Transform player = null;
+    [SerializeField] private EventsMono eventsMono = null;
+    [SerializeField] private LayerMask obstacleMask = new LayerMask();
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
     public DetectorState DetectorState { 

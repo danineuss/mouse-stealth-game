@@ -3,13 +3,13 @@ using UnityEngine;
 //TODO: make interface
 public class UICoordinator : MonoBehaviour
 {
-    [SerializeField] private EventsMono eventsMono;
-    [SerializeField] private GameObject failedScreen;
-    [SerializeField] private GameObject pausedScreen;
-    [SerializeField] private DialogMono introScreen;
-    [SerializeField] private DialogMono distractAbilityScreen;
-    [SerializeField] private DialogMono victoryScreen;
-    [SerializeField] private GameObject headsUpDisplay;
+    [SerializeField] private EventsMono eventsMono = null;
+    [SerializeField] private GameObject failedScreen = null;
+    [SerializeField] private GameObject pausedScreen = null;
+    [SerializeField] private DialogMono introScreen = null;
+    [SerializeField] private DialogMono distractAbilityScreen = null;
+    [SerializeField] private DialogMono victoryScreen = null;
+    [SerializeField] private GameObject headsUpDisplay = null;
     public ISceneEvents SceneEvents => eventsMono.SceneEvents;
 
     void Start() {
@@ -20,11 +20,10 @@ public class UICoordinator : MonoBehaviour
     void InitializeScreens() {
         failedScreen.SetActive(false);
         pausedScreen.SetActive(false);
+        introScreen.gameObject.SetActive(false);
         distractAbilityScreen.gameObject.SetActive(false);
         victoryScreen.gameObject.SetActive(false);
         headsUpDisplay.SetActive(false);
-
-        introScreen.gameObject.SetActive(true);
     }
 
     void InitializeEvents() {

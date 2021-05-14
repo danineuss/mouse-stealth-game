@@ -2,8 +2,8 @@
 
 public class DialogTrigger : MonoBehaviour 
 {
-    [SerializeField] private DialogMono dialogMono;
-    [SerializeField] private EventsMono eventsMono;
+    [SerializeField] private DialogMono dialogMono = null;
+    [SerializeField] private EventsMono eventsMono = null;
     [SerializeField] private bool disableAfterDisplay = false;
     [SerializeField] private bool triggerUponStart = false;
     

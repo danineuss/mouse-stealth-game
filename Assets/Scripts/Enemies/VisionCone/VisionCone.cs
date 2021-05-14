@@ -11,7 +11,7 @@ public enum VisionConeState {
 }
 
 public class VisionCone : MonoBehaviour {
-    [SerializeField] private VisionConeControlPoints ControlPoints;
+    [SerializeField] private VisionConeControlPoints ControlPoints = null;
     [SerializeField] private float VisionConePeriod = 5f;
 
     public Vector3 CurrentLookatTarget { get; private set; }

@@ -5,8 +5,8 @@ using UnityEngine.Audio;
 using UnityEngine;
 
 public class AudioVM : MonoBehaviour {
-    [SerializeField] private PlayerMono playerMono;
-    [SerializeField] private List<Sound> Sounds;
+    [SerializeField] private PlayerMono playerMono = null;
+    [SerializeField] private List<Sound> Sounds = null;
     private SoundEmitter playerSoundEmitter;
 
     public void PlaySoundAtEnemy(IEnemyVM enemyVM, DetectorState detectorState) {

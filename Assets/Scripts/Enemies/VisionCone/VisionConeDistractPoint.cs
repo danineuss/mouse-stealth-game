@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class VisionConeDistractPoint : MonoBehaviour, IVisionConeControlPoint {
-    [SerializeField] private float fieldOfView; 
+    [SerializeField] private float fieldOfView = 0f; 
     public float FieldOfView {
         get => fieldOfView;
         private set => fieldOfView = value;

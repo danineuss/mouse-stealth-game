@@ -8,8 +8,8 @@ public class ConeVisualizer : MonoBehaviour {
     [SerializeField] private Color kSpotLightOrange = new Color(183f, 102f, 0f, 1f);
     [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
     [SerializeField] private Color kSpotLightBlue = new Color(0f, 23f, 183f, 1f);
-    [SerializeField] private Material greenMaterial;
-    [SerializeField] private Material blueMaterial;
+    [SerializeField] private Material greenMaterial = null;
+    [SerializeField] private Material blueMaterial = null;
     [SerializeField] private float kConeRangeMultiplier = 1.5f;
 
     private MeshRenderer coneMeshRenderer;

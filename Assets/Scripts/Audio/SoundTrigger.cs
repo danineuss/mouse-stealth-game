@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SoundTrigger : MonoBehaviour
 {
-    [SerializeField] private AudioVM audioVM;
-    [SerializeField] private string nameOfSound;
+    [SerializeField] private AudioVM audioVM = null;
+    [SerializeField] private string nameOfSound = "";
     private SoundEmitter soundEmitter;
 
     void Awake() {

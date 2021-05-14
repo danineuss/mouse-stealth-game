@@ -13,8 +13,8 @@ public interface IEnemyVM: IIdentifiable
 
 public class EnemyVM : MonoBehaviour, IEnemyVM
 {
-    [SerializeField] private EventsMono eventsMono;
-    [SerializeField] private AudioVM audioVM;
+    [SerializeField] private EventsMono eventsMono = null;
+    [SerializeField] private AudioVM audioVM = null;
     //TODO: maybe remove this public property
     public EnemyEvents EnemyEvents => eventsMono.EnemyEvents;
 
