@@ -1,5 +1,5 @@
 ﻿//
-//  Outline.cs
+//  OutlineMono.cs
 //  QuickOutline
 //
 //  Created by Chris Nolet on 3/30/18.
@@ -13,7 +13,7 @@ using UnityEngine;
 
 [DisallowMultipleComponent]
 
-public class Outline : MonoBehaviour {
+public class OutlineMono : MonoBehaviour {
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
   public enum Mode {

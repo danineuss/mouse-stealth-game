@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IEnemyVM: IIdentifiable
 {
-    EnemyEvents EnemyEvents { get; }
-
     bool GetDistracted();
     void PlaySound(Sound sound);
 }
 
-public class EnemyVM : MonoBehaviour, IEnemyVM
+public class EnemyVM : IEnemyVM
 {
-    [SerializeField] private EventsMono eventsMono = null;
-    [SerializeField] private AudioVM audioVM = null;
-    //TODO: maybe remove this public property
-    public EnemyEvents EnemyEvents => eventsMono.EnemyEvents;
-
     public Guid ID => id;
 
-    private EnemyIO enemyIO;
     private IPlayerDetector playerDetector;
+    private AudioVM audioVM;
+    private IEnemyIO enemyIO;
     private SoundEmitter soundEmitter;
+    private IPlayerEvents playerEvents;
+    private IEnemyEvents enemyEvents;
     private Guid id;
 
     public bool GetDistracted()
@@ -42,28 +36,36 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         soundEmitter.PlaySound(sound);
     }
 
-    void Awake()
+    public EnemyVM(
+        IPlayerDetector playerDetector,
+        AudioVM audioVM,
+        IEnemyIO enemyIO,
+        SoundEmitter soundEmitter,
+        IPlayerEvents playerEvents,
+        IEnemyEvents enemyEvents)
     {
-        enemyIO = GetComponentInChildren<EnemyIO>();
-        playerDetector = GetComponentInChildren<VisionConeMono>().PlayerDetector;
-        soundEmitter = GetComponentInChildren<SoundEmitter>();
-        id = new Guid();
-    }
+        this.playerDetector = playerDetector;
+        this.audioVM = audioVM;
+        this.enemyIO = enemyIO;
+        this.soundEmitter = soundEmitter;
+        this.playerEvents = playerEvents;
+        this.enemyEvents = enemyEvents;
+        
+        id = Guid.NewGuid();
+        this.enemyIO.SetEnemyID(id);
 
-    void Start()
-    {
         InitializeEvents();
     }
 
     void InitializeEvents()
     {
-        eventsMono.EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        eventsMono.EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        eventsMono.EnemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
+        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
-        eventsMono.PlayerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        eventsMono.PlayerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
-        eventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
+        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
 
     void OnCursorEnterEnemy(Guid enemyID)
@@ -88,7 +90,7 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorStateEnum);
 
         if (playerDetector.DetectorStateEnum == DetectorStateEnum.Alarmed)
-            EnemyEvents.FailGame();
+            enemyEvents.FailGame();
     }
 
     void OnReceivePlayerLocation(

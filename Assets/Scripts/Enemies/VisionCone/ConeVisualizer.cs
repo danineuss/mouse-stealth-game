@@ -18,7 +18,7 @@ public class ConeVisualizer : IConeVisualizer
     private MeshRenderer coneMeshRenderer;
     private Material greenMaterial;
     private Material blueMaterial;
-    private Outline outline;
+    private OutlineMono outline;
 
     private Light spotLight;
     private Color kSpotLightGreen;
@@ -34,7 +34,7 @@ public class ConeVisualizer : IConeVisualizer
         MeshRenderer coneMeshRenderer,
         Material greenMaterial,
         Material blueMaterial,
-        Outline outline,
+        OutlineMono outline,
         Light spotLight,
         Color kSpotLightGreen,
         Color kSpotLightOrange,

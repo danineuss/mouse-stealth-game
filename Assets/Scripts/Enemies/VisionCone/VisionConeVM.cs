@@ -29,7 +29,7 @@ public class VisionConeVM : IVisionConeVM
     public float FieldOfView { get; private set; }
     public float Range => (CurrentLookatTarget - coneTransform.position).magnitude;
 
-    private VisionConeControlPoints controlPoints;
+    private VisionConeControlPointsMono controlPoints;
     private float visionConePeriod;
     private IConeVisualizer coneVisualizer;
     private Transform coneTransform;
@@ -41,7 +41,7 @@ public class VisionConeVM : IVisionConeVM
     private float kFollowPlayerClampValue = 0.1f;
 
     public VisionConeVM(
-        VisionConeControlPoints controlPoints,
+        VisionConeControlPointsMono controlPoints,
         float visionConePeriod,
         IConeVisualizer coneVisualizer,
         Transform coneTransform,

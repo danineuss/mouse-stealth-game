@@ -12,7 +12,7 @@ public class VisionConeMono: MonoBehaviour
     [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
 
     [Header("Control Points")]
-    [SerializeField] private VisionConeControlPoints controlPoints = null;
+    [SerializeField] private VisionConeControlPointsMono controlPoints = null;
     [SerializeField] private float visionConePeriod = 5f;
 
     [Header("Visualization")]
@@ -33,7 +33,7 @@ public class VisionConeMono: MonoBehaviour
     {
         var spotLight = GetComponentInChildren<Light>();
         var coneMeshRenderer = GetComponentInChildren<MeshRenderer>();
-        var coneOutline = GetComponentInChildren<Outline>();
+        var coneOutline = GetComponentInChildren<OutlineMono>();
         var coneScaleParent = GetComponentsInChildren<Transform>()
                                 .Where(x => x.CompareTag("ScaleParent"))
                                 .First();

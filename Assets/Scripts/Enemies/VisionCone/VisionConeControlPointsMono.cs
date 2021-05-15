@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class VisionConeControlPoints : MonoBehaviour {
+public class VisionConeControlPointsMono : MonoBehaviour {
     public List<VisionConePatrolPoint> patrolPoints;
     public VisionConeDistractPoint distractPoint;
 
