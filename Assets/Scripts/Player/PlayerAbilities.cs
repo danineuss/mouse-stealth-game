@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +10,7 @@ public interface IPlayerAbilities
     List<KeyCode> RelevantKeyPresses { get; }
     List<IPlayerAbility> RelevantAbilities { get; }
 
-    void ExecuteAbility(IPlayerAbility ability, IEnemyVM enemyVM = null);
+    void ExecuteAbility(IPlayerAbility ability, Guid enemyID);
     void LearnAbility(IPlayerAbility ability);
 }
 
@@ -35,7 +36,7 @@ public class PlayerAbilities : IPlayerAbilities
 
     public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
 
-    public void ExecuteAbility(IPlayerAbility ability, IEnemyVM target = null)
+    public void ExecuteAbility(IPlayerAbility ability, Guid targetID)
     {
         if (!Abilities.ContainsValue(ability))
             return;
@@ -45,7 +46,7 @@ public class PlayerAbilities : IPlayerAbilities
             return;
 
         timesSinceLastExecute[ability] = Time.time;
-        ability.SetTarget(target);
+        ability.SetTarget(targetID);
         playerEvents.AbilityExecuted(ability);
     }
 

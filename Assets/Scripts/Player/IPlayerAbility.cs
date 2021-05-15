@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public interface IPlayerAbility {
     KeyCode AssociatedKey {
@@ -9,7 +10,7 @@ public interface IPlayerAbility {
     }
 
     //TODO: change to targetID
-    void SetTarget(IEnemyVM target = null);
+    void SetTarget(Guid targetID);
 
-    void Execute(IEnemyVM enemyVM = null);
+    void Execute(IEnemyVM enemyVM);
 }

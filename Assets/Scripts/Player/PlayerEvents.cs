@@ -3,43 +3,42 @@ using UnityEngine;
 
 public interface IPlayerEvents
 {
-    event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
-    event Action<IEnemyVM> OnRemovePlayerLocation;
+    event Action<Guid, bool, Transform> OnSendPlayerLocation;
+    event Action<Guid> OnRemovePlayerLocation;
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
     event Action OnPauseButtonPressed;
 
     void AbilityExecuted(IPlayerAbility ability);
     void AbilityLearned(IPlayerAbility ability);
-    void RemovePlayerLocation(IEnemyVM enemyVM);
-    void SendPlayerLocation(IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform);
+    void RemovePlayerLocation(Guid enemyID);
+    void SendPlayerLocation(Guid enemyID, bool shouldDisplayText, Transform playerTransform);
     void PressPauseButton();
 }
 
 public class PlayerEvents : IPlayerEvents
 {
-    public event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
-    public event Action<IEnemyVM> OnRemovePlayerLocation;
+    public event Action<Guid, bool, Transform> OnSendPlayerLocation;
+    public event Action<Guid> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
     public event Action OnPauseButtonPressed;
 
     public void SendPlayerLocation(
-        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
-    )
+        Guid enemyID, bool shouldDisplayText, Transform playerTransform)
     {
         if (OnSendPlayerLocation == null)
             return;
 
-        OnSendPlayerLocation(enemyVM, shouldDisplayText, playerTransform);
+        OnSendPlayerLocation(enemyID, shouldDisplayText, playerTransform);
     }
 
-    public void RemovePlayerLocation(IEnemyVM enemyVM)
+    public void RemovePlayerLocation(Guid enemyID)
     {
         if (OnRemovePlayerLocation == null)
             return;
 
-        OnRemovePlayerLocation(enemyVM);
+        OnRemovePlayerLocation(enemyID);
     }
 
     public void AbilityExecuted(IPlayerAbility ability)

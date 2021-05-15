@@ -66,13 +66,13 @@ namespace Tests
             var relevantAbilities = new List<IPlayerAbility>() { new DummyAbility(KeyCode.A, 10f) };
             playerAbilities.RelevantAbilities.Returns(relevantAbilities);
             var enemyVM = Substitute.For<IEnemyVM>();
-            enemyVM.ID.Returns(new Guid());
+            enemyVM.ID.Returns(Guid.NewGuid());
             SetupPlayerVM(playerAbilities);
             
-            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
+            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             
-            playerEvents.Received().SendPlayerLocation(enemyVM, true, gameObject.transform);
-            playerEvents.DidNotReceive().SendPlayerLocation(enemyVM, false, null);
+            playerEvents.Received().SendPlayerLocation(enemyVM.ID, true, gameObject.transform);
+            playerEvents.DidNotReceive().SendPlayerLocation(enemyVM.ID, false, null);
         }
 
         [Test]
@@ -81,13 +81,13 @@ namespace Tests
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
             var enemyVM = Substitute.For<IEnemyVM>();
-            enemyVM.ID.Returns(new Guid());
+            enemyVM.ID.Returns(Guid.NewGuid());
             SetupPlayerVM(playerAbilities);
             
-            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
+            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             
-            playerEvents.DidNotReceive().SendPlayerLocation(enemyVM, true, gameObject.transform);
-            playerEvents.Received().SendPlayerLocation(enemyVM, false, null);
+            playerEvents.DidNotReceive().SendPlayerLocation(enemyVM.ID, true, gameObject.transform);
+            playerEvents.Received().SendPlayerLocation(enemyVM.ID, false, null);
         }
 
         [Test]
@@ -96,20 +96,20 @@ namespace Tests
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
             var enemyVM = Substitute.For<IEnemyVM>();
-            enemyVM.ID.Returns(new Guid());
+            enemyVM.ID.Returns(Guid.NewGuid());
             SetupPlayerVM(playerAbilities);
             
-            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<IEnemyVM>>(enemyVM);
+            enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
             
-            playerEvents.Received().RemovePlayerLocation(enemyVM);
+            playerEvents.Received().RemovePlayerLocation(enemyVM.ID);
         }
 
         [Test]
         public void should_not_remove_player_location_for_enemy_iff_no_enemy()
         {
             var enemyVM = Substitute.For<IEnemyVM>();
-            enemyVM.ID.Returns(new Guid());
+            enemyVM.ID.Returns(Guid.NewGuid());
             SetupPlayerVM();
             
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
@@ -153,7 +153,7 @@ namespace Tests
 
             playerVM.Update();
 
-            playerAbilities.DidNotReceiveWithAnyArgs().ExecuteAbility(default);
+            playerAbilities.DidNotReceiveWithAnyArgs().ExecuteAbility(default, default);
 
             playerInput.GetKeyDown(ability.AssociatedKey).Returns(true);
             playerVM = new PlayerVM(
@@ -168,7 +168,7 @@ namespace Tests
             );
 
             playerVM.Update();
-            playerAbilities.Received().ExecuteAbility(ability);
+            playerAbilities.Received().ExecuteAbility(ability, Guid.Empty);
         }
 
         [Test]

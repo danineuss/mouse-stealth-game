@@ -70,7 +70,7 @@ public class EnemyIO : MonoBehaviour {
     }
 
     void OnMouseEnter() {
-        enemyVM.EnemyEvents.CursorEnterEnemy(enemyVM);
+        enemyVM.EnemyEvents.CursorEnterEnemy(enemyID);
     }
 
     void OnMouseExit() {

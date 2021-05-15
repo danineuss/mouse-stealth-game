@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -80,7 +81,7 @@ namespace Tests
             };
             var playerAbilities = new PlayerAbilities(playerEvents, abilityDictionary);
 
-            playerAbilities.ExecuteAbility(firstAbility);
+            playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
 
             playerEvents.Received().AbilityExecuted(firstAbility);
         }
@@ -91,7 +92,7 @@ namespace Tests
             var playerEvents = Substitute.For<IPlayerEvents>();
             var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
-            playerAbilities.ExecuteAbility(firstAbility);
+            playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
 
             playerEvents.DidNotReceive().AbilityExecuted(firstAbility);
         }

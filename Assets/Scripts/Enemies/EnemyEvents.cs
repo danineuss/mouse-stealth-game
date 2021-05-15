@@ -1,30 +1,30 @@
 ﻿using System;
 public interface IEnemyEvents
 {
-    event Action<IEnemyVM> OnCursorEnterEnemy;
+    event Action<Guid> OnCursorEnterEnemy;
     event Action OnCurserExitEnemy;
     event Action<PlayerDetector> OnDetectorStateChanged;
     event Action OnGameFailed;
 
     void ChangeDetectorState(PlayerDetector playerDetector);
-    void CursorEnterEnemy(IEnemyVM enemyVM = null);
+    void CursorEnterEnemy(Guid enemyID);
     void CursorExitEnemy();
     void FailGame();
 }
 
 public class EnemyEvents : IEnemyEvents
 {
-    public event Action<IEnemyVM> OnCursorEnterEnemy;
+    public event Action<Guid> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
     public event Action<PlayerDetector> OnDetectorStateChanged;
     public event Action OnGameFailed;
 
-    public void CursorEnterEnemy(IEnemyVM enemyVM = null)
+    public void CursorEnterEnemy(Guid enemyID)
     {
         if (OnCursorEnterEnemy == null)
             return;
 
-        OnCursorEnterEnemy(enemyVM);
+        OnCursorEnterEnemy(enemyID);
     }
 
     public void CursorExitEnemy()

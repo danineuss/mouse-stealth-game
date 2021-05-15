@@ -66,9 +66,9 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         eventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
     }
 
-    void OnCursorEnterEnemy(IEnemyVM enemyVM)
+    void OnCursorEnterEnemy(Guid enemyID)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetDisplayVisibility(true);
@@ -92,18 +92,17 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
     }
 
     void OnReceivePlayerLocation(
-        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null
-    )
+        Guid enemyID, bool shouldDisplayText, Transform playerTransform = null)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
-    void OnRemovePlayerLocation(IEnemyVM enemyVM)
+    void OnRemovePlayerLocation(Guid enemyID)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(false);

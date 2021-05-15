@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Tests
@@ -14,7 +15,7 @@ namespace Tests
             this.keyCode = keyCode;
             this.coolDown = coolDown;
         }
-        public void SetTarget(IEnemyVM target = null) {}
+        public void SetTarget(Guid targetID) {}
 
         public void Execute(IEnemyVM enemyVM = null)
         {
