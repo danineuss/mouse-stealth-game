@@ -22,15 +22,15 @@ namespace Tests
             var playerAbilities = new PlayerAbilities(playerEvents, abilityDictionary);
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
-            playerEvents.Received(1).AbilityExecuted(firstAbility);
+            playerEvents.Received(1).ExecuteAbility(firstAbility);
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
-            playerEvents.Received(1).AbilityExecuted(firstAbility);
+            playerEvents.Received(1).ExecuteAbility(firstAbility);
 
             yield return new WaitForSeconds(firstAbility.CoolDown);
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
-            playerEvents.Received(2).AbilityExecuted(firstAbility);
+            playerEvents.Received(2).ExecuteAbility(firstAbility);
         }
     }
 }

@@ -3,45 +3,39 @@ using UnityEngine;
 
 public interface IPlayerEvents
 {
-    event Action<Guid, bool, Transform> OnSendPlayerLocation;
-    event Action<Guid> OnRemovePlayerLocation;
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
+    event Action<Guid> OnEnemyDistracted;
     event Action OnPauseButtonPressed;
+    event Action<Guid> OnPlayerLocationRemoved;
+    event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    void AbilityExecuted(IPlayerAbility ability);
-    void AbilityLearned(IPlayerAbility ability);
+    void DistractEnemy(Guid enemyID);
+    void ExecuteAbility(IPlayerAbility ability);
+    void LearnAbility(IPlayerAbility ability);
+    void PressPauseButton();
     void RemovePlayerLocation(Guid enemyID);
     void SendPlayerLocation(Guid enemyID, bool shouldDisplayText, Transform playerTransform);
-    void PressPauseButton();
 }
 
 public class PlayerEvents : IPlayerEvents
 {
-    public event Action<Guid, bool, Transform> OnSendPlayerLocation;
-    public event Action<Guid> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
+    public event Action<Guid> OnEnemyDistracted;
     public event Action OnPauseButtonPressed;
+    public event Action<Guid> OnPlayerLocationRemoved;
+    public event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    public void SendPlayerLocation(
-        Guid enemyID, bool shouldDisplayText, Transform playerTransform)
+    public void DistractEnemy(Guid enemyID)
     {
-        if (OnSendPlayerLocation == null)
+        if (OnEnemyDistracted == null)
             return;
-
-        OnSendPlayerLocation(enemyID, shouldDisplayText, playerTransform);
+        
+        OnEnemyDistracted(enemyID);
     }
 
-    public void RemovePlayerLocation(Guid enemyID)
-    {
-        if (OnRemovePlayerLocation == null)
-            return;
-
-        OnRemovePlayerLocation(enemyID);
-    }
-
-    public void AbilityExecuted(IPlayerAbility ability)
+    public void ExecuteAbility(IPlayerAbility ability)
     {
         if (OnAbilityExecuted == null)
             return;
@@ -49,7 +43,7 @@ public class PlayerEvents : IPlayerEvents
         OnAbilityExecuted(ability);
     }
 
-    public void AbilityLearned(IPlayerAbility ability)
+    public void LearnAbility(IPlayerAbility ability)
     {
         if (OnAbilityLearned == null)
             return;
@@ -63,5 +57,22 @@ public class PlayerEvents : IPlayerEvents
             return;
         
         OnPauseButtonPressed();
+    }
+
+    public void RemovePlayerLocation(Guid enemyID)
+    {
+        if (OnPlayerLocationRemoved == null)
+            return;
+
+        OnPlayerLocationRemoved(enemyID);
+    }
+
+    public void SendPlayerLocation(
+        Guid enemyID, bool shouldDisplayText, Transform playerTransform)
+    {
+        if (OnPlayerLocationSent == null)
+            return;
+
+        OnPlayerLocationSent(enemyID, shouldDisplayText, playerTransform);
     }
 }

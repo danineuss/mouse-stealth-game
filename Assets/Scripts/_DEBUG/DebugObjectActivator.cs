@@ -7,6 +7,6 @@ public class DebugObjectActivator : MonoBehaviour {
     
     void OnTriggerEnter() {
         Object.SetActive(DesiredStateAfterTrigger);
-        EventsMono.PlayerEvents.AbilityLearned(new PlayerAbilityDistract());
+        EventsMono.PlayerEvents.LearnAbility(new PlayerAbilityDistract());
     }
 }

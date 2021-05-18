@@ -7,5 +7,5 @@ public interface IPlayerAbility {
 
     void SetTarget(Guid targetID);
 
-    void Execute(IEnemyVM enemyVM);
+    void Execute(IPlayerEvents playerEvents);
 }

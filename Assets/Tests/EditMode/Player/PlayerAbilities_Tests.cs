@@ -83,7 +83,7 @@ namespace Tests
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
 
-            playerEvents.Received().AbilityExecuted(firstAbility);
+            playerEvents.Received().ExecuteAbility(firstAbility);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace Tests
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
 
-            playerEvents.DidNotReceive().AbilityExecuted(firstAbility);
+            playerEvents.DidNotReceive().ExecuteAbility(firstAbility);
         }
     }
 }

@@ -47,7 +47,8 @@ public class PlayerAbilities : IPlayerAbilities
 
         timesSinceLastExecute[ability] = Time.time;
         ability.SetTarget(targetID);
-        playerEvents.AbilityExecuted(ability);
+        ability.Execute(playerEvents);
+        playerEvents.ExecuteAbility(ability);
     }
 
     public void LearnAbility(IPlayerAbility ability)

@@ -13,11 +13,8 @@ public class PlayerAbilityDistract : IPlayerAbility
         this.targetID = targetID;
     }
 
-    public void Execute(IEnemyVM enemyVM) 
+    public void Execute(IPlayerEvents playerEvents) 
     {
-        if (enemyVM == null || enemyVM.ID != targetID)
-            return;
-
-        enemyVM.GetDistracted();
+        playerEvents.DistractEnemy(targetID);
     }
 }

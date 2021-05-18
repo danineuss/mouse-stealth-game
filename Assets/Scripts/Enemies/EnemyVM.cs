@@ -3,7 +3,6 @@ using UnityEngine;
 
 public interface IEnemyVM: IIdentifiable
 {
-    bool GetDistracted();
     void PlaySound(Sound sound);
 }
 
@@ -17,18 +16,6 @@ public class EnemyVM : IEnemyVM
     private SoundEmitter soundEmitter;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
-
-    public bool GetDistracted()
-    {
-        if (playerDetector.DetectorStateEnum != DetectorStateEnum.Idle)
-        {
-            return false;
-        }
-
-        playerDetector.SetStateDistracted();
-        enemyIO.SetTextColor(DetectorStateEnum.Distracted);
-        return true;
-    }
 
     public void PlaySound(Sound sound)
     {
@@ -62,9 +49,10 @@ public class EnemyVM : IEnemyVM
         enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
-        playerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        playerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
+        playerEvents.OnPlayerLocationSent += OnReceivePlayerLocation;
+        playerEvents.OnPlayerLocationRemoved += OnRemovePlayerLocation;
         playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        playerEvents.OnEnemyDistracted += OnEnemyDistracted;
     }
 
     void OnCursorEnterEnemy(Guid enemyID)
@@ -111,7 +99,16 @@ public class EnemyVM : IEnemyVM
 
     void OnPlayerAbilityExecuted(IPlayerAbility ability)
     {
-        ability.Execute(this);
         enemyIO.UpdateCooldownForAbility(ability);
+    }
+
+    void OnEnemyDistracted(Guid targetID)
+    {
+        if (targetID != this.ID || 
+            playerDetector.DetectorStateEnum != DetectorStateEnum.Idle)
+            return;
+
+        playerDetector.SetStateDistracted();
+        enemyIO.SetTextColor(DetectorStateEnum.Distracted);
     }
 }
