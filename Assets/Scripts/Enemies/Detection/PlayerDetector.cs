@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public enum DetectorStateEnum {
@@ -9,16 +9,12 @@ public enum DetectorStateEnum {
     Distracted
 }
 
-public abstract class DetectorState
-{
-    
-}
-
 public interface IPlayerDetector: IIdentifiable
 {
     DetectorStateEnum DetectorStateEnum { get; }
 
-    void SetStateDistracted();
+    bool AttemptDistraction();
+    void TransitionTo(DetectorState detectorState);
     void Update();
 }
 
@@ -36,33 +32,28 @@ public class PlayerDetector : IPlayerDetector
             eventsMono.EnemyEvents.ChangeDetectorState(this.ID);
         }
     }
+    public DetectorState DetectorState => detectorState;
     public Guid ID { get; private set; }
 
     private IVisionConeVM visionConeVM;
     private EventsMono eventsMono;
-    private LayerMask obstacleMask;
-    private Transform player;
-    private Transform detectorTransform;
     private float kDetectionEscalationSpeed;
     private float kDetectionDeescalationSpeed;
 
     private DetectorStateEnum detectorStateEnum;
-    private bool playerVisible;
+    private bool playerVisible; //TODO: move to Vision Cone.
     private float detectionEscalationMeter = 0.5f;
     private float kDetectPlayerRepetitionDelay = 0.075f;
-    private float kDistractionDuration = 5f;
-    private float timeOfLastDistraction = 0f;
+    private DetectorState detectorState;
 
-    public void SetStateDistracted()
+    public bool AttemptDistraction()
     {
-        if (DetectorStateEnum == DetectorStateEnum.Searching)
-            return;
+        return detectorState.AttemptDistraction(visionConeVM);
+    }
 
-        DetectorStateEnum = DetectorStateEnum.Distracted;
-        visionConeVM.SetStateDistracted(true);
-
-        timeOfLastDistraction = Time.time;
-        eventsMono.StartCoroutine(ResetDistraction());
+    public void TransitionTo(DetectorState detectorState)
+    {
+        this.detectorState = detectorState;
     }
 
     public void Update()
@@ -73,31 +64,18 @@ public class PlayerDetector : IPlayerDetector
     public PlayerDetector(
         IVisionConeVM visionConeVM,
         EventsMono eventsMono,
-        LayerMask obstacleMask,
-        Transform player,
-        Transform detectorTransform,
         float kDetectionEscalationSpeed,
         float kDetectionDeescalationSpeed)
     {
         this.visionConeVM = visionConeVM;
         this.eventsMono = eventsMono;
-        this.obstacleMask = obstacleMask;
-        this.player = player;
-        this.detectorTransform = detectorTransform;
         this.kDetectionEscalationSpeed = kDetectionEscalationSpeed;
         this.kDetectionDeescalationSpeed = kDetectionDeescalationSpeed;
 
         DetectorStateEnum = DetectorStateEnum.Idle;
+        detectorState = new DetectorStateIdle(this, eventsMono);
 
         eventsMono.StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
-    }
-    IEnumerator ResetDistraction()
-    {
-        while (Time.time - timeOfLastDistraction < kDistractionDuration)
-            yield return null;
-
-        DetectorStateEnum = DetectorStateEnum.Idle;
-        visionConeVM.SetStateDistracted(false);
     }
 
     IEnumerator DetectPlayerWithDelay(float seconds)
@@ -115,7 +93,7 @@ public class PlayerDetector : IPlayerDetector
             return;
 
         bool wasPlayerPreviouslyVisible = playerVisible;
-        if (PlayerOutsideVisibleCone())
+        if (!visionConeVM.IsPlayerInsideVisionCone())
         {
             playerVisible = false;
             if (wasPlayerPreviouslyVisible)
@@ -123,14 +101,7 @@ public class PlayerDetector : IPlayerDetector
             return;
         }
 
-        bool playerObstructed = Physics.Raycast(
-            detectorTransform.position,
-            (player.transform.position - detectorTransform.position).normalized,
-            Vector3.Distance(player.transform.position, detectorTransform.position),
-            obstacleMask
-        );
-
-        if (playerObstructed)
+        if (visionConeVM.IsPlayerObstructed())
         {
             playerVisible = false;
             if (wasPlayerPreviouslyVisible)
@@ -139,17 +110,7 @@ public class PlayerDetector : IPlayerDetector
         }
 
         playerVisible = true;
-        visionConeVM.SetPlayerAsTarget(player);
-    }
-
-    bool PlayerOutsideVisibleCone()
-    {
-        float angleToPlayer = Vector3.Angle(
-            visionConeVM.CurrentLookatTarget - detectorTransform.position,
-            player.transform.position - detectorTransform.position
-        );
-        float distanceToPlayer = Vector3.Distance(player.transform.position, detectorTransform.position);
-        return (angleToPlayer > visionConeVM.FieldOfView / 2 || distanceToPlayer > visionConeVM.Range);
+        visionConeVM.StartFollowingPlayer();
     }
 
     void SetDetectionState()

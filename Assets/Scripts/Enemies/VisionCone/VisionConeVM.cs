@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum VisionConeState {
+public enum VisionConeStateEnum {
     Idle,
     Patrolling,
     FollowingPlayer,
@@ -16,10 +16,13 @@ public interface IVisionConeVM
     float FieldOfView { get; }
     float Range { get; }
 
+    bool IsPlayerInsideVisionCone();
+    bool IsPlayerObstructed();
     void ResetToPatrolling();
-    void SetPlayerAsTarget(Transform player);
+    void StartFollowingPlayer();
     void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0);
     void SetStateDistracted(bool distracted);
+    void TransitionTo(VisionConeState visionConeState);
     void Update();
 }
 
@@ -33,11 +36,14 @@ public class VisionConeVM : IVisionConeVM
     private float visionConePeriod;
     private IConeVisualizer coneVisualizer;
     private Transform coneTransform;
+    private Transform playerTransform;
+    private LayerMask obstacleMask;
     private EventsMono eventsMono;
 
+    private VisionConeState visionConeState;
     private IEnumerator currentCoroutine;
     private int controlPointIndex = 0;
-    private VisionConeState visionConeState;
+    private VisionConeStateEnum visionConeStateEnum;
     private float kFollowPlayerClampValue = 0.1f;
 
     public VisionConeVM(
@@ -45,13 +51,20 @@ public class VisionConeVM : IVisionConeVM
         float visionConePeriod,
         IConeVisualizer coneVisualizer,
         Transform coneTransform,
+        Transform playerTransform,
+        LayerMask obstacleMask,
         EventsMono eventsMono)
     {
         this.controlPoints = controlPoints;
         this.visionConePeriod = visionConePeriod;
         this.coneVisualizer = coneVisualizer;
         this.coneTransform = coneTransform;
+        this.playerTransform = playerTransform;
+        this.obstacleMask = obstacleMask;
         this.eventsMono = eventsMono;
+
+        visionConeStateEnum = VisionConeStateEnum.Idle;
+        TransitionTo(new VisionConeStateIdle(this));
 
         InitializeCone();
         MoveTowardsNextControlPoint();
@@ -65,47 +78,65 @@ public class VisionConeVM : IVisionConeVM
         IterateControlPointIndex();
 
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
+    }
 
-        visionConeState = VisionConeState.Idle;
+    public bool IsPlayerInsideVisionCone()
+    {
+        float angleToPlayer = Vector3.Angle(
+            CurrentLookatTarget - coneTransform.position,
+            playerTransform.position - coneTransform.position
+        );
+        float distanceToPlayer = Vector3.Distance(playerTransform.position, coneTransform.position);
+        return (angleToPlayer < FieldOfView / 2 && distanceToPlayer < Range);
+    }
+
+    public bool IsPlayerObstructed()
+    {
+        return Physics.Raycast(
+            coneTransform.position,
+            (playerTransform.position - coneTransform.position).normalized,
+            Vector3.Distance(playerTransform.position, coneTransform.position),
+            obstacleMask
+        );
+    }
+
+    public void TransitionTo(VisionConeState visionConeState)
+    {
+        this.visionConeState = visionConeState;
     }
 
     public void Update()
     {
-        if (visionConeState == VisionConeState.Idle)
-        {
+        if (visionConeStateEnum == VisionConeStateEnum.Idle)
             MoveTowardsNextControlPoint();
-        }
+        
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
     }
 
-    public void SetPlayerAsTarget(Transform player)
+    public void StartFollowingPlayer()
     {
-        visionConeState = VisionConeState.FollowingPlayer;
-        StartNewCoroutine(FollowPlayer(player));
+        visionConeStateEnum = VisionConeStateEnum.FollowingPlayer;
+        StartNewCoroutine(FollowPlayer(playerTransform));
     }
 
     public void SetStateDistracted(bool distracted)
     {
         if (!distracted)
         {
-            visionConeState = VisionConeState.Idle;
+            visionConeStateEnum = VisionConeStateEnum.Idle;
             return;
         }
 
-        visionConeState = VisionConeState.Distracted;
+        visionConeStateEnum = VisionConeStateEnum.Distracted;
         StartNewCoroutine(ObserveDistraction());
-        eventsMono.StopCoroutine(currentCoroutine);
-        currentCoroutine = ObserveDistraction();
-        eventsMono.StartCoroutine(currentCoroutine);
     }
 
     public void ResetToPatrolling()
     {
         if (currentCoroutine != null)
-        {
             eventsMono.StopCoroutine(currentCoroutine);
-        }
-        visionConeState = VisionConeState.Idle;
+        
+        visionConeStateEnum = VisionConeStateEnum.Idle;
     }
 
     public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
@@ -127,7 +158,7 @@ public class VisionConeVM : IVisionConeVM
 
     IEnumerator LerpLookatTarget(Vector3 newLookatTarget, float newFieldOfView, float durationSeconds)
     {
-        visionConeState = VisionConeState.Patrolling;
+        visionConeStateEnum = VisionConeStateEnum.Patrolling;
 
         float elapsedTime = 0f;
         float startFieldOfView = FieldOfView;
@@ -142,7 +173,7 @@ public class VisionConeVM : IVisionConeVM
         }
 
         IterateControlPointIndex();
-        visionConeState = VisionConeState.Idle;
+        visionConeStateEnum = VisionConeStateEnum.Idle;
     }
 
     // Currently supports one or two Control Points: iterate iff Count == 2, otherwise stay.
@@ -157,9 +188,8 @@ public class VisionConeVM : IVisionConeVM
     void StartNewCoroutine(IEnumerator newCoroutine)
     {
         if (currentCoroutine != null)
-        {
             eventsMono.StopCoroutine(currentCoroutine);
-        }
+        
         currentCoroutine = newCoroutine;
         eventsMono.StartCoroutine(currentCoroutine);
     }
@@ -170,9 +200,8 @@ public class VisionConeVM : IVisionConeVM
         {
             var deltaVector = player.position - CurrentLookatTarget;
             if (deltaVector.magnitude > kFollowPlayerClampValue)
-            {
                 deltaVector *= kFollowPlayerClampValue / deltaVector.magnitude;
-            }
+            
             CurrentLookatTarget += deltaVector;
             yield return null;
         }

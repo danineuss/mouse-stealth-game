@@ -60,15 +60,14 @@ public class VisionConeMono: MonoBehaviour
             controlPoints,
             visionConePeriod, 
             coneVisualizer, 
-            transform, 
+            transform,
+            player, 
+            obstacleMask,
             eventsMono
         );
         playerDetector = new PlayerDetector(
             visionConeVM,
             eventsMono,
-            obstacleMask,
-            player,
-            transform,
             kDetectionEscalationSpeed,
             kDetectionDeescalationSpeed
         );

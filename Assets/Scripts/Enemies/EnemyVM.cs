@@ -104,11 +104,12 @@ public class EnemyVM : IEnemyVM
 
     void OnEnemyDistracted(Guid targetID)
     {
-        if (targetID != this.ID || 
-            playerDetector.DetectorStateEnum != DetectorStateEnum.Idle)
+        if (targetID != this.ID)
             return;
 
-        playerDetector.SetStateDistracted();
+        if (!playerDetector.AttemptDistraction())
+            return;
+        
         enemyIO.SetTextColor(DetectorStateEnum.Distracted);
     }
 }
