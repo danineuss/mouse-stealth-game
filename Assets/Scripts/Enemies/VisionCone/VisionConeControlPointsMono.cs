@@ -14,9 +14,7 @@ public class VisionConeControlPointsMono : MonoBehaviour {
         if (patrolPoints.Count == 0)
             return;
 
-        foreach (var controlPoint in patrolPoints) {
-            DrawGizmosForPoint(controlPoint);
-        }
+        patrolPoints.ForEach(controlPoint => DrawGizmosForPoint(controlPoint));
 
         Gizmos.color = Color.blue;
         DrawGizmosForPoint(distractPoint);

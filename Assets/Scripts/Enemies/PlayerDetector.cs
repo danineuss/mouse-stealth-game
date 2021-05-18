@@ -14,7 +14,7 @@ public abstract class DetectorState
     
 }
 
-public interface IPlayerDetector
+public interface IPlayerDetector: IIdentifiable
 {
     DetectorStateEnum DetectorStateEnum { get; }
 
@@ -33,9 +33,10 @@ public class PlayerDetector : IPlayerDetector
                 return;
 
             detectorStateEnum = value;
-            eventsMono.EnemyEvents.ChangeDetectorState(this);
+            eventsMono.EnemyEvents.ChangeDetectorState(this.ID);
         }
     }
+    public Guid ID { get; private set; }
 
     private IVisionConeVM visionConeVM;
     private EventsMono eventsMono;

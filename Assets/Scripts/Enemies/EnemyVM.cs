@@ -9,7 +9,7 @@ public interface IEnemyVM: IIdentifiable
 
 public class EnemyVM : IEnemyVM
 {
-    public Guid ID => id;
+    public Guid ID { get; private set; }
 
     private IPlayerDetector playerDetector;
     private AudioVM audioVM;
@@ -17,7 +17,6 @@ public class EnemyVM : IEnemyVM
     private SoundEmitter soundEmitter;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
-    private Guid id;
 
     public bool GetDistracted()
     {
@@ -51,8 +50,8 @@ public class EnemyVM : IEnemyVM
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         
-        id = Guid.NewGuid();
-        this.enemyIO.SetEnemyID(id);
+        ID = Guid.NewGuid();
+        this.enemyIO.SetEnemyID(ID);
 
         InitializeEvents();
     }
@@ -81,9 +80,9 @@ public class EnemyVM : IEnemyVM
         enemyIO.SetDisplayVisibility(false);
     }
 
-    void OnDetectorStateChanged(PlayerDetector playerDetector)
+    void OnDetectorStateChanged(Guid detectorID)
     {
-        if (playerDetector != this.playerDetector)
+        if (detectorID != playerDetector.ID)
             return;
 
         enemyIO.SetTextColor(playerDetector.DetectorStateEnum);

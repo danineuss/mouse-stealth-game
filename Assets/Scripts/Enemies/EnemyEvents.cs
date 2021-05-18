@@ -3,10 +3,10 @@ public interface IEnemyEvents
 {
     event Action<Guid> OnCursorEnterEnemy;
     event Action OnCurserExitEnemy;
-    event Action<PlayerDetector> OnDetectorStateChanged;
+    event Action<Guid> OnDetectorStateChanged;
     event Action OnGameFailed;
 
-    void ChangeDetectorState(PlayerDetector playerDetector);
+    void ChangeDetectorState(Guid detectorID);
     void CursorEnterEnemy(Guid enemyID);
     void CursorExitEnemy();
     void FailGame();
@@ -16,7 +16,7 @@ public class EnemyEvents : IEnemyEvents
 {
     public event Action<Guid> OnCursorEnterEnemy;
     public event Action OnCurserExitEnemy;
-    public event Action<PlayerDetector> OnDetectorStateChanged;
+    public event Action<Guid> OnDetectorStateChanged;
     public event Action OnGameFailed;
 
     public void CursorEnterEnemy(Guid enemyID)
@@ -35,12 +35,12 @@ public class EnemyEvents : IEnemyEvents
         OnCurserExitEnemy();
     }
 
-    public void ChangeDetectorState(PlayerDetector playerDetector)
+    public void ChangeDetectorState(Guid detectorID)
     {
         if (OnDetectorStateChanged == null)
             return;
 
-        OnDetectorStateChanged(playerDetector);
+        OnDetectorStateChanged(detectorID);
     }
 
     public void FailGame()
