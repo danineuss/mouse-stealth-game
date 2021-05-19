@@ -4611,6 +4611,7 @@ MonoBehaviour:
   Object: {fileID: 368052426}
   DesiredStateAfterTrigger: 1
   EventsMono: {fileID: 331622347}
+  DistractionDuration: 5
 --- !u!1001 &942936702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7503,7 +7504,7 @@ PrefabInstance:
     - target: {fileID: 8366174039583470974, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.861
+      value: 1.229
       objectReference: {fileID: 0}
     - target: {fileID: 8366174039583470974, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using UnityEngine;
 
 public enum DetectorStateEnum {
     Idle,
@@ -12,8 +10,11 @@ public enum DetectorStateEnum {
 public interface IPlayerDetector: IIdentifiable
 {
     DetectorStateEnum DetectorStateEnum { get; }
+    IVisionConeVM VisionConeVM { get; }
+    float DetectionEscalationSpeed { get; }
+    float DetectionDeescalationSpeed { get; }
 
-    bool AttemptDistraction();
+    bool AttemptDistraction(float distractionDuration);
     void TransitionTo(DetectorState detectorState);
     void Update();
 }
@@ -33,22 +34,20 @@ public class PlayerDetector : IPlayerDetector
         }
     }
     public DetectorState DetectorState => detectorState;
-    public Guid ID { get; private set; }
+    public IVisionConeVM VisionConeVM => visionConeVM;
+    public Guid ID { get; }
+    public float DetectionEscalationSpeed { get; }
+    public float DetectionDeescalationSpeed { get; }
 
     private IVisionConeVM visionConeVM;
     private EventsMono eventsMono;
-    private float kDetectionEscalationSpeed;
-    private float kDetectionDeescalationSpeed;
 
     private DetectorStateEnum detectorStateEnum;
-    private bool playerVisible; //TODO: move to Vision Cone.
-    private float detectionEscalationMeter = 0.5f;
-    private float kDetectPlayerRepetitionDelay = 0.075f;
     private DetectorState detectorState;
 
-    public bool AttemptDistraction()
+    public bool AttemptDistraction(float distractionDuration)
     {
-        return detectorState.AttemptDistraction(visionConeVM);
+        return detectorState.AttemptDistraction(distractionDuration);
     }
 
     public void TransitionTo(DetectorState detectorState)
@@ -58,99 +57,22 @@ public class PlayerDetector : IPlayerDetector
 
     public void Update()
     {
-        SetDetectionState();
+        detectorState.UpdateDetectionState();
     }
 
     public PlayerDetector(
         IVisionConeVM visionConeVM,
         EventsMono eventsMono,
-        float kDetectionEscalationSpeed,
-        float kDetectionDeescalationSpeed)
+        float DetectionEscalationSpeed,
+        float DetectionDeescalationSpeed)
     {
         this.visionConeVM = visionConeVM;
         this.eventsMono = eventsMono;
-        this.kDetectionEscalationSpeed = kDetectionEscalationSpeed;
-        this.kDetectionDeescalationSpeed = kDetectionDeescalationSpeed;
+        this.DetectionEscalationSpeed = DetectionEscalationSpeed;
+        this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
+        this.ID = Guid.NewGuid();
 
         DetectorStateEnum = DetectorStateEnum.Idle;
         detectorState = new DetectorStateIdle(this, eventsMono);
-
-        eventsMono.StartCoroutine(DetectPlayerWithDelay(kDetectPlayerRepetitionDelay));
-    }
-
-    IEnumerator DetectPlayerWithDelay(float seconds)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(seconds);
-            DetectPlayer();
-        }
-    }
-
-    void DetectPlayer()
-    {
-        if (DetectorStateEnum == DetectorStateEnum.Distracted)
-            return;
-
-        bool wasPlayerPreviouslyVisible = playerVisible;
-        if (!visionConeVM.IsPlayerInsideVisionCone())
-        {
-            playerVisible = false;
-            if (wasPlayerPreviouslyVisible)
-                visionConeVM.ResetToPatrolling();
-            return;
-        }
-
-        if (visionConeVM.IsPlayerObstructed())
-        {
-            playerVisible = false;
-            if (wasPlayerPreviouslyVisible)
-                visionConeVM.ResetToPatrolling();
-            return;
-        }
-
-        playerVisible = true;
-        visionConeVM.StartFollowingPlayer();
-    }
-
-    void SetDetectionState()
-    {
-        if (DetectorStateEnum == DetectorStateEnum.Idle && playerVisible)
-            DetectorStateEnum = DetectorStateEnum.Searching;
-
-        if (DetectorStateEnum != DetectorStateEnum.Distracted)
-            SetDetectionEscalationMeter();
-
-        visionConeVM.SetSpotState(DetectorStateEnum, detectionEscalationMeter);
-    }
-
-    void SetDetectionEscalationMeter()
-    {
-        if (playerVisible)
-            detectionEscalationMeter += Time.deltaTime * kDetectionEscalationSpeed;
-        else
-            detectionEscalationMeter -= Time.deltaTime * kDetectionDeescalationSpeed;
-
-
-        if (detectionEscalationMeter >= 1f)
-            EscelateDetection();
-
-        if (detectionEscalationMeter <= 0.01f)
-            DeescalateDetection();
-
-        detectionEscalationMeter = Mathf.Clamp(detectionEscalationMeter, 0f, 1f);
-    }
-
-    void EscelateDetection()
-    {
-        if (DetectorStateEnum == DetectorStateEnum.Searching)
-            DetectorStateEnum = DetectorStateEnum.Alarmed;
-        detectionEscalationMeter = 0f;
-    }
-
-    void DeescalateDetection()
-    {
-        if (DetectorStateEnum == DetectorStateEnum.Searching && !playerVisible)
-            DetectorStateEnum = DetectorStateEnum.Idle;
     }
 }

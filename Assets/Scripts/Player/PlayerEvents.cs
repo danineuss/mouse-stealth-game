@@ -5,12 +5,12 @@ public interface IPlayerEvents
 {
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
-    event Action<Guid> OnEnemyDistracted;
+    event Action<Guid, float> OnEnemyDistracted;
     event Action OnPauseButtonPressed;
     event Action<Guid> OnPlayerLocationRemoved;
     event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    void DistractEnemy(Guid enemyID);
+    void DistractEnemy(Guid enemyID, float distractionDuration);
     void ExecuteAbility(IPlayerAbility ability);
     void LearnAbility(IPlayerAbility ability);
     void PressPauseButton();
@@ -22,17 +22,17 @@ public class PlayerEvents : IPlayerEvents
 {
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
-    public event Action<Guid> OnEnemyDistracted;
+    public event Action<Guid, float> OnEnemyDistracted;
     public event Action OnPauseButtonPressed;
     public event Action<Guid> OnPlayerLocationRemoved;
     public event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    public void DistractEnemy(Guid enemyID)
+    public void DistractEnemy(Guid enemyID, float distractionDuration)
     {
         if (OnEnemyDistracted == null)
             return;
         
-        OnEnemyDistracted(enemyID);
+        OnEnemyDistracted(enemyID, distractionDuration);
     }
 
     public void ExecuteAbility(IPlayerAbility ability)

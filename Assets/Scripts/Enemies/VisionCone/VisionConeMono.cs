@@ -8,8 +8,8 @@ public class VisionConeMono: MonoBehaviour
     [SerializeField] private Transform player = null;
     [SerializeField] private EventsMono eventsMono = null;
     [SerializeField] private LayerMask obstacleMask = new LayerMask();
-    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionEscalationSpeed = 0.1f;
-    [SerializeField, Range(0.01f, 0.5f)] private float kDetectionDeescalationSpeed = 0.02f;
+    [SerializeField, Range(0.01f, 1.0f)] private float DetectionEscalationSpeed = 0.5f;
+    [SerializeField, Range(0.01f, 0.5f)] private float DetectionDeescalationSpeed = 0.2f;
 
     [Header("Control Points")]
     [SerializeField] private VisionConeControlPointsMono controlPoints = null;
@@ -68,8 +68,8 @@ public class VisionConeMono: MonoBehaviour
         playerDetector = new PlayerDetector(
             visionConeVM,
             eventsMono,
-            kDetectionEscalationSpeed,
-            kDetectionDeescalationSpeed
+            DetectionEscalationSpeed,
+            DetectionDeescalationSpeed
         );
     }
 

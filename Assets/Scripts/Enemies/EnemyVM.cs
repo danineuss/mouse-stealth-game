@@ -102,12 +102,12 @@ public class EnemyVM : IEnemyVM
         enemyIO.UpdateCooldownForAbility(ability);
     }
 
-    void OnEnemyDistracted(Guid targetID)
+    void OnEnemyDistracted(Guid targetID, float distractionDuration)
     {
         if (targetID != this.ID)
             return;
 
-        if (!playerDetector.AttemptDistraction())
+        if (!playerDetector.AttemptDistraction(distractionDuration))
             return;
         
         enemyIO.SetTextColor(DetectorStateEnum.Distracted);

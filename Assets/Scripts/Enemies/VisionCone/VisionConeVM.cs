@@ -96,7 +96,8 @@ public class VisionConeVM : IVisionConeVM
             coneTransform.position,
             (playerTransform.position - coneTransform.position).normalized,
             Vector3.Distance(playerTransform.position, coneTransform.position),
-            obstacleMask
+            obstacleMask,
+            QueryTriggerInteraction.Ignore
         );
     }
 
