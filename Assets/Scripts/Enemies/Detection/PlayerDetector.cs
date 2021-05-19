@@ -1,16 +1,8 @@
 ﻿using System;
 
-public enum DetectorStateEnum {
-    Idle,
-    Searching,
-    Alarmed,
-    Distracted
-}
-
 public interface IPlayerDetector: IIdentifiable
 {
-    DetectorStateEnum DetectorStateEnum { get; }
-    IVisionConeVM VisionConeVM { get; }
+    DetectorState DetectorState { get; }
     float DetectionEscalationSpeed { get; }
     float DetectionDeescalationSpeed { get; }
 
@@ -21,28 +13,13 @@ public interface IPlayerDetector: IIdentifiable
 
 public class PlayerDetector : IPlayerDetector
 {
-    public DetectorStateEnum DetectorStateEnum
-    {
-        get => detectorStateEnum;
-        private set
-        {
-            if (detectorStateEnum == value)
-                return;
-
-            detectorStateEnum = value;
-            eventsMono.EnemyEvents.ChangeDetectorState(this.ID);
-        }
-    }
     public DetectorState DetectorState => detectorState;
-    public IVisionConeVM VisionConeVM => visionConeVM;
     public Guid ID { get; }
     public float DetectionEscalationSpeed { get; }
     public float DetectionDeescalationSpeed { get; }
 
     private IVisionConeVM visionConeVM;
     private EventsMono eventsMono;
-
-    private DetectorStateEnum detectorStateEnum;
     private DetectorState detectorState;
 
     public bool AttemptDistraction(float distractionDuration)
@@ -53,6 +30,7 @@ public class PlayerDetector : IPlayerDetector
     public void TransitionTo(DetectorState detectorState)
     {
         this.detectorState = detectorState;
+        eventsMono.EnemyEvents.ChangeDetectorState(this.ID);
     }
 
     public void Update()
@@ -72,7 +50,6 @@ public class PlayerDetector : IPlayerDetector
         this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
         this.ID = Guid.NewGuid();
 
-        DetectorStateEnum = DetectorStateEnum.Idle;
-        detectorState = new DetectorStateIdle(this, eventsMono);
+        detectorState = new DetectorStateIdle(this, visionConeVM, eventsMono);
     }
 }

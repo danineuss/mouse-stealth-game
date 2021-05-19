@@ -681,6 +681,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1783130274}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: audioVM
+      value: 
+      objectReference: {fileID: 918347162}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6709,6 +6714,11 @@ PrefabInstance:
       propertyPath: eventsMono
       value: 
       objectReference: {fileID: 331622347}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: audioVM
+      value: 
+      objectReference: {fileID: 918347162}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6913,6 +6923,11 @@ PrefabInstance:
       propertyPath: eventsMono
       value: 
       objectReference: {fileID: 331622347}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: audioVM
+      value: 
+      objectReference: {fileID: 918347162}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7496,6 +7511,11 @@ PrefabInstance:
       propertyPath: eventsMono
       value: 
       objectReference: {fileID: 331622347}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: audioVM
+      value: 
+      objectReference: {fileID: 918347162}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -8898,6 +8918,11 @@ PrefabInstance:
       propertyPath: eventsMono
       value: 
       objectReference: {fileID: 331622347}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: audioVM
+      value: 
+      objectReference: {fileID: 918347162}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x

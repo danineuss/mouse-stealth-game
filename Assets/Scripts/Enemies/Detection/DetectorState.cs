@@ -1,38 +1,48 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public abstract class DetectorState
 {
+    public abstract EnemyIOTextColor EnemyIOTextColor { get; }
+    public abstract EnemySound EnemySound { get; }
+
     protected IPlayerDetector playerDetector;
+    protected IVisionConeVM visionConeVM;
     protected EventsMono eventsMono;
 
-    protected DetectorState(IPlayerDetector playerDetector, EventsMono eventsMono) 
+    protected DetectorState(
+        IPlayerDetector playerDetector, 
+        IVisionConeVM visionConeVM,
+        EventsMono eventsMono) 
     {
         this.playerDetector = playerDetector;
+        this.visionConeVM = visionConeVM;
         this.eventsMono = eventsMono;
     }
 
     public abstract bool AttemptDistraction(float distractionDuration);
-
     public abstract void UpdateDetectionState();
 }
 
 public class DetectorStateIdle: DetectorState
 {
+    public override EnemySound EnemySound => EnemySound.Idle;
+    public override EnemyIOTextColor EnemyIOTextColor => EnemyIOTextColor.Active;
+
     public DetectorStateIdle(
         IPlayerDetector playerDetector,
+        IVisionConeVM visionConeVM,
         EventsMono eventsMono) 
-        : base(playerDetector, eventsMono) 
+        : base(playerDetector, visionConeVM, eventsMono) 
     {
-        SetupIdleState();
+        visionConeVM.SetSpotState(SpotLightState.Idle);
     }
 
     public override bool AttemptDistraction(float distractionDuration)
     {
-        playerDetector.VisionConeVM.SetStateDistracted(true);
         playerDetector.TransitionTo(new DetectorStateDistracted(
             playerDetector, 
+            visionConeVM,
             eventsMono,
             distractionDuration)
         );
@@ -41,38 +51,38 @@ public class DetectorStateIdle: DetectorState
 
     public override void UpdateDetectionState()
     {
-        if (!playerDetector.VisionConeVM.IsPlayerInsideVisionCone())
+        if (!visionConeVM.IsPlayerInsideVisionCone())
             return;
         
-        if (playerDetector.VisionConeVM.IsPlayerObstructed())
+        if (visionConeVM.IsPlayerObstructed())
             return;
 
         playerDetector.TransitionTo(new DetectorStateSearching(
             playerDetector, 
+            visionConeVM,
             eventsMono,
             playerDetector.DetectionEscalationSpeed,
             playerDetector.DetectionDeescalationSpeed)
         );
     }
-
-    private void SetupIdleState()
-    {
-        playerDetector.VisionConeVM.SetSpotState(DetectorStateEnum.Idle);
-    }
 }
 
 public class DetectorStateSearching : DetectorState
 {
+    public override EnemyIOTextColor EnemyIOTextColor => EnemyIOTextColor.Inactive;
+    public override EnemySound EnemySound => EnemySound.Searching;
+
     private readonly float DetectionEscalationSpeed;
     private readonly float DetectionDeescalationSpeed;
     private float detectionEscalationMeter;
 
     public DetectorStateSearching(
         IPlayerDetector playerDetector, 
+        IVisionConeVM visionConeVM,
         EventsMono eventsMono, 
         float DetectionEscalationSpeed,
         float DetectionDeescalationSpeed)
-        : base(playerDetector, eventsMono)
+        : base(playerDetector, visionConeVM, eventsMono)
     {
         this.DetectionEscalationSpeed = DetectionEscalationSpeed;
         this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
@@ -87,7 +97,7 @@ public class DetectorStateSearching : DetectorState
 
     public override void UpdateDetectionState()
     {
-        if (playerDetector.VisionConeVM.IsPlayerObstructed())
+        if (visionConeVM.IsPlayerObstructed())
             detectionEscalationMeter -= Time.deltaTime * DetectionDeescalationSpeed;
         else
             detectionEscalationMeter += Time.deltaTime * DetectionEscalationSpeed;
@@ -104,28 +114,42 @@ public class DetectorStateSearching : DetectorState
     private void StartFollowingPlayer()
     {
         this.detectionEscalationMeter = 0f;
-        playerDetector.VisionConeVM.StartFollowingPlayer();
-        playerDetector.VisionConeVM.SetSpotState(DetectorStateEnum.Searching);
+        visionConeVM.StartFollowingPlayer();
+        visionConeVM.SetSpotState(SpotLightState.Searching);
     }
 
     void EscelateDetection()
     {
-        playerDetector.TransitionTo(new DetectorStateAlarmed(playerDetector, eventsMono));
+        playerDetector.TransitionTo(new DetectorStateAlarmed(
+            playerDetector, 
+            visionConeVM,
+            eventsMono)
+        );
     }
 
     void DeescalateDetection()
     {
-        playerDetector.VisionConeVM.ResetToPatrolling();
-        playerDetector.VisionConeVM.SetSpotState(DetectorStateEnum.Idle);
-        playerDetector.TransitionTo(new DetectorStateIdle(playerDetector, eventsMono));
+        visionConeVM.ResetToPatrolling();
+        playerDetector.TransitionTo(new DetectorStateIdle(
+            playerDetector, 
+            visionConeVM,
+            eventsMono)
+        );
     }
 }
 
 public class DetectorStateAlarmed : DetectorState
 {
-    public DetectorStateAlarmed(IPlayerDetector playerDetector, EventsMono eventsMono) 
-        : base(playerDetector, eventsMono)
+    public override EnemyIOTextColor EnemyIOTextColor => EnemyIOTextColor.Inactive;
+    public override EnemySound EnemySound => EnemySound.Alarmed;
+
+    public DetectorStateAlarmed(
+        IPlayerDetector playerDetector,
+        IVisionConeVM visionConeVM,
+        EventsMono eventsMono) 
+        : base(playerDetector, visionConeVM, eventsMono)
     {
+        visionConeVM.SetSpotState(SpotLightState.Alarmed);
     }
 
     public override bool AttemptDistraction(float distractionDuration)
@@ -141,15 +165,20 @@ public class DetectorStateAlarmed : DetectorState
 
 public class DetectorStateDistracted : DetectorState
 {
+    public override EnemyIOTextColor EnemyIOTextColor => EnemyIOTextColor.Inactive;
+    public override EnemySound EnemySound => EnemySound.Distracted;
+
     private float timeOfLastDistraction;
 
     public DetectorStateDistracted(
         IPlayerDetector playerDetector, 
+        IVisionConeVM visionConeVM,
         EventsMono eventsMono,
         float distractionDuration) 
-        : base(playerDetector, eventsMono)
+        : base(playerDetector, visionConeVM, eventsMono)
     {
-        playerDetector.VisionConeVM.SetSpotState(DetectorStateEnum.Distracted);
+        visionConeVM.SetSpotState(SpotLightState.Distracted);
+        visionConeVM.SetStateDistracted(true);
 
         timeOfLastDistraction = Time.time;
         eventsMono.StartCoroutine(ResetDistraction(distractionDuration));
@@ -170,7 +199,11 @@ public class DetectorStateDistracted : DetectorState
         while (Time.time - timeOfLastDistraction < distractionDuration)
             yield return null;
 
-        playerDetector.VisionConeVM.SetStateDistracted(false);
-        playerDetector.TransitionTo(new DetectorStateIdle(playerDetector, eventsMono));
+        visionConeVM.SetStateDistracted(false);
+        playerDetector.TransitionTo(new DetectorStateIdle(
+            playerDetector, 
+            visionConeVM, 
+            eventsMono)
+        );
     }
 }

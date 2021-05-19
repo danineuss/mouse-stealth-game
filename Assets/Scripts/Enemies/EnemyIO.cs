@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum EnemyIOTextColor
+{
+    Active,
+    Inactive
+}
+
 public interface IEnemyIO
 {
     void OnMouseEnter();
     void OnMouseExit();
     void SetDisplayVisibility(bool visible);
     void SetEnemyID(Guid enemyID);
-    void SetTextColor(DetectorStateEnum detectorState);
+    void SetTextColor(EnemyIOTextColor textColor);
     void SetTextFollowingPlayer(bool shouldDisplayText, Transform playerTransform = null);
     void Update();
     void UpdateCooldownForAbility(IPlayerAbility ability);
@@ -48,15 +54,16 @@ public class EnemyIO : IEnemyIO
         }
     }
 
-    public void SetTextColor(DetectorStateEnum detectorState)
+    public void SetTextColor(EnemyIOTextColor textColor)
     {
-        if (detectorState == DetectorStateEnum.Idle)
+        switch(textColor)
         {
-            textMesh.color = kActiveTextColor;
-        }
-        else
-        {
-            textMesh.color = kInactiveTextColor;
+            case EnemyIOTextColor.Active:
+                textMesh.color = kActiveTextColor;
+                break;
+            case EnemyIOTextColor.Inactive:
+                textMesh.color = kInactiveTextColor;
+                break;
         }
     }
 

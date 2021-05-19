@@ -20,7 +20,7 @@ public interface IVisionConeVM
     bool IsPlayerObstructed();
     void ResetToPatrolling();
     void StartFollowingPlayer();
-    void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0);
+    void SetSpotState(SpotLightState spotLightState, float lerpDuration = 0);
     void SetStateDistracted(bool distracted);
     void TransitionTo(VisionConeState visionConeState);
     void Update();
@@ -140,9 +140,9 @@ public class VisionConeVM : IVisionConeVM
         visionConeStateEnum = VisionConeStateEnum.Idle;
     }
 
-    public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
+    public void SetSpotState(SpotLightState spotLightState, float lerpDuration = 0f)
     {
-        coneVisualizer.SetSpotState(newDetectorState, lerpDuration);
+        coneVisualizer.SetSpotState(spotLightState, lerpDuration);
     }
 
     void MoveTowardsNextControlPoint()

@@ -73,11 +73,9 @@ public class EnemyVM : IEnemyVM
         if (detectorID != playerDetector.ID)
             return;
 
-        enemyIO.SetTextColor(playerDetector.DetectorStateEnum);
-        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorStateEnum);
-
-        if (playerDetector.DetectorStateEnum == DetectorStateEnum.Alarmed)
-            enemyEvents.FailGame();
+        enemyIO.SetTextColor(playerDetector.DetectorState.EnemyIOTextColor);
+        var enemySoundName = playerDetector.DetectorState.EnemySound.Name;
+        PlaySound(audioVM.SoundWithName(enemySoundName));
     }
 
     void OnReceivePlayerLocation(
@@ -110,6 +108,6 @@ public class EnemyVM : IEnemyVM
         if (!playerDetector.AttemptDistraction(distractionDuration))
             return;
         
-        enemyIO.SetTextColor(DetectorStateEnum.Distracted);
+        enemyIO.SetTextColor(playerDetector.DetectorState.EnemyIOTextColor);
     }
 }

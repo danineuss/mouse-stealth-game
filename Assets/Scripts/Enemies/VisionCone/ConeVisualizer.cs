@@ -2,9 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum SpotLightState
+{
+    Idle,
+    Searching,
+    Alarmed,
+    Distracted
+}
+
 public interface IConeVisualizer
 {
-    void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0);
+    void SetSpotState(SpotLightState spotLightState, float lerpDuration = 0);
     void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView);
 }
 
@@ -73,22 +81,22 @@ public class ConeVisualizer : IConeVisualizer
         coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
     }
 
-    public void SetSpotState(DetectorStateEnum newDetectorState, float lerpDuration = 0f)
+    public void SetSpotState(SpotLightState spotLightState, float lerpDuration = 0f)
     {
-        switch (newDetectorState)
+        switch (spotLightState)
         {
-            case DetectorStateEnum.Idle:
+            case SpotLightState.Idle:
                 spotLight.color = Color.LerpUnclamped(kSpotLightGreen, kSpotLightOrange, lerpDuration);
                 coneMeshRenderer.material = greenMaterial;
                 outline.OutlineColor = kSpotLightGreen;
                 break;
-            case DetectorStateEnum.Searching:
+            case SpotLightState.Searching:
                 spotLight.color = Color.LerpUnclamped(kSpotLightOrange, kSpotLightRed, lerpDuration);
                 break;
-            case DetectorStateEnum.Alarmed:
+            case SpotLightState.Alarmed:
                 spotLight.color = kSpotLightRed;
                 break;
-            case DetectorStateEnum.Distracted:
+            case SpotLightState.Distracted:
                 spotLight.color = kSpotLightBlue;
                 coneMeshRenderer.material = blueMaterial;
                 outline.OutlineColor = kSpotLightBlue;
