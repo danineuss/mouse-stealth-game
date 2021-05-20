@@ -10,7 +10,7 @@ public enum EnemyIOTextColor
     Inactive
 }
 
-public interface IEnemyIO
+public interface IEnemyIO: IUpdatable
 {
     void OnMouseEnter();
     void OnMouseExit();
@@ -18,7 +18,6 @@ public interface IEnemyIO
     void SetEnemyID(Guid enemyID);
     void SetTextColor(EnemyIOTextColor textColor);
     void SetTextFollowingPlayer(bool shouldDisplayText, Transform playerTransform = null);
-    void Update();
     void UpdateCooldownForAbility(IPlayerAbility ability);
 }
 

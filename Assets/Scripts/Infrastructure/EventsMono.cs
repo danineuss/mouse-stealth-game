@@ -1,14 +1,24 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EventsMono : MonoBehaviour
+public interface IEvents
 {
-    public PlayerEvents PlayerEvents => playerEvents;
-    public EnemyEvents EnemyEvents => enemyEvents;
-    public SceneEvents SceneEvents => sceneEvents;
-    private PlayerEvents playerEvents;
-    private EnemyEvents enemyEvents;
-    private SceneEvents sceneEvents;
+    IPlayerEvents PlayerEvents { get; }
+    IEnemyEvents EnemyEvents { get; }
+    ISceneEvents SceneEvents { get; }
+
+    void StartCoroutine(IEnumerator coroutine);
+    void StopCoroutine(IEnumerator coroutine);
+}
+
+public class EventsMono : MonoBehaviour, IEvents
+{
+    public IPlayerEvents PlayerEvents => playerEvents;
+    public IEnemyEvents EnemyEvents => enemyEvents;
+    public ISceneEvents SceneEvents => sceneEvents;
+    private IPlayerEvents playerEvents;
+    private IEnemyEvents enemyEvents;
+    private ISceneEvents sceneEvents;
 
     void Awake()
     {

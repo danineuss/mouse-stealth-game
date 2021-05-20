@@ -10,7 +10,7 @@ public enum VisionConeStateEnum {
     Distracted
 }
 
-public interface IVisionConeVM
+public interface IVisionConeVM: IUpdatable
 {
     Vector3 CurrentLookatTarget { get; }
     float FieldOfView { get; }
@@ -23,7 +23,6 @@ public interface IVisionConeVM
     void SetSpotState(SpotLightState spotLightState, float lerpDuration = 0);
     void SetStateDistracted(bool distracted);
     void TransitionTo(VisionConeState visionConeState);
-    void Update();
 }
 
 public class VisionConeVM : IVisionConeVM

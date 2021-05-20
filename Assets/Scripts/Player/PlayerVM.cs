@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlayerVM
+public interface IPlayerVM: IUpdatable, ILateUpdatable, ITriggerEnterable
 {
-    void Update();
-    void LateUpdate();
-    void OnTriggerEnter(Collider collider);
 }
 
 public class PlayerVM : IPlayerVM
@@ -55,7 +52,6 @@ public class PlayerVM : IPlayerVM
         sceneEvents.OnDialogClosed += delegate{ cameraController.LockCursor(true); };
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
-
 
     public void Update()
     {

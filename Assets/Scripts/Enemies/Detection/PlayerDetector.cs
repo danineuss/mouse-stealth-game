@@ -1,6 +1,6 @@
 ﻿using System;
 
-public interface IPlayerDetector: IIdentifiable
+public interface IPlayerDetector: IIdentifiable, IUpdatable
 {
     DetectorState DetectorState { get; }
     float DetectionEscalationSpeed { get; }
@@ -8,7 +8,6 @@ public interface IPlayerDetector: IIdentifiable
 
     bool AttemptDistraction(float distractionDuration);
     void TransitionTo(DetectorState detectorState);
-    void Update();
 }
 
 public class PlayerDetector : IPlayerDetector
@@ -19,7 +18,7 @@ public class PlayerDetector : IPlayerDetector
     public float DetectionDeescalationSpeed { get; }
 
     private IVisionConeVM visionConeVM;
-    private EventsMono eventsMono;
+    private IEvents events;
     private DetectorState detectorState;
 
     public bool AttemptDistraction(float distractionDuration)
@@ -30,7 +29,7 @@ public class PlayerDetector : IPlayerDetector
     public void TransitionTo(DetectorState detectorState)
     {
         this.detectorState = detectorState;
-        eventsMono.EnemyEvents.ChangeDetectorState(this.ID);
+        events.EnemyEvents.ChangeDetectorState(this.ID);
     }
 
     public void Update()
@@ -40,16 +39,16 @@ public class PlayerDetector : IPlayerDetector
 
     public PlayerDetector(
         IVisionConeVM visionConeVM,
-        EventsMono eventsMono,
+        IEvents events,
         float DetectionEscalationSpeed,
         float DetectionDeescalationSpeed)
     {
         this.visionConeVM = visionConeVM;
-        this.eventsMono = eventsMono;
+        this.events = events;
         this.DetectionEscalationSpeed = DetectionEscalationSpeed;
         this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
         this.ID = Guid.NewGuid();
 
-        detectorState = new DetectorStateIdle(this, visionConeVM, eventsMono);
+        TransitionTo(new DetectorStateIdle(this, visionConeVM, events));
     }
 }
