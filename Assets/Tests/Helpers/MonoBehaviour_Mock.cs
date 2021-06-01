@@ -1,32 +1,33 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MonoBehaviour_Mock: MonoBehaviour
 {
-    public IUpdatable Updatable;
-    public ILateUpdatable LateUpdatable;
-    public ITriggerEnterable TriggerEnterable;
+    public List<IUpdatable> Updatables = new List<IUpdatable>();
+    public List<ILateUpdatable> LateUpdatables = new List<ILateUpdatable>();
+    public List<ITriggerEnterable> TriggerEnterables = new List<ITriggerEnterable>();
 
     void Update()
     {
-        if (Updatable == null)
+        if (Updatables.Count == 0)
             return;
         
-        Updatable.Update();
+        Updatables.ForEach(x => x.Update());
     }
 
     void LateUpdate()
     {
-        if (LateUpdatable == null)
+        if (LateUpdatables.Count == 0)
             return;
 
-        LateUpdatable.LateUpdate();
+        LateUpdatables.ForEach(x => x.LateUpdate());
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        if (TriggerEnterable == null)
+        if (TriggerEnterables.Count == 0)
             return;
         
-        TriggerEnterable.OnTriggerEnter(collider);
+        TriggerEnterables.ForEach(x => x.OnTriggerEnter(collider));
     }
 }

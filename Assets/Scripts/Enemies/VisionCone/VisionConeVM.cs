@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface IVisionConeVM: IUpdatable
@@ -12,7 +13,7 @@ public interface IVisionConeVM: IUpdatable
     void IterateControlPointIndex();
     IEnumerator LerpTowardsTarget(
         Vector3 newLookatTarget, float newFieldOfView, float durationSeconds);
-    void StartLookatCoroutine(IEnumerator lerpCoroutine);
+    void StartLookatCoroutine(IEnumerator lerpCoroutine, bool interrupt = true);
     void TransitionTo(VisionConeState visionConeState);
     void UpdateCone(Vector3 target, float fieldOfView);
     void UpdateDetectionMeter(float detectionMeter);
@@ -24,7 +25,8 @@ public class VisionConeVM : IVisionConeVM
     public float FieldOfView { get; private set; }
     public float Range => (CurrentLookatTarget - coneTransform.position).magnitude;
 
-    private VisionConeControlPointsMono controlPoints;
+    private List<IVisionConePatrolPoint> patrolPoints;
+    private IVisionConeControlPoint distractPoint;
     private IConeVisualizer coneVisualizer;
     private Transform coneTransform;
     private Transform playerTransform;
@@ -32,18 +34,20 @@ public class VisionConeVM : IVisionConeVM
     private IEvents events;
 
     private VisionConeState visionConeState;
-    private IEnumerator currentCoroutine;
+    private List<IEnumerator> currentCoroutines = new List<IEnumerator>();
     private int controlPointIndex = 0;
 
     public VisionConeVM(
-        VisionConeControlPointsMono controlPoints,
+        List<IVisionConePatrolPoint> patrolPoints,
+        IVisionConeControlPoint distractPoint,
         IConeVisualizer coneVisualizer,
         Transform coneTransform,
         Transform playerTransform,
         LayerMask obstacleMask,
         IEvents events)
     {
-        this.controlPoints = controlPoints;
+        this.patrolPoints = patrolPoints;
+        this.distractPoint = distractPoint;
         this.coneVisualizer = coneVisualizer;
         this.coneTransform = coneTransform;
         this.playerTransform = playerTransform;
@@ -58,8 +62,8 @@ public class VisionConeVM : IVisionConeVM
 
     void InitializeCone()
     {
-        var currentControlPoint = controlPoints.patrolPoints[controlPointIndex];
-        CurrentLookatTarget = currentControlPoint.transform.position;
+        var currentControlPoint = patrolPoints[controlPointIndex];
+        CurrentLookatTarget = currentControlPoint.Position;
         FieldOfView = currentControlPoint.FieldOfView;
 
         coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
@@ -88,7 +92,7 @@ public class VisionConeVM : IVisionConeVM
     
     public void IterateControlPointIndex()
     {
-        if (controlPoints.patrolPoints.Count == 2)
+        if (patrolPoints.Count == 2)
             controlPointIndex = 1 - controlPointIndex;
     }
 
@@ -101,23 +105,22 @@ public class VisionConeVM : IVisionConeVM
 
         while (elapsedTime < durationSeconds)
         {
-            var target = Vector3.Slerp(
+            CurrentLookatTarget = Vector3.Slerp(
                 startLookatTarget, newLookatTarget, elapsedTime / durationSeconds);
-            var fieldOfView = Mathf.Lerp(
+            FieldOfView = Mathf.Lerp(
                 startFieldOfView, newFieldOfView, elapsedTime / durationSeconds);
             
-            UpdateCone(target, fieldOfView);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
     }
-    public void StartLookatCoroutine(IEnumerator newCoroutine)
+    public void StartLookatCoroutine(IEnumerator newCoroutine, bool interrupt = true)
     {
-        if (currentCoroutine != null)
-            events.StopCoroutine(currentCoroutine);
+        if (currentCoroutines.Count != 0 && interrupt)
+            currentCoroutines.ForEach(x => events.StopCoroutine(x));
         
-        currentCoroutine = newCoroutine;
-        events.StartCoroutine(currentCoroutine);
+        currentCoroutines.Add(newCoroutine);
+        events.StartCoroutine(newCoroutine);
     }
 
     public void TransitionTo(VisionConeState visionConeState)
@@ -125,8 +128,8 @@ public class VisionConeVM : IVisionConeVM
         visionConeState.SetupVisionConeState(
             this, 
             coneVisualizer,
-            controlPoints.patrolPoints[controlPointIndex],
-            controlPoints.distractPoint,
+            patrolPoints[controlPointIndex],
+            distractPoint,
             playerTransform
         );
         this.visionConeState = visionConeState;

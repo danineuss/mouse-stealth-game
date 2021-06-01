@@ -10,9 +10,9 @@ public abstract class VisionConeState
     public abstract void SetupVisionConeState(
         IVisionConeVM visionConeVM, 
         IConeVisualizer coneVisualizer,
-        VisionConePatrolPoint patrolPoint, 
-        VisionConeDistractPoint distractPoint,
-        Transform player
+        IVisionConePatrolPoint patrolPoint, 
+        IVisionConeControlPoint distractPoint,
+        Transform playerTransform
     );
 
     public abstract void UpdateDetectionMeter(float detectionMeter);
@@ -20,13 +20,13 @@ public abstract class VisionConeState
 
 public class VisionConeStateIdle : VisionConeState
 {
-    private VisionConePatrolPoint nextPatrolPoint;
+    private IVisionConePatrolPoint nextPatrolPoint;
     public override void SetupVisionConeState(
         IVisionConeVM visionConeVM, 
         IConeVisualizer coneVisualizer,
-        VisionConePatrolPoint patrolPoint, 
-        VisionConeDistractPoint distractPoint,
-        Transform player)
+        IVisionConePatrolPoint patrolPoint, 
+        IVisionConeControlPoint distractPoint,
+        Transform playerTransform)
     {
         this.visionConeVM = visionConeVM;
         this.coneVisualizer = coneVisualizer;        
@@ -40,7 +40,7 @@ public class VisionConeStateIdle : VisionConeState
 
     private void EvaluatePatrolStart()
     {    
-        if (nextPatrolPoint.transform.position == visionConeVM.CurrentLookatTarget && 
+        if (nextPatrolPoint.Position == visionConeVM.CurrentLookatTarget && 
             nextPatrolPoint.FieldOfView == visionConeVM.FieldOfView)
             return;
         
@@ -50,14 +50,14 @@ public class VisionConeStateIdle : VisionConeState
 
 public class VisionConeStatePatrolling : VisionConeState
 {
-    private VisionConePatrolPoint currentPatrolPoint;
+    private IVisionConePatrolPoint currentPatrolPoint;
 
     public override void SetupVisionConeState(
         IVisionConeVM visionConeVM, 
         IConeVisualizer coneVisualizer,
-        VisionConePatrolPoint patrolPoint, 
-        VisionConeDistractPoint distractPoint,
-        Transform player)
+        IVisionConePatrolPoint patrolPoint, 
+        IVisionConeControlPoint distractPoint,
+        Transform playerTransform)
     {
         this.visionConeVM = visionConeVM;
         this.coneVisualizer = coneVisualizer;
@@ -71,29 +71,19 @@ public class VisionConeStatePatrolling : VisionConeState
 
     void MoveTowardsNextControlPoint()
     {
-        var lerpLookatTarget = PatrolAndWait(
-            currentPatrolPoint.transform.position, 
+        var lerpLookatTarget = visionConeVM.LerpTowardsTarget(
+            currentPatrolPoint.Position, 
             currentPatrolPoint.FieldOfView, 
             currentPatrolPoint.DurationTowardsPoint
         );
         visionConeVM.StartLookatCoroutine(lerpLookatTarget);
+        visionConeVM.StartLookatCoroutine(WaitAndIterate(), false);
     }
 
-    IEnumerator PatrolAndWait(
-        Vector3 newLookatTarget, float newFieldOfView, float durationSeconds)
+    IEnumerator WaitAndIterate()
     {
-        var patrol = visionConeVM.LerpTowardsTarget(
-            newLookatTarget, newFieldOfView, durationSeconds);
-        visionConeVM.StartLookatCoroutine(patrol);
-
-        yield return new WaitForSeconds(durationSeconds);
-
-        visionConeVM.StartLookatCoroutine(WaitAtPatrolPoint());
-    }
-
-    private IEnumerator WaitAtPatrolPoint()
-    {
-        yield return new WaitForSeconds(currentPatrolPoint.WaitTimeAtTarget);
+        var waitTime = currentPatrolPoint.DurationTowardsPoint + currentPatrolPoint.WaitTimeAtTarget;
+        yield return new WaitForSeconds(waitTime);
 
         visionConeVM.IterateControlPointIndex();
         visionConeVM.TransitionTo(new VisionConeStateIdle());
@@ -102,20 +92,20 @@ public class VisionConeStatePatrolling : VisionConeState
 
 public class VisionConeStateFollowingPlayer : VisionConeState
 {
-    private Transform player;
+    private Transform playerTransform;
     private float EvaluationWaitTime = 2f;
     private const float FollowPlayerClampValue = 0.1f;
 
     public override void SetupVisionConeState(
         IVisionConeVM visionConeVM,
         IConeVisualizer coneVisualizer,
-        VisionConePatrolPoint nextPatrolPoint, 
-        VisionConeDistractPoint distractPoint,
-        Transform player)
+        IVisionConePatrolPoint patrolPoint, 
+        IVisionConeControlPoint distractPoint,
+        Transform playerTransform)
     {
         this.visionConeVM = visionConeVM;
         this.coneVisualizer = coneVisualizer;
-        this.player = player;
+        this.playerTransform = playerTransform;
 
         coneVisualizer.SetSpotState(SpotLightState.Searching);
         visionConeVM.StartLookatCoroutine(FollowPlayer());
@@ -130,7 +120,7 @@ public class VisionConeStateFollowingPlayer : VisionConeState
     {
         while (!visionConeVM.IsPlayerObstructed())
         {
-            var deltaVector = player.position - visionConeVM.CurrentLookatTarget;
+            var deltaVector = playerTransform.position - visionConeVM.CurrentLookatTarget;
             if (deltaVector.magnitude > FollowPlayerClampValue)
                 deltaVector *= FollowPlayerClampValue / deltaVector.magnitude;
             var newLookatTarget = visionConeVM.CurrentLookatTarget + deltaVector;
@@ -159,15 +149,15 @@ public class VisionConeStateFollowingPlayer : VisionConeState
 
 public class VisionConeStateDistracted : VisionConeState
 {
-    private VisionConeDistractPoint distractPoint;
+    private IVisionConeControlPoint distractPoint;
     private readonly float LerpToDistractDuration = 1f;
 
     public override void SetupVisionConeState(
         IVisionConeVM visionConeVM, 
         IConeVisualizer coneVisualizer,
-        VisionConePatrolPoint nextPatrolPoint, 
-        VisionConeDistractPoint distractPoint,
-        Transform player)
+        IVisionConePatrolPoint patrolPoint, 
+        IVisionConeControlPoint distractPoint,
+        Transform playerTransform)
     {
         this.visionConeVM = visionConeVM;
         this.coneVisualizer = coneVisualizer;

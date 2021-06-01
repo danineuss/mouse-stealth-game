@@ -12,7 +12,7 @@ public class VisionConeMono: MonoBehaviour
     [SerializeField, Range(0.01f, 0.5f)] private float DetectionDeescalationSpeed = 0.2f;
 
     [Header("Control Points")]
-    [SerializeField] private VisionConeControlPointsMono controlPoints = null;
+    [SerializeField] private VisionConeControlPointsMono controlPointsMono = null;
 
     [Header("Visualization")]
     [SerializeField] private float kConeRangeMultiplier = 1.5f;
@@ -56,7 +56,8 @@ public class VisionConeMono: MonoBehaviour
         );
 
         visionConeVM = new VisionConeVM(
-            controlPoints,
+            controlPointsMono.PatrolPoints,
+            controlPointsMono.DistractPoint,
             coneVisualizer, 
             transform,
             player, 

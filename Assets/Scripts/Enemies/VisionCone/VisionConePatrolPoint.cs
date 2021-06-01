@@ -2,20 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionConePatrolPoint : MonoBehaviour, IVisionConeControlPoint 
+public interface IVisionConePatrolPoint: IVisionConeControlPoint
 {
-    [SerializeField] private float fieldOfView = 0f; 
-    [SerializeField] private float durationTowardsPoint = 1f;
-    [SerializeField] private float waitTimeAtTarget = 0.5f;
+    float DurationTowardsPoint { get; }
+    float WaitTimeAtTarget { get; }
+}
 
-    public Vector3 Position => transform.position;
-    public float FieldOfView => fieldOfView; 
-    public float DurationTowardsPoint => durationTowardsPoint;
-    public float WaitTimeAtTarget => waitTimeAtTarget;
+public class VisionConePatrolPoint : IVisionConePatrolPoint
+{
+    public float FieldOfView { get; }
+    public Vector3 Position { get; }
+    public float DurationTowardsPoint { get; }
+    public float WaitTimeAtTarget { get; }
 
-    public void OnDrawGizmos() 
+    public VisionConePatrolPoint(
+        float fieldOfView, 
+        Vector3 position, 
+        float durationTowardsPoint, 
+        float waitTimeAtTarget)
+    {
+        FieldOfView = fieldOfView;
+        Position = position;
+        DurationTowardsPoint = durationTowardsPoint;
+        WaitTimeAtTarget = waitTimeAtTarget;
+    }
+
+    public void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 0.5f);
+        Gizmos.DrawWireSphere(Position, 0.5f);
     }
 }
