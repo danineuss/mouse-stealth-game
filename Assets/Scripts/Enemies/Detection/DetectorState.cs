@@ -35,7 +35,7 @@ public class DetectorStateIdle: DetectorState
         IEvents events) 
         : base(playerDetector, visionConeVM, events) 
     {
-        visionConeVM.SetSpotState(SpotLightState.Idle);
+        visionConeVM.TransitionTo(new VisionConeStateIdle());
     }
 
     public override bool AttemptDistraction(float distractionDuration)
@@ -74,7 +74,8 @@ public class DetectorStateSearching : DetectorState
 
     private readonly float DetectionEscalationSpeed;
     private readonly float DetectionDeescalationSpeed;
-    private float detectionEscalationMeter;
+    private readonly float FloatingPointDelta = 0.005f;
+    private float detectionMeter;
 
     public DetectorStateSearching(
         IPlayerDetector playerDetector, 
@@ -87,7 +88,8 @@ public class DetectorStateSearching : DetectorState
         this.DetectionEscalationSpeed = DetectionEscalationSpeed;
         this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
         
-        StartFollowingPlayer();
+        this.detectionMeter = 0f;
+        visionConeVM.TransitionTo(new VisionConeStateFollowingPlayer());
     }
 
     public override bool AttemptDistraction(float distractionDuration)
@@ -97,44 +99,40 @@ public class DetectorStateSearching : DetectorState
 
     public override void UpdateDetectionState()
     {
+        UpdateDetectionMeter();
+        EscalateOrDeescalateDetection();
+
+        visionConeVM.UpdateDetectionMeter(detectionMeter);
+    }
+
+    private void UpdateDetectionMeter()
+    {
         if (visionConeVM.IsPlayerObstructed())
-            detectionEscalationMeter -= Time.deltaTime * DetectionDeescalationSpeed;
+            detectionMeter -= Time.deltaTime * DetectionDeescalationSpeed;
         else
-            detectionEscalationMeter += Time.deltaTime * DetectionEscalationSpeed;
-
-        if (detectionEscalationMeter >= 1f)
-            EscelateDetection();
-
-        if (detectionEscalationMeter <= 0.001f)
-            DeescalateDetection();
-
-        detectionEscalationMeter = Mathf.Clamp(detectionEscalationMeter, 0f, 1f);
+            detectionMeter += Time.deltaTime * DetectionEscalationSpeed;
+        
+        detectionMeter = Mathf.Clamp(detectionMeter, 0f, 1f);
     }
 
-    private void StartFollowingPlayer()
+    private void EscalateOrDeescalateDetection()
     {
-        this.detectionEscalationMeter = 0f;
-        visionConeVM.StartFollowingPlayer();
-        visionConeVM.SetSpotState(SpotLightState.Searching);
-    }
-
-    void EscelateDetection()
-    {
-        playerDetector.TransitionTo(new DetectorStateAlarmed(
-            playerDetector, 
-            visionConeVM,
-            events)
-        );
-    }
-
-    void DeescalateDetection()
-    {
-        visionConeVM.ResetToPatrolling();
-        playerDetector.TransitionTo(new DetectorStateIdle(
-            playerDetector, 
-            visionConeVM,
-            events)
-        );
+        if (detectionMeter >= 1f - FloatingPointDelta)
+        {
+            playerDetector.TransitionTo(new DetectorStateAlarmed(
+                playerDetector, 
+                visionConeVM,
+                events)
+            );
+        }
+        else if (detectionMeter <= 0f + FloatingPointDelta)
+        {
+            playerDetector.TransitionTo(new DetectorStateIdle(
+                playerDetector, 
+                visionConeVM,
+                events)
+            );
+        }
     }
 }
 
@@ -147,10 +145,7 @@ public class DetectorStateAlarmed : DetectorState
         IPlayerDetector playerDetector,
         IVisionConeVM visionConeVM,
         IEvents events) 
-        : base(playerDetector, visionConeVM, events)
-    {
-        visionConeVM.SetSpotState(SpotLightState.Alarmed);
-    }
+        : base(playerDetector, visionConeVM, events) {}
 
     public override bool AttemptDistraction(float distractionDuration)
     {
@@ -175,9 +170,7 @@ public class DetectorStateDistracted : DetectorState
         float distractionDuration) 
         : base(playerDetector, visionConeVM, events)
     {
-        visionConeVM.SetSpotState(SpotLightState.Distracted);
-        visionConeVM.SetStateDistracted(true);
-
+        visionConeVM.TransitionTo(new VisionConeStateDistracted());
         events.StartCoroutine(ResetDistraction(distractionDuration));
     }
 
@@ -195,7 +188,7 @@ public class DetectorStateDistracted : DetectorState
     {
         yield return new WaitForSeconds(distractionDuration);
 
-        visionConeVM.SetStateDistracted(false);
+        visionConeVM.TransitionTo(new VisionConeStatePatrolling());
         playerDetector.TransitionTo(new DetectorStateIdle(
             playerDetector, 
             visionConeVM, 

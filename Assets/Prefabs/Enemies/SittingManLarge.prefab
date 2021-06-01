@@ -560,8 +560,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ddc6a9f68d70834abbd933c69b1c60a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.39156365, b: 0.735849, a: 1}
   outlineWidth: 2
   precomputeOutline: 1
   bakeKeys:
@@ -3075,6 +3075,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldOfView: 36.74
+  durationTowardsPoint: 1
+  waitTimeAtTarget: 0.5
 --- !u!1 &8477133248410741364
 GameObject:
   m_ObjectHideFlags: 0

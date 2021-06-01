@@ -1256,6 +1256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldOfView: 50
+  durationTowardsPoint: 2
+  waitTimeAtTarget: 0.5
 --- !u!4 &228157406
 Transform:
   m_ObjectHideFlags: 0
@@ -5085,7 +5087,7 @@ PrefabInstance:
     - target: {fileID: 7939834745407043162, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.69
+      value: -4.67
       objectReference: {fileID: 0}
     - target: {fileID: 7939834745407043162, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
@@ -5095,7 +5097,7 @@ PrefabInstance:
     - target: {fileID: 7939834745407043162, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.859
+      value: 2.815
       objectReference: {fileID: 0}
     - target: {fileID: 7939834745407043162, guid: afd11c00dfc42c94ca9c706ecd0a5c78,
         type: 3}
@@ -6634,10 +6636,35 @@ PrefabInstance:
       propertyPath: distractPoint
       value: 
       objectReference: {fileID: 817148103}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.g
+      value: 0.5882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 2980435256182833830, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: fieldOfView
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2980435256182833830, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: durationTowardsPoint
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4856492044376084018, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
@@ -6719,6 +6746,16 @@ PrefabInstance:
       propertyPath: audioVM
       value: 
       objectReference: {fileID: 918347162}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: DetectionEscalationSpeed
+      value: 0.207
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: DetectionDeescalationSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7431,6 +7468,26 @@ PrefabInstance:
       propertyPath: distractPoint
       value: 
       objectReference: {fileID: 1942517606}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.g
+      value: 0.5882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932337355310108636, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: outlineColor.b
+      value: 0.07452898
+      objectReference: {fileID: 0}
     - target: {fileID: 2980435256182833830, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: fieldOfView
@@ -8410,6 +8467,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldOfView: 40.65
+  durationTowardsPoint: 1
+  waitTimeAtTarget: 0.5
 --- !u!4 &1544919074
 Transform:
   m_ObjectHideFlags: 0

@@ -13,7 +13,6 @@ public class VisionConeMono: MonoBehaviour
 
     [Header("Control Points")]
     [SerializeField] private VisionConeControlPointsMono controlPoints = null;
-    [SerializeField] private float visionConePeriod = 5f;
 
     [Header("Visualization")]
     [SerializeField] private float kConeRangeMultiplier = 1.5f;
@@ -58,7 +57,6 @@ public class VisionConeMono: MonoBehaviour
 
         visionConeVM = new VisionConeVM(
             controlPoints,
-            visionConePeriod, 
             coneVisualizer, 
             transform,
             player, 

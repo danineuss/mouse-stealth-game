@@ -8,7 +8,7 @@ namespace Tests
 {
     public class FirstPersonCharacterController_UnityTests
     {
-        private float floatingPointDelta = 0.015f;
+        private float floatingPointDelta = 0.02f;
 
         GameObject SetupRestictable(Vector3 size)
         {

@@ -112,10 +112,9 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512
-  kDetectionEscalationSpeed: 0.5
-  kDetectionDeescalationSpeed: 0.2
+  DetectionEscalationSpeed: 0.5
+  DetectionDeescalationSpeed: 0.2
   controlPoints: {fileID: 0}
-  visionConePeriod: 5
   kConeRangeMultiplier: 1.5
   greenMaterial: {fileID: 2100000, guid: c660b9d0c9215354f81283113c6f13e0, type: 2}
   blueMaterial: {fileID: 2100000, guid: 22fb44e42da020d4087ec25469b0883d, type: 2}
@@ -227,8 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ddc6a9f68d70834abbd933c69b1c60a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0.5882353, b: 0.078431375, a: 1}
   outlineWidth: 2
   precomputeOutline: 0
   bakeKeys: []

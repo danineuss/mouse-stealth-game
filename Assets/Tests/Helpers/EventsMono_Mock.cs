@@ -8,8 +8,8 @@ public class EventsMono_Mock : IEvents
     public IEnemyEvents EnemyEvents { get; set; }
     public ISceneEvents SceneEvents { get; set; }
     public CoroutineTestRunner CoroutineTestRunner { get; set; }
-    public int CoroutineStartCounter { get; set; }
-    public int CoroutineStopCounter { get; set; }
+    public int CoroutineStartCounter { get; private set; }
+    public int CoroutineStopCounter { get; private set; }
 
     private GameObject gameObject;
 

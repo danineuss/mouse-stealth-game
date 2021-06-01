@@ -42,9 +42,8 @@ namespace Tests
             Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(1).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Idle);
-            visionConeCM.DidNotReceive().ResetToPatrolling();
-            visionConeCM.DidNotReceive().StartFollowingPlayer();
+            visionConeCM.ReceivedWithAnyArgs(1).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
         }
 
         [UnityTest]
@@ -61,13 +60,13 @@ namespace Tests
             Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(2).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Searching);
-            visionConeCM.Received(1).StartFollowingPlayer();
-            visionConeCM.DidNotReceive().ResetToPatrolling();
+            visionConeCM.ReceivedWithAnyArgs(2).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateFollowingPlayer>());
         }
 
         [UnityTest]
-        public IEnumerator should_with_visible_player_when_becomes_obstructed_second_frame_transition_to_searching_and_back_to_idle()
+        public IEnumerator should_with_visible_player_be_searching_when_becomes_obstructed_second_frame_transition_back_to_idle()
         {
             eventsMono = EventsMono_Mock.NewSubstitute();
             visionConeCM = Substitute.For<IVisionConeVM>();
@@ -81,13 +80,12 @@ namespace Tests
 
             yield return null;
 
-           Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
+            Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(3).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Searching);
-            visionConeCM.Received(1).StartFollowingPlayer();
-            visionConeCM.Received(2).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).ResetToPatrolling();
+            visionConeCM.ReceivedWithAnyArgs(3).TransitionTo(default);
+            visionConeCM.Received(2).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateFollowingPlayer>());
         }
 
         [UnityTest]
@@ -104,10 +102,9 @@ namespace Tests
             Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.Received().FailGame();
             eventsMono.EnemyEvents.Received(3).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Searching);
-            visionConeCM.Received(1).StartFollowingPlayer();
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Alarmed);
+            visionConeCM.ReceivedWithAnyArgs(2).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateFollowingPlayer>());
         }
 
         [UnityTest]
@@ -126,11 +123,9 @@ namespace Tests
             Assert.AreEqual(1, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(2).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Distracted);
-            visionConeCM.Received(1).SetStateDistracted(true);
-            visionConeCM.DidNotReceive().ResetToPatrolling();
-            visionConeCM.DidNotReceive().StartFollowingPlayer();
+            visionConeCM.ReceivedWithAnyArgs(2).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateDistracted>());
         }
 
         [UnityTest]
@@ -149,12 +144,10 @@ namespace Tests
             Assert.AreEqual(1, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(3).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(2).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Distracted);
-            visionConeCM.Received(1).SetStateDistracted(true);
-            visionConeCM.Received(1).SetStateDistracted(false);
-            visionConeCM.DidNotReceive().ResetToPatrolling();
-            visionConeCM.DidNotReceive().StartFollowingPlayer();
+            visionConeCM.ReceivedWithAnyArgs(4).TransitionTo(default);
+            visionConeCM.Received(2).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateDistracted>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStatePatrolling>());
         }
 
         [UnityTest]
@@ -178,11 +171,9 @@ namespace Tests
             Assert.AreEqual(1, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.DidNotReceiveWithAnyArgs().FailGame();
             eventsMono.EnemyEvents.Received(2).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Distracted);
-            visionConeCM.Received(1).SetStateDistracted(true);
-            visionConeCM.DidNotReceive().SetSpotState(SpotLightState.Searching);
-            visionConeCM.DidNotReceive().StartFollowingPlayer();
+            visionConeCM.ReceivedWithAnyArgs(2).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateDistracted>());
         }
 
         [UnityTest]
@@ -203,11 +194,9 @@ namespace Tests
             Assert.AreEqual(0, eventsMono.CoroutineStartCounter);
             eventsMono.EnemyEvents.Received().FailGame();
             eventsMono.EnemyEvents.Received(3).ChangeDetectorState(playerDetector.ID);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Idle);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Searching);
-            visionConeCM.Received(1).SetSpotState(SpotLightState.Alarmed);
-            visionConeCM.Received(1).StartFollowingPlayer();
-            visionConeCM.DidNotReceive().SetSpotState(SpotLightState.Distracted);
+            visionConeCM.ReceivedWithAnyArgs(2).TransitionTo(default);
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateIdle>());
+            visionConeCM.Received(1).TransitionTo(Arg.Any<VisionConeStateFollowingPlayer>());
         }
     }
 }
