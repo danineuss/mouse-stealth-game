@@ -1,24 +1,21 @@
+using System;
 using UnityEngine;
 
 namespace Tests
 {
     public class DummyAbility : IPlayerAbility
     {
-        public KeyCode AssociatedKey => keyCode;
-        public float CoolDown => coolDown;
-        private KeyCode keyCode;
-        private float coolDown;
+        public KeyCode AssociatedKey { get; private set; }
+        public float CoolDown { get; private set; }
 
         public DummyAbility(KeyCode keyCode, float coolDown)
         {
-            this.keyCode = keyCode;
-            this.coolDown = coolDown;
+            this.AssociatedKey = keyCode;
+            this.CoolDown = coolDown;
         }
-        public void SetTarget(IEnemyVM target = null) {}
 
-        public void Execute(IEnemyVM enemyVM = null)
-        {
-            return;
-        }
+        public void SetTarget(Guid targetID) {}
+
+        public void Execute(IPlayerEvents playerEvents) {}
     }
 }

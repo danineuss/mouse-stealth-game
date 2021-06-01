@@ -3,46 +3,39 @@ using UnityEngine;
 
 public interface IPlayerEvents
 {
-    event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
-    event Action<IEnemyVM> OnRemovePlayerLocation;
     event Action<IPlayerAbility> OnAbilityExecuted;
     event Action<IPlayerAbility> OnAbilityLearned;
+    event Action<Guid, float> OnEnemyDistracted;
     event Action OnPauseButtonPressed;
+    event Action<Guid> OnPlayerLocationRemoved;
+    event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    void AbilityExecuted(IPlayerAbility ability);
-    void AbilityLearned(IPlayerAbility ability);
-    void RemovePlayerLocation(IEnemyVM enemyVM);
-    void SendPlayerLocation(IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform);
+    void DistractEnemy(Guid enemyID, float distractionDuration);
+    void ExecuteAbility(IPlayerAbility ability);
+    void LearnAbility(IPlayerAbility ability);
     void PressPauseButton();
+    void RemovePlayerLocation(Guid enemyID);
+    void SendPlayerLocation(Guid enemyID, bool shouldDisplayText, Transform playerTransform);
 }
 
 public class PlayerEvents : IPlayerEvents
 {
-    public event Action<IEnemyVM, bool, Transform> OnSendPlayerLocation;
-    public event Action<IEnemyVM> OnRemovePlayerLocation;
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
+    public event Action<Guid, float> OnEnemyDistracted;
     public event Action OnPauseButtonPressed;
+    public event Action<Guid> OnPlayerLocationRemoved;
+    public event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
-    public void SendPlayerLocation(
-        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform
-    )
+    public void DistractEnemy(Guid enemyID, float distractionDuration)
     {
-        if (OnSendPlayerLocation == null)
+        if (OnEnemyDistracted == null)
             return;
-
-        OnSendPlayerLocation(enemyVM, shouldDisplayText, playerTransform);
+        
+        OnEnemyDistracted(enemyID, distractionDuration);
     }
 
-    public void RemovePlayerLocation(IEnemyVM enemyVM)
-    {
-        if (OnRemovePlayerLocation == null)
-            return;
-
-        OnRemovePlayerLocation(enemyVM);
-    }
-
-    public void AbilityExecuted(IPlayerAbility ability)
+    public void ExecuteAbility(IPlayerAbility ability)
     {
         if (OnAbilityExecuted == null)
             return;
@@ -50,7 +43,7 @@ public class PlayerEvents : IPlayerEvents
         OnAbilityExecuted(ability);
     }
 
-    public void AbilityLearned(IPlayerAbility ability)
+    public void LearnAbility(IPlayerAbility ability)
     {
         if (OnAbilityLearned == null)
             return;
@@ -64,5 +57,22 @@ public class PlayerEvents : IPlayerEvents
             return;
         
         OnPauseButtonPressed();
+    }
+
+    public void RemovePlayerLocation(Guid enemyID)
+    {
+        if (OnPlayerLocationRemoved == null)
+            return;
+
+        OnPlayerLocationRemoved(enemyID);
+    }
+
+    public void SendPlayerLocation(
+        Guid enemyID, bool shouldDisplayText, Transform playerTransform)
+    {
+        if (OnPlayerLocationSent == null)
+            return;
+
+        OnPlayerLocationSent(enemyID, shouldDisplayText, playerTransform);
     }
 }

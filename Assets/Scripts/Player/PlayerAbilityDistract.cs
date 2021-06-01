@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class PlayerAbilityDistract : IPlayerAbility 
@@ -7,18 +6,21 @@ public class PlayerAbilityDistract : IPlayerAbility
     public KeyCode AssociatedKey => KeyCode.F;
     public float CoolDown => 10f;
 
-    private IEnemyVM targetEnemy;
+    private float distractionDuration;
+    private Guid targetID;
 
-    public void SetTarget(IEnemyVM target)
+    public PlayerAbilityDistract(float distractionDuration)
     {
-        this.targetEnemy = target;
+        this.distractionDuration = distractionDuration;
     }
 
-    public void Execute(IEnemyVM enemyVM = null) 
+    public void SetTarget(Guid targetID)
     {
-        if (enemyVM == null || enemyVM != targetEnemy)
-            return;
+        this.targetID = targetID;
+    }
 
-        enemyVM.GetDistracted();
+    public void Execute(IPlayerEvents playerEvents) 
+    {
+        playerEvents.DistractEnemy(targetID, distractionDuration);
     }
 }

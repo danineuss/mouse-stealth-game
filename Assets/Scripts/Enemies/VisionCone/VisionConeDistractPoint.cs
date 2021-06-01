@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionConeDistractPoint : MonoBehaviour, IVisionConeControlPoint {
-    [SerializeField] private float fieldOfView = 0f; 
-    public float FieldOfView {
-        get => fieldOfView;
-        private set => fieldOfView = value;
+public class VisionConeDistractPoint: IVisionConeControlPoint
+{
+    public float FieldOfView { get; }
+    public Vector3 Position { get; }
+    
+    public VisionConeDistractPoint(float fieldOfView, Vector3 position)
+    {
+        FieldOfView = fieldOfView;
+        Position = position;
     }
 
-    public Vector3 Position {
-        get => transform.position; 
-    }
-    
-    public void OnDrawGizmos() {
+    public void OnDrawGizmos()
+    {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, 0.1f);
+        Gizmos.DrawWireSphere(Position, 0.1f);
     }
 }

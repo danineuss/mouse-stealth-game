@@ -3,9 +3,9 @@ using UnityEngine;
 
 public abstract class SceneState
 {
-    protected SceneVM sceneVM;
+    protected ISceneVM sceneVM;
 
-    public void SetSceneVM(SceneVM sceneVM)
+    public void SetSceneVM(ISceneVM sceneVM)
     {
         this.sceneVM = sceneVM;
     }

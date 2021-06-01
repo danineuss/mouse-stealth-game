@@ -1,15 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public interface IPlayerAbility {
-    KeyCode AssociatedKey {
-        get;
-    }
-    float CoolDown {
-        get;
-    }
+    KeyCode AssociatedKey { get; }
+    float CoolDown { get; }
 
-    //TODO: change to targetID
-    void SetTarget(IEnemyVM target = null);
+    void SetTarget(Guid targetID);
 
-    void Execute(IEnemyVM enemyVM = null);
+    void Execute(IPlayerEvents playerEvents);
 }

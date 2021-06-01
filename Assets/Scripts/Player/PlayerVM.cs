@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlayerVM
+public interface IPlayerVM: IUpdatable, ILateUpdatable, ITriggerEnterable
 {
-    void Update();
-    void LateUpdate();
-    void OnTriggerEnter(Collider collider);
 }
 
 public class PlayerVM : IPlayerVM
@@ -19,7 +16,7 @@ public class PlayerVM : IPlayerVM
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
     private ISceneEvents sceneEvents;
-    private IEnemyVM targetEnemy;
+    private Guid targetEnemyID;
 
     public PlayerVM(
         Transform playerTransform,
@@ -40,7 +37,7 @@ public class PlayerVM : IPlayerVM
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;
 
-        targetEnemy = null;
+        targetEnemyID = Guid.Empty;
 
         InitializeEvents();
     }
@@ -55,7 +52,6 @@ public class PlayerVM : IPlayerVM
         sceneEvents.OnDialogClosed += delegate{ cameraController.LockCursor(true); };
         playerEvents.OnAbilityLearned += OnAbilityLearned;
     }
-
 
     public void Update()
     {
@@ -72,7 +68,7 @@ public class PlayerVM : IPlayerVM
         foreach (var keyCode in playerAbilities.RelevantKeyPresses)
         {
             if (playerInput.GetKeyDown(keyCode))
-                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemy);
+                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemyID);
         }
     }
 
@@ -87,26 +83,26 @@ public class PlayerVM : IPlayerVM
         characterController.OnTriggerEnter(collider);
     }
 
-    void OnCursorEnterEnemy(IEnemyVM enemyVM)
+    void OnCursorEnterEnemy(Guid enemyID)
     {
-        targetEnemy = enemyVM;
+        targetEnemyID = enemyID;
         if (playerAbilities.RelevantAbilities.Count > 0)
         {
-            playerEvents.SendPlayerLocation(enemyVM, true, playerTransform);
+            playerEvents.SendPlayerLocation(enemyID, true, playerTransform);
         }
         else
         {
-            playerEvents.SendPlayerLocation(enemyVM, false, null);
+            playerEvents.SendPlayerLocation(enemyID, false, null);
         }
     }
 
     void OnCurserExitEnemy()
     {
-        if(targetEnemy == null)
+        if(targetEnemyID == Guid.Empty)
             return;
 
-        playerEvents.RemovePlayerLocation(targetEnemy);
-        targetEnemy = null;
+        playerEvents.RemovePlayerLocation(targetEnemyID);
+        targetEnemyID = Guid.Empty;
     }
 
     void ToggleCursorLockForGamePaused(bool gamePaused)

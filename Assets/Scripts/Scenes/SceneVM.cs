@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public interface ISceneVM
 {
+    void PauseGame(bool paused);
     void TransitionTo(SceneState sceneState);
 }
 
@@ -39,7 +40,9 @@ public class SceneVM: ISceneVM
         sceneEvents.OnDialogOpened += ToggleDialogOpen;
         sceneEvents.OnDialogClosed += ToggleDialogOpen;
         sceneEvents.OnGameRestarted += RestartGame;
+
         playerEvents.OnPauseButtonPressed += HandlePauseButtonPressed;
+        
         enemyEvents.OnGameFailed += FailGame;
     }
 

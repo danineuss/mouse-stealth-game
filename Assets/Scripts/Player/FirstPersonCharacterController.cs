@@ -1,11 +1,10 @@
 
 using UnityEngine;
 
-public interface IFirstPersonCharacterController
+public interface IFirstPersonCharacterController: ITriggerEnterable
 {
     void MoveCharacter();
     void RestrictCharacterMovement();
-    void OnTriggerEnter(Collider collider);
 }
 
 public class FirstPersonCharacterController : IFirstPersonCharacterController

@@ -1,74 +1,63 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IEnemyVM: IIdentifiable
 {
-    EnemyEvents EnemyEvents { get; }
-
-    bool GetDistracted();
     void PlaySound(Sound sound);
 }
 
-public class EnemyVM : MonoBehaviour, IEnemyVM
+public class EnemyVM : IEnemyVM
 {
-    [SerializeField] private EventsMono eventsMono = null;
-    [SerializeField] private AudioVM audioVM = null;
-    //TODO: maybe remove this public property
-    public EnemyEvents EnemyEvents => eventsMono.EnemyEvents;
+    public Guid ID { get; private set; }
 
-    public Guid ID => id;
-
-    private EnemyIO enemyIO;
-    private PlayerDetector playerDetector;
+    private IPlayerDetector playerDetector;
+    private AudioVM audioVM;
+    private IEnemyIO enemyIO;
     private SoundEmitter soundEmitter;
-    private Guid id;
-
-    public bool GetDistracted()
-    {
-        if (playerDetector.DetectorState != DetectorState.Idle)
-        {
-            return false;
-        }
-
-        playerDetector.SetStateDistracted();
-        enemyIO.SetTextColor(DetectorState.Distracted);
-        return true;
-    }
+    private IPlayerEvents playerEvents;
+    private IEnemyEvents enemyEvents;
 
     public void PlaySound(Sound sound)
     {
         soundEmitter.PlaySound(sound);
     }
 
-    void Awake()
+    public EnemyVM(
+        IPlayerDetector playerDetector,
+        AudioVM audioVM,
+        IEnemyIO enemyIO,
+        SoundEmitter soundEmitter,
+        IPlayerEvents playerEvents,
+        IEnemyEvents enemyEvents)
     {
-        enemyIO = GetComponentInChildren<EnemyIO>();
-        playerDetector = GetComponentInChildren<PlayerDetector>();
-        soundEmitter = GetComponentInChildren<SoundEmitter>();
-        id = new Guid();
-    }
+        this.playerDetector = playerDetector;
+        this.audioVM = audioVM;
+        this.enemyIO = enemyIO;
+        this.soundEmitter = soundEmitter;
+        this.playerEvents = playerEvents;
+        this.enemyEvents = enemyEvents;
+        
+        ID = Guid.NewGuid();
+        this.enemyIO.SetEnemyID(ID);
 
-    void Start()
-    {
         InitializeEvents();
     }
 
     void InitializeEvents()
     {
-        eventsMono.EnemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        eventsMono.EnemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        eventsMono.EnemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
+        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+        enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
-        eventsMono.PlayerEvents.OnSendPlayerLocation += OnReceivePlayerLocation;
-        eventsMono.PlayerEvents.OnRemovePlayerLocation += OnRemovePlayerLocation;
-        eventsMono.PlayerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        playerEvents.OnPlayerLocationSent += OnReceivePlayerLocation;
+        playerEvents.OnPlayerLocationRemoved += OnRemovePlayerLocation;
+        playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
+        playerEvents.OnEnemyDistracted += OnEnemyDistracted;
     }
 
-    void OnCursorEnterEnemy(IEnemyVM enemyVM)
+    void OnCursorEnterEnemy(Guid enemyID)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetDisplayVisibility(true);
@@ -79,31 +68,28 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
         enemyIO.SetDisplayVisibility(false);
     }
 
-    void OnDetectorStateChanged(PlayerDetector playerDetector)
+    void OnDetectorStateChanged(Guid detectorID)
     {
-        if (playerDetector != this.playerDetector)
+        if (detectorID != playerDetector.ID)
             return;
 
-        enemyIO.SetTextColor(playerDetector.DetectorState);
-        audioVM.PlaySoundAtEnemy(this, playerDetector.DetectorState);
-
-        if (playerDetector.DetectorState == DetectorState.Alarmed)
-            EnemyEvents.FailGame();
+        enemyIO.SetTextColor(playerDetector.DetectorState.EnemyIOTextColor);
+        var enemySoundName = playerDetector.DetectorState.EnemySound.Name;
+        PlaySound(audioVM.SoundWithName(enemySoundName));
     }
 
     void OnReceivePlayerLocation(
-        IEnemyVM enemyVM, bool shouldDisplayText, Transform playerTransform = null
-    )
+        Guid enemyID, bool shouldDisplayText, Transform playerTransform = null)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
     }
 
-    void OnRemovePlayerLocation(IEnemyVM enemyVM)
+    void OnRemovePlayerLocation(Guid enemyID)
     {
-        if (enemyVM.ID != this.ID)
+        if (enemyID != this.ID)
             return;
 
         enemyIO.SetTextFollowingPlayer(false);
@@ -111,7 +97,17 @@ public class EnemyVM : MonoBehaviour, IEnemyVM
 
     void OnPlayerAbilityExecuted(IPlayerAbility ability)
     {
-        ability.Execute(this);
         enemyIO.UpdateCooldownForAbility(ability);
+    }
+
+    void OnEnemyDistracted(Guid targetID, float distractionDuration)
+    {
+        if (targetID != this.ID)
+            return;
+
+        if (!playerDetector.AttemptDistraction(distractionDuration))
+            return;
+        
+        enemyIO.SetTextColor(playerDetector.DetectorState.EnemyIOTextColor);
     }
 }
