@@ -45,27 +45,12 @@ public class EnemyVM : IEnemyVM
 
     void InitializeEvents()
     {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
         enemyEvents.OnDetectorStateChanged += OnDetectorStateChanged;
 
         playerEvents.OnPlayerLocationSent += OnReceivePlayerLocation;
         playerEvents.OnPlayerLocationRemoved += OnRemovePlayerLocation;
         playerEvents.OnAbilityExecuted += OnPlayerAbilityExecuted;
         playerEvents.OnEnemyDistracted += OnEnemyDistracted;
-    }
-
-    void OnCursorEnterEnemy(Guid enemyID)
-    {
-        if (enemyID != this.ID)
-            return;
-
-        enemyIO.SetDisplayVisibility(true);
-    }
-
-    void OnCurserExitEnemy()
-    {
-        enemyIO.SetDisplayVisibility(false);
     }
 
     void OnDetectorStateChanged(Guid detectorID)
@@ -84,7 +69,7 @@ public class EnemyVM : IEnemyVM
         if (enemyID != this.ID)
             return;
 
-        enemyIO.SetTextFollowingPlayer(shouldDisplayText, playerTransform);
+        enemyIO.SetTextVisibleAndFollowing(shouldDisplayText, playerTransform);
     }
 
     void OnRemovePlayerLocation(Guid enemyID)
@@ -92,7 +77,7 @@ public class EnemyVM : IEnemyVM
         if (enemyID != this.ID)
             return;
 
-        enemyIO.SetTextFollowingPlayer(false);
+        enemyIO.SetTextVisibleAndFollowing(false);
     }
 
     void OnPlayerAbilityExecuted(IPlayerAbility ability)
