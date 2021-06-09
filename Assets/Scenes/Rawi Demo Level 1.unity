@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fieldOfView: 50
   durationTowardsPoint: 2
-  waitTimeAtTarget: 2
+  waitTimeAtTarget: 5
 --- !u!4 &228157406
 Transform:
   m_ObjectHideFlags: 0
@@ -6669,7 +6669,7 @@ PrefabInstance:
     - target: {fileID: 2980435256182833830, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: waitTimeAtTarget
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4856492044376084018, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
@@ -6751,16 +6751,6 @@ PrefabInstance:
       propertyPath: audioVM
       value: 
       objectReference: {fileID: 918347162}
-    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
-        type: 3}
-      propertyPath: DetectionEscalationSpeed
-      value: 0.207
-      objectReference: {fileID: 0}
-    - target: {fileID: 6082908083152821311, guid: 8fde4828e151ba04a8a18f878f2cf362,
-        type: 3}
-      propertyPath: DetectionDeescalationSpeed
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 6309566932517173719, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6790,6 +6780,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Person Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 8477133248410741364, guid: 8fde4828e151ba04a8a18f878f2cf362,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8921836617314434477, guid: 8fde4828e151ba04a8a18f878f2cf362,
         type: 3}
