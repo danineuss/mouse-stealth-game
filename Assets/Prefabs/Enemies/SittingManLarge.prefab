@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventsMono: {fileID: 0}
   kActiveTextColor: {r: 0, g: 0.2812406, b: 0.735849, a: 255}
-  kInactiveTextColor: {r: 0.0035154943, g: 0.745283, b: 0.745283, a: 75}
+  kInactiveTextColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 75}
 --- !u!1 &1558739450960892359
 GameObject:
   m_ObjectHideFlags: 0

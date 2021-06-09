@@ -14,10 +14,9 @@ public interface IEnemyIO: IUpdatable
 {
     void OnMouseEnter();
     void OnMouseExit();
-    void SetDisplayVisibility(bool visible);
     void SetEnemyID(Guid enemyID);
     void SetTextColor(EnemyIOTextColor textColor);
-    void SetTextFollowingPlayer(bool shouldDisplayText, Transform playerTransform = null);
+    void SetTextVisibleAndFollowing(bool shouldDisplayText, Transform playerTransform = null);
     void UpdateCooldownForAbility(IPlayerAbility ability);
 }
 
@@ -26,31 +25,47 @@ public class EnemyIO : IEnemyIO
     private IEnemyEvents enemyEvents;
     private TextMesh textMesh;
     private OutlineMono enemyOutline;
-    private Color kInactiveTextColor;
-    private Color kActiveTextColor;
+    private readonly Color InactiveTextColor;
+    private readonly Color ActiveTextColor;
     private Transform ioTransform;
     private Transform cooldownScaleParent;
     private Transform playerFollowTransform;
     private Dictionary<IPlayerAbility, float> abilityCooldowns;
     private Guid enemyID;
-    private float kOutlineWidth = 10f;
+    private readonly float OutlineWidth = 10f;
 
-    public void SetDisplayVisibility(bool visible)
+    public EnemyIO(
+        IEnemyEvents enemyEvents,
+        TextMesh textMesh,
+        OutlineMono enemyOutline,
+        Color inactiveTextColor,
+        Color activeTextColor,
+        Transform ioTransform,
+        Transform cooldownScaleParent)
     {
-        textMesh.gameObject.SetActive(visible);
-        cooldownScaleParent.gameObject.SetActive(visible);
-        enemyOutline.OutlineWidth = visible ? kOutlineWidth : 0f;
+        this.enemyEvents = enemyEvents;
+        this.textMesh = textMesh;
+        this.enemyOutline = enemyOutline;
+        this.InactiveTextColor = inactiveTextColor;
+        this.ActiveTextColor = activeTextColor;
+        this.ioTransform = ioTransform;
+        this.cooldownScaleParent = cooldownScaleParent;
+
+        abilityCooldowns = new Dictionary<IPlayerAbility, float>();
+        playerFollowTransform = null;
+        this.textMesh.color = activeTextColor;
+        this.cooldownScaleParent.localScale = new Vector3(1f, 0f, 1f);
+        this.enemyID = Guid.Empty;
+
+        SetTextVisibleAndFollowing(false);
     }
 
-    public void SetTextFollowingPlayer(bool shouldDisplayText, Transform playerTransform)
+    public void SetTextVisibleAndFollowing(bool shouldDisplayText, Transform playerTransform = null)
     {
         textMesh.gameObject.SetActive(shouldDisplayText);
         cooldownScaleParent.gameObject.SetActive(shouldDisplayText);
-
-        if (shouldDisplayText)
-        {
-            playerFollowTransform = playerTransform;
-        }
+        enemyOutline.OutlineWidth = shouldDisplayText ? OutlineWidth : 0f;
+        playerFollowTransform = playerTransform;
     }
 
     public void SetTextColor(EnemyIOTextColor textColor)
@@ -58,10 +73,10 @@ public class EnemyIO : IEnemyIO
         switch(textColor)
         {
             case EnemyIOTextColor.Active:
-                textMesh.color = kActiveTextColor;
+                textMesh.color = ActiveTextColor;
                 break;
             case EnemyIOTextColor.Inactive:
-                textMesh.color = kInactiveTextColor;
+                textMesh.color = InactiveTextColor;
                 break;
         }
     }
@@ -84,32 +99,6 @@ public class EnemyIO : IEnemyIO
             throw new Exception("Should only set the ID once.");
         
         this.enemyID = enemyID;
-    }
-
-    public EnemyIO(
-        IEnemyEvents enemyEvents,
-        TextMesh textMesh,
-        OutlineMono enemyOutline,
-        Color kInactiveTextColor,
-        Color kActiveTextColor,
-        Transform ioTransform,
-        Transform cooldownScaleParent)
-    {
-        this.enemyEvents = enemyEvents;
-        this.textMesh = textMesh;
-        this.enemyOutline = enemyOutline;
-        this.kInactiveTextColor = kInactiveTextColor;
-        this.kActiveTextColor = kActiveTextColor;
-        this.ioTransform = ioTransform;
-        this.cooldownScaleParent = cooldownScaleParent;
-
-        abilityCooldowns = new Dictionary<IPlayerAbility, float>();
-        playerFollowTransform = null;
-        this.textMesh.color = kActiveTextColor;
-        this.cooldownScaleParent.localScale = new Vector3(1f, 0f, 1f);
-        this.enemyID = Guid.Empty;
-
-        SetDisplayVisibility(false);
     }
 
     public void Update()
@@ -145,11 +134,11 @@ public class EnemyIO : IEnemyIO
             newCooldown = Mathf.Clamp(newCooldown, 0f, key.CoolDown);
             if (newCooldown == 0f)
             {
-                textMesh.color = kActiveTextColor;
+                textMesh.color = ActiveTextColor;
             }
             else
             {
-                textMesh.color = kInactiveTextColor;
+                textMesh.color = InactiveTextColor;
             }
 
             var currentScale = cooldownScaleParent.localScale;

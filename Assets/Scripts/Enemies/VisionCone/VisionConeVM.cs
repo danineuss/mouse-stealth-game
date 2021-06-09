@@ -114,10 +114,14 @@ public class VisionConeVM : IVisionConeVM
             yield return null;
         }
     }
+
     public void StartLookatCoroutine(IEnumerator newCoroutine, bool interrupt = true)
     {
         if (currentCoroutines.Count != 0 && interrupt)
+        {
             currentCoroutines.ForEach(x => events.StopCoroutine(x));
+            currentCoroutines.Clear();
+        }
         
         currentCoroutines.Add(newCoroutine);
         events.StartCoroutine(newCoroutine);

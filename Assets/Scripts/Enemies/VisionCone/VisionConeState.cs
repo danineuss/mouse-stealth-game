@@ -173,7 +173,8 @@ public class VisionConeStateDistracted : VisionConeState
         coneVisualizer.SetSpotState(SpotLightState.Distracted);
 
         var distraction = visionConeVM.LerpTowardsTarget(
-            distractPoint.Position, distractPoint.FieldOfView, LerpToDistractDuration);
+            distractPoint.Position, distractPoint.FieldOfView, LerpToDistractDuration
+        );
         visionConeVM.StartLookatCoroutine(distraction);
     }
 }
