@@ -23,10 +23,10 @@ public class VisionConeMono: MonoBehaviour
     [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
     [SerializeField] private Color kSpotLightBlue = new Color(0f, 23f, 183f, 1f);
 
-    public IPlayerDetector PlayerDetector => playerDetector;
+    public IPlayerDetector PlayerDetector { get; private set; }
+    public VisionConeControlPointsMono ControlPointsMono => controlPointsMono;
 
     private IVisionConeVM visionConeVM;
-    private IPlayerDetector playerDetector;
 
     void Awake()
     {
@@ -64,7 +64,7 @@ public class VisionConeMono: MonoBehaviour
             obstacleMask,
             eventsMono
         );
-        playerDetector = new PlayerDetector(
+        PlayerDetector = new PlayerDetector(
             visionConeVM,
             eventsMono,
             DetectionEscalationSpeed,
@@ -75,6 +75,6 @@ public class VisionConeMono: MonoBehaviour
     void Update()
     {
         visionConeVM.Update();
-        playerDetector.Update();
+        PlayerDetector.Update();
     }
 }

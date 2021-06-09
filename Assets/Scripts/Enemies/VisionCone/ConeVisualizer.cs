@@ -70,7 +70,7 @@ public class ConeVisualizer : IConeVisualizer
     {
         var toCurrentTarget = currentTarget - coneTransform.position;
         var range = toCurrentTarget.magnitude * ConeRangeMultiplier;
-        coneTransform.rotation = Quaternion.LookRotation(toCurrentTarget);
+        // coneTransform.rotation = Quaternion.LookRotation(toCurrentTarget);
 
         spotLight.spotAngle = fieldOfView;
         spotLight.range = range;
@@ -78,7 +78,7 @@ public class ConeVisualizer : IConeVisualizer
         var distanceToScaleAnchor = (coneScaleAnchor.position - coneTransform.position).magnitude;
         var newScaleZ = coneScaleParent.localScale.z + 0.7f * (range - distanceToScaleAnchor) / range;
         var newScaleXY = 2 * newScaleZ * Mathf.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
-        coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
+        // coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
     }
 
     public void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0f)
