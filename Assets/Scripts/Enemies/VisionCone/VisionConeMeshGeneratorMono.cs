@@ -25,6 +25,8 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
     {
         CreateMesh();
         UpdateMesh();
+
+        var a = TrianglesFromHexagons(4);
     }
 
     void CreateMesh()
@@ -44,6 +46,46 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
         {
             0, 1, 2
         };
+    }
+
+    int[] TrianglesFromHexagons(int numberOfRings)
+    {
+        List<int> triangles = new List<int>();
+        for (int i = 2; i <= numberOfRings; i++)
+        {
+            triangles.AddRange(TrianglesFromHexagon(i));
+        }
+        return triangles.ToArray();
+    }
+
+    int[] TrianglesFromHexagon(int depthOfRing)
+    {
+        if (depthOfRing < 2)
+            throw new ArgumentException();
+
+        int[] innerPoints = PointsForDepth(depthOfRing - 1);
+        int[] outerPoints = PointsForDepth(depthOfRing);
+        int[] cornerPoints = CornerPointsForDepth(depthOfRing);
+
+        return new int[1]{1};
+    }
+
+    private int[] PointsForDepth(int depthOfRing)
+    {
+        int[] outerPoints = new int[6 * depthOfRing];
+        for (int i = 0; i < outerPoints.Count(); i++)
+            outerPoints[i] = 6 * (depthOfRing * (depthOfRing - 1) / 2) + 1 + i;
+        
+        return outerPoints;
+    }
+
+    private int[] CornerPointsForDepth(int depthOfRing)
+    {
+        int[] cornerPoints = new int[6];
+        for (int i = 0; i < cornerPoints.Count(); i++)
+            cornerPoints[i] = 6 * (depthOfRing * (depthOfRing - 1) / 2) + 1 + depthOfRing * i;
+        
+        return cornerPoints;
     }
 
     void UpdateMesh()
