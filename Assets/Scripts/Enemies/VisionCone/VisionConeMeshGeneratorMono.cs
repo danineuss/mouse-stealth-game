@@ -12,6 +12,9 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
     private Mesh mesh;
     private Vector3[] vertices;
     private int[] triangles;
+    private int[] innerPoints;
+    private int[] outerPoints;
+    private int[] innerCornerPoints;
 
     void Start()
     {
@@ -51,23 +54,65 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
     int[] TrianglesFromHexagons(int numberOfRings)
     {
         List<int> triangles = new List<int>();
+        triangles.AddRange(TrianglesInnerMostHexagon());
+
         for (int i = 2; i <= numberOfRings; i++)
-        {
             triangles.AddRange(TrianglesFromHexagon(i));
-        }
+        
         return triangles.ToArray();
     }
 
     int[] TrianglesFromHexagon(int depthOfRing)
     {
         if (depthOfRing < 2)
-            throw new ArgumentException();
+            throw new ArgumentException("Triangle calculations only supported with depth >= 2.");
 
-        int[] innerPoints = PointsForDepth(depthOfRing - 1);
-        int[] outerPoints = PointsForDepth(depthOfRing);
-        int[] cornerPoints = CornerPointsForDepth(depthOfRing);
+        innerPoints = PointsForDepth(depthOfRing - 1);
+        outerPoints = PointsForDepth(depthOfRing);
+        innerCornerPoints = InnerCornerPointsForDepth(depthOfRing);
 
-        return new int[1]{1};
+        int numberOfEdgePoints = innerPoints.Count() - innerCornerPoints.Count();
+        var triangles = new int[3 * (innerCornerPoints.Count() * 3 + numberOfEdgePoints * 2)];
+        return AccumulateTriangles(triangles, 0, 0, outerPoints.Count() - 1);
+    }
+
+    private int[] AccumulateTriangles(
+        int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    {
+        if (innerIndex == innerPoints.Count())
+            return triangles;
+        
+        if (innerCornerPoints.Contains(innerPoints[innerIndex]))
+            return AccumulateTrianglesAtCorners(triangles, trianglesIndex, innerIndex, outerIndex);
+        else
+            return AccumulateTrianglesAtEdges(triangles, trianglesIndex, innerIndex, outerIndex);
+    }
+
+    private int[] AccumulateTrianglesAtCorners(int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    {
+        triangles[trianglesIndex++] = innerPoints[innerIndex];
+        triangles[trianglesIndex++] = outerPoints[outerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
+        triangles[trianglesIndex++] = innerPoints[innerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 2) % outerPoints.Count()];
+        triangles[trianglesIndex++] = innerPoints[innerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 2) % outerPoints.Count()];
+        triangles[trianglesIndex++] = innerPoints[(innerIndex + 1) % innerPoints.Count()];
+
+        return AccumulateTriangles(triangles, trianglesIndex, innerIndex + 1, (outerIndex + 2) % outerPoints.Count());
+    }
+
+    private int[] AccumulateTrianglesAtEdges(int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    {
+        triangles[trianglesIndex++] = innerPoints[innerIndex];
+        triangles[trianglesIndex++] = outerPoints[outerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
+        triangles[trianglesIndex++] = innerPoints[innerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
+        triangles[trianglesIndex++] = innerPoints[(innerIndex + 1) % innerPoints.Count()];
+
+        return AccumulateTriangles(triangles, trianglesIndex, innerIndex + 1, (outerIndex + 1) % outerPoints.Count());
     }
 
     private int[] PointsForDepth(int depthOfRing)
@@ -79,13 +124,26 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
         return outerPoints;
     }
 
-    private int[] CornerPointsForDepth(int depthOfRing)
+    private int[] InnerCornerPointsForDepth(int depthOfRing)
     {
         int[] cornerPoints = new int[6];
         for (int i = 0; i < cornerPoints.Count(); i++)
-            cornerPoints[i] = 6 * (depthOfRing * (depthOfRing - 1) / 2) + 1 + depthOfRing * i;
+            cornerPoints[i] = 6 * ((depthOfRing - 1) * (depthOfRing - 2) / 2) + 1 + (depthOfRing - 1) * i;
         
         return cornerPoints;
+    }
+
+    private static IEnumerable<int> TrianglesInnerMostHexagon()
+    {
+        return new int[]
+        {
+            0, 1, 2,
+            0, 2, 3,
+            0, 3, 4,
+            0, 4, 5,
+            0, 5, 6, 
+            0, 6, 1
+        };
     }
 
     void UpdateMesh()
