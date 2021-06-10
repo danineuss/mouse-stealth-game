@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee16452504073574d93844b4f6d679f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeshResolution: 2
   visionConeMono: {fileID: 8996808756254921792}
 --- !u!1 &6481307520767780976
 GameObject:
