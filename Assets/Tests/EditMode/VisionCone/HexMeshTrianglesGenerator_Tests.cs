@@ -17,21 +17,29 @@ namespace Tests
         {
             var innerMostHexTrianges = hexTrianglesGenerator.TrianglesForHexagons(1);
 
-            Assert.AreEqual(18, innerMostHexTrianges.Length);
+            Assert.AreEqual(36, innerMostHexTrianges.Length);
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 1, 2}));
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 2, 3}));
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 3, 4}));
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 4, 5}));
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 5, 6}));
             Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{0, 6, 1}));
+
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{1, 7, 2}));
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{2, 8, 3}));
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{3, 9, 4}));
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{4, 10, 5}));
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{5, 11, 6}));
+            Assert.True(ContainsSequenceInArray(innerMostHexTrianges, new int[]{6, 12, 1}));
         }
 
         [Test]
         public void should_contain_correct_triangles_for_larger_hexagon()
         {
             var largerHexagonTriangles = hexTrianglesGenerator.TrianglesForHexagons(3);
+            var expectedNumberOfTriangles = 162 + 18 * 5;
 
-            Assert.AreEqual(162, largerHexagonTriangles.Length);
+            Assert.AreEqual(expectedNumberOfTriangles, largerHexagonTriangles.Length);
             Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{0, 1, 2}));
             Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{2, 10, 3}));
             Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{15, 16, 5}));
@@ -39,6 +47,9 @@ namespace Tests
             Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{9, 22, 23}));
             Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{31, 32, 15}));
             Assert.False(ContainsSequenceInArray(largerHexagonTriangles, new int[]{47, 25, 46}));
+            Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{19, 37, 20}));
+            Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{26, 43, 44}));
+            Assert.True(ContainsSequenceInArray(largerHexagonTriangles, new int[]{26, 44, 27}));
         }
 
         [Test]
@@ -50,13 +61,15 @@ namespace Tests
             var triangles_4 = hexTrianglesGenerator.TrianglesForHexagons(4);
             var triangles_10 = hexTrianglesGenerator.TrianglesForHexagons(10);
             
-            var triangles_10_expected_count = Enumerable.Range(1, 10).Select(x => 36 * x - 18).Sum();
+            var expectedCount_2 = 72 + 18 * 3;
+            var expectedCount_4 = 288 + 18 * 7;
+            var expectedCount_10 = Enumerable.Range(1, 10).Select(x => 36 * x - 18).Sum() + 18 * 19;
 
             Assert.AreEqual(new int[0], noTriangles_0);
             Assert.AreEqual(new int[0], noTriangles_neg_0);
-            Assert.AreEqual(72, triangles_2.Length);
-            Assert.AreEqual(288, triangles_4.Length);
-            Assert.AreEqual(triangles_10_expected_count, triangles_10.Length);
+            Assert.AreEqual(expectedCount_2, triangles_2.Length);
+            Assert.AreEqual(expectedCount_4, triangles_4.Length);
+            Assert.AreEqual(expectedCount_10, triangles_10.Length);
         }
 
         private bool ContainsSequenceInArray(int[] array, int[] sequence)

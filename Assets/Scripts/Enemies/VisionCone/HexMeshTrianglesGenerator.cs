@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public interface IHexMeshTrianglesGeneratable
@@ -8,6 +9,8 @@ public interface IHexMeshTrianglesGeneratable
 
 public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
 {
+    private int[] triangles;
+    private int trianglesIndex;
     private int[] innerPoints;
     private int[] outerPoints;
     private int[] innerCornerPoints;
@@ -16,57 +19,43 @@ public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
     {
         if (numberOfHexagonRings < 1)
             return new int[0];
-        
-        var triangles = new int[NumberOfIndices(numberOfHexagonRings)];
 
-        int trianglesStartIndex = 0;
-        foreach (int depth in Enumerable.Range(1, numberOfHexagonRings))
-        {
-            int[] currentTriangles;
-            if (depth == 1)
-                currentTriangles = TrianglesInnerMostHexagon();
-            else
-                currentTriangles = TrianglesForHexagon(depth);
-            
-            for (int i = 0; i < currentTriangles.Count(); i++)
-                triangles[trianglesStartIndex + i] = currentTriangles[i];
-            
-            trianglesStartIndex += currentTriangles.Count();
-        }
-        
+        triangles = new int[NumberOfIndices(numberOfHexagonRings)];    
+        trianglesIndex = 0;
+
+        HexagonalTriangles(numberOfHexagonRings);
+        OutermostCircularTriangles(numberOfHexagonRings);
+
         return triangles;
     }
 
     private int NumberOfIndices(int numberOfHexagonRings)
     {
-        return Enumerable.Range(1, numberOfHexagonRings)
+        var numberOfHexagonalTrianges = Enumerable.Range(1, numberOfHexagonRings)
             .Select(x => 36 * x - 18)
             .Sum();
+        var numberOfOutermostCircularTriangles = 18 * (1 + (numberOfHexagonRings - 1) * 2);
+        return numberOfHexagonalTrianges + numberOfOutermostCircularTriangles;
     }
 
-    private static int[] TrianglesInnerMostHexagon()
+    private void HexagonalTriangles(int numberOfHexagonRings)
     {
-        return new int[]
+        foreach (int depth in Enumerable.Range(1, numberOfHexagonRings))
         {
-            0, 1, 2,
-            0, 2, 3,
-            0, 3, 4,
-            0, 4, 5,
-            0, 5, 6, 
-            0, 6, 1
-        };
+            FindInnerOuterAndCornerPoints(depth);
+
+            if (depth == 1)
+                TrianglesInnerMostHexagon();
+            else
+                AccumulateTriangles(0, outerPoints.Count() - 1);
+        }
     }
 
-    private int[] TrianglesForHexagon(int depthOfHex)
+    private void FindInnerOuterAndCornerPoints(int depthOfHex)
     {
         innerPoints = PointsForDepth(depthOfHex - 1);
         innerCornerPoints = CornerPointsForDepth(depthOfHex - 1);
         outerPoints = PointsForDepth(depthOfHex);
-
-        int numberOfInnerEdgePoints = innerPoints.Count() - innerCornerPoints.Count();
-        var triangles = new int[3 * (innerCornerPoints.Count() * 3 + numberOfInnerEdgePoints * 2)];
-
-        return AccumulateTriangles(triangles, 0, 0, outerPoints.Count() - 1);
     }
 
     private int[] PointsForDepth(int depthOfHex)
@@ -87,19 +76,32 @@ public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
         return cornerPoints;
     }
 
-    private int[] AccumulateTriangles(
-        int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    private void TrianglesInnerMostHexagon()
+    {
+        new List<int>()
+        {
+            0, 1, 2,
+            0, 2, 3,
+            0, 3, 4,
+            0, 4, 5,
+            0, 5, 6, 
+            0, 6, 1
+        }
+            .ForEach(x => triangles[trianglesIndex++] = x);
+    }
+
+    private void AccumulateTriangles(int innerIndex, int outerIndex)
     {
         if (innerIndex == innerPoints.Count())
-            return triangles;
+            return;
         
         if (innerCornerPoints.Contains(innerPoints[innerIndex]))
-            return AccumulateTrianglesAtCorners(triangles, trianglesIndex, innerIndex, outerIndex);
+            AccumulateTrianglesAtCorners(innerIndex, outerIndex);
         else
-            return AccumulateTrianglesAtEdges(triangles, trianglesIndex, innerIndex, outerIndex);
+            AccumulateTrianglesAtEdges(innerIndex, outerIndex);
     }
 
-    private int[] AccumulateTrianglesAtCorners(int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    private void AccumulateTrianglesAtCorners(int innerIndex, int outerIndex)
     {
         triangles[trianglesIndex++] = innerPoints[innerIndex];
         triangles[trianglesIndex++] = outerPoints[outerIndex];
@@ -111,10 +113,10 @@ public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
         triangles[trianglesIndex++] = outerPoints[(outerIndex + 2) % outerPoints.Count()];
         triangles[trianglesIndex++] = innerPoints[(innerIndex + 1) % innerPoints.Count()];
 
-        return AccumulateTriangles(triangles, trianglesIndex, innerIndex + 1, (outerIndex + 2) % outerPoints.Count());
+        AccumulateTriangles(innerIndex + 1, (outerIndex + 2) % outerPoints.Count());
     }
 
-    private int[] AccumulateTrianglesAtEdges(int[] triangles, int trianglesIndex, int innerIndex, int outerIndex)
+    private void AccumulateTrianglesAtEdges(int innerIndex, int outerIndex)
     {
         triangles[trianglesIndex++] = innerPoints[innerIndex];
         triangles[trianglesIndex++] = outerPoints[outerIndex];
@@ -123,6 +125,37 @@ public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
         triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
         triangles[trianglesIndex++] = innerPoints[(innerIndex + 1) % innerPoints.Count()];
 
-        return AccumulateTriangles(triangles, trianglesIndex, innerIndex + 1, (outerIndex + 1) % outerPoints.Count());
+        AccumulateTriangles(innerIndex + 1, (outerIndex + 1) % outerPoints.Count());
+    }
+
+    private void OutermostCircularTriangles(int numberOfHexagonRings)
+    {
+        var outerCornerPoints = CornerPointsForDepth(numberOfHexagonRings);
+        var pointsOnCircle = Enumerable.Range(outerPoints.Last() + 1, 6 * numberOfHexagonRings).ToArray();
+
+        for (int outerIndex = 0; outerIndex < outerPoints.Count(); outerIndex++)
+        {
+            if (outerCornerPoints.Contains(outerPoints[outerIndex]))
+                AddCircularTrianglesAtCorner(pointsOnCircle, outerIndex);
+            else
+                AddCircularTrianglesOnEdge(pointsOnCircle, outerIndex);
+        }
+    }
+
+    private void AddCircularTrianglesAtCorner(int[] pointsOnCircle, int outerIndex)
+    {
+        triangles[trianglesIndex++] = outerPoints[outerIndex];
+        triangles[trianglesIndex++] = pointsOnCircle[outerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
+    }
+
+    private void AddCircularTrianglesOnEdge(int[] pointsOnCircle, int outerIndex)
+    {
+        triangles[trianglesIndex++] = outerPoints[outerIndex];
+        triangles[trianglesIndex++] = pointsOnCircle[outerIndex - 1];
+        triangles[trianglesIndex++] = pointsOnCircle[outerIndex];
+        triangles[trianglesIndex++] = outerPoints[outerIndex];
+        triangles[trianglesIndex++] = pointsOnCircle[outerIndex];
+        triangles[trianglesIndex++] = outerPoints[(outerIndex + 1) % outerPoints.Count()];
     }
 }

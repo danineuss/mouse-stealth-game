@@ -30,11 +30,11 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
-        CreateMesh();
+        CreateVerticesTriangles();
         UpdateMesh();
     }
 
-    void CreateMesh()
+    void CreateVerticesTriangles()
     {
         Vector3 startPoint = visionConeMono.ControlPointsMono.PatrolPoints[0].Position - transform.position;
 
