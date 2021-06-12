@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 public class VisionConeMeshGeneratorMono : MonoBehaviour
 {
     [Range(0.1f, 20)] public float Radius;
-    [Range(2, 100)] public int MeshResolution;
+    [Range(0.1f, 10)] public float MeshResolution;
 
     [SerializeField] private VisionConeMono visionConeMono = null;
     [SerializeField] private Mesh mesh;
@@ -19,39 +20,45 @@ public class VisionConeMeshGeneratorMono : MonoBehaviour
 
     void Start()
     {
-        hexVerticesGenerator = new HexMeshVerticesGenerator(MeshResolution);
-        hexTrianglesGenerator = new HexMeshTrianglesGenerator();
-
         GenerateMesh();
     }
 
     public void GenerateMesh()
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
 
+        InitializeMeshGenerators();
         CreateVerticesTriangles();
         UpdateMesh();
+    }
+
+    private void InitializeMeshGenerators()
+    {        
+        hexVerticesGenerator = new HexMeshVerticesGenerator();
+        hexTrianglesGenerator = new HexMeshTrianglesGenerator();
     }
 
     void CreateVerticesTriangles()
     {
         Vector3 startPoint = visionConeMono.ControlPointsMono.PatrolPoints[0].Position - transform.position;
 
-        int numberOfHexagons = Mathf.RoundToInt(Radius / MeshResolution);
-        vertices = hexVerticesGenerator.HexagonVerticesForRadius(Radius)
+        int numberOfHexagonRings = Mathf.RoundToInt(Radius * MeshResolution);
+        numberOfHexagonRings = numberOfHexagonRings < 1 ? 1 : numberOfHexagonRings;
+
+        vertices = hexVerticesGenerator.HexagonVerticesForRadius(Radius, numberOfHexagonRings)
             .ToList()
             .Select(x => x + startPoint)
             .ToArray();
-        triangles = hexTrianglesGenerator.TrianglesForHexagons(numberOfHexagons);
+        triangles = hexTrianglesGenerator.TrianglesForHexagons(numberOfHexagonRings);
     }
 
     void UpdateMesh()
     {
+        mesh = new Mesh();
         mesh.Clear();
 
         mesh.vertices = vertices;
-        mesh.triangles = triangles;
+        mesh.triangles = triangles;        
+        GetComponent<MeshFilter>().mesh = mesh;
 
         mesh.RecalculateNormals();
     }
