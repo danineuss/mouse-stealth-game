@@ -6,7 +6,6 @@ public class PlayerMono: MonoBehaviour
     [SerializeField] private EventsMono eventsMono = null;
     [SerializeField] private float movementSpeed = 0f;
     [SerializeField] private float rotationSpeed = 0f;
-    public PlayerVM PlayerVM => playerVM;
 
     private PlayerVM playerVM;
 

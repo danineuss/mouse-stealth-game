@@ -14,7 +14,8 @@ public class FirstPersonCharacterController : IFirstPersonCharacterController
     private float movementSpeed;
     private IPlayerMovementRestictable currentRestictable;
 
-    public FirstPersonCharacterController(Transform character, IPlayerInput playerInput, float movementSpeed) 
+    public FirstPersonCharacterController(
+        Transform character, IPlayerInput playerInput, float movementSpeed) 
     {
         characterTransform = character;
         this.playerInput = playerInput;
@@ -41,7 +42,8 @@ public class FirstPersonCharacterController : IFirstPersonCharacterController
     
     public void OnTriggerEnter(Collider collider)
     {
-        IPlayerMovementRestictable restictable = collider.GetComponent<IPlayerMovementRestictable>();
+        IPlayerMovementRestictable restictable = 
+            collider.GetComponent<IPlayerMovementRestictable>();
         if (restictable == null || restictable == currentRestictable)
             return;
 

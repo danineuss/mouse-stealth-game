@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4031594559250874080}
   - component: {fileID: 6399137173418149744}
   - component: {fileID: 4805294021841666320}
-  - component: {fileID: 5927576631633191388}
+  - component: {fileID: 9132231360743361039}
   m_Layer: 0
   m_Name: Mesh Generator
   m_TagString: Untagged
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5927576631633191388
+--- !u!114 &9132231360743361039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,10 +89,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2784820321343714657}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee16452504073574d93844b4f6d679f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 77c6facdd1dd1c04984fe20570607e61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshResolution: 2
+  FieldOfViewDeg: 10
+  MeshResolution: 0.1
   visionConeMono: {fileID: 8996808756254921792}
 --- !u!1 &6481307520767780976
 GameObject:
