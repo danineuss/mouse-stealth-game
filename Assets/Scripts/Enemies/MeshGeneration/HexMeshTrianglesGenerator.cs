@@ -20,13 +20,19 @@ public class HexMeshTrianglesGenerator : IHexMeshTrianglesGeneratable
         if (numberOfHexagonRings < 1)
             return new int[0];
 
-        triangles = new int[NumberOfIndices(numberOfHexagonRings)];    
-        trianglesIndex = 0;
-
+        InitializeTriangles(numberOfHexagonRings);
         HexagonalTriangles(numberOfHexagonRings);
         OutermostCircularTriangles(numberOfHexagonRings);
 
         return triangles;
+    }
+
+    private void InitializeTriangles(int numberOfHexagonRings)
+    {
+        trianglesIndex = 0;
+        int numberOfIndices = NumberOfIndices(numberOfHexagonRings);
+        if (triangles == null || triangles.Count() != numberOfIndices)
+            triangles = new int[numberOfIndices];
     }
 
     private int NumberOfIndices(int numberOfHexagonRings)

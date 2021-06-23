@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public interface IHexMeshVerticesGeneratable
 {
-    Vector3[] GenerateHexagonVertices(float fieldOfViewRad, float radius, int numberOfHexagonRings);   
+    Vector3[] GenerateHexagonVertices(float fieldOfViewRad, float radius, int numberOfHexagonRings);
 }
 
 public partial class HexMeshVerticesGenerator : IHexMeshVerticesGeneratable
@@ -17,14 +18,20 @@ public partial class HexMeshVerticesGenerator : IHexMeshVerticesGeneratable
     {
         if (fieldOfViewRad <= 0f || radius <= 0 || numberOfHexagonRings < 1)
             return new Vector3[0];
-        
-        vertices = new Vector3[NumberOfVertices(numberOfHexagonRings)];
-        verticesIndex = 0;
 
+        InitializeVertices(numberOfHexagonRings);
         HexagonalVertices(fieldOfViewRad, radius, numberOfHexagonRings);
         CircularVertices(fieldOfViewRad, radius, numberOfHexagonRings);
 
         return vertices;
+    }
+
+    private void InitializeVertices(int numberOfHexagonRings)
+    {
+        verticesIndex = 0;
+        int numberOfVertices = NumberOfVertices(numberOfHexagonRings);
+        if (vertices == null || vertices.Count() != numberOfVertices)
+            vertices = new Vector3[numberOfVertices];
     }
 
     private int NumberOfVertices(int numberOfHexagonRings)
@@ -50,60 +57,60 @@ public partial class HexMeshVerticesGenerator : IHexMeshVerticesGeneratable
     private SphereAngles[] AnglesAtDepth(
         float fieldOfViewRad, int depthOfHex, int numberOfHexagonRings)
     {
-        var cornerAngles = CornerAnglesForDepth(fieldOfViewRad, depthOfHex, numberOfHexagonRings);
-        if (depthOfHex < 2)
-            return cornerAngles;
-        
-        return InsertEdgeAngles(cornerAngles, depthOfHex);
+        var angles = new SphereAngles[6 + 6 * (depthOfHex - 1)];
+        CornerAnglesForDepth(angles, fieldOfViewRad, depthOfHex, numberOfHexagonRings);
+        if (depthOfHex > 1)
+            InsertEdgeAngles(angles, depthOfHex);
+
+        return angles;
     }
 
-    private SphereAngles[] CornerAnglesForDepth(
-        float fieldOfViewRad, int depthOfHex, int numberOfHexagonRings)
+    private void CornerAnglesForDepth(
+        SphereAngles[] angles, float fieldOfViewRad, int depthOfHex, int numberOfHexagonRings)
     {
         float outerDeltaAlpha = depthOfHex / (float)numberOfHexagonRings * fieldOfViewRad / 2f;
         float innerDeltaAlpha = outerDeltaAlpha * RatioInnerToOuterRadius;
-        return new SphereAngles[] {
+
+        int i = 0;
+        new List<SphereAngles>() {
             new SphereAngles(-outerDeltaAlpha, 0f),
             new SphereAngles(-outerDeltaAlpha / 2, -innerDeltaAlpha),
             new SphereAngles(outerDeltaAlpha / 2, -innerDeltaAlpha),
             new SphereAngles(outerDeltaAlpha, 0f),
             new SphereAngles(outerDeltaAlpha / 2, innerDeltaAlpha),
             new SphereAngles(-outerDeltaAlpha / 2, innerDeltaAlpha)
-        };
+        }
+            .ForEach(x => angles[depthOfHex * i++] = x);
     }
 
-    private SphereAngles[] InsertEdgeAngles(SphereAngles[] cornerAngles, int depth)
+    private void InsertEdgeAngles(SphereAngles[] angles, int depth)
     {
-        var angles = new SphereAngles[cornerAngles.Count() + 6 * (depth - 1)];
-        for(int cornerIndex = 0; cornerIndex < cornerAngles.Count(); cornerIndex++)
+        for (int cornerIndex = 0; cornerIndex < 6; cornerIndex++)
         {
-            SphereAngles currentCorner = cornerAngles[cornerIndex];
-            SphereAngles nextCorner = cornerAngles[(cornerIndex + 1) % cornerAngles.Count()];
+            SphereAngles currentCorner = angles[cornerIndex * depth];
+            SphereAngles nextCorner = angles[((cornerIndex + 1) * depth) % angles.Count()];
             for (int i = 0; i < depth; i++)
-                angles[cornerIndex * depth + i] = 
+                angles[cornerIndex * depth + i] =
                     currentCorner + (i / (float)depth) * (nextCorner - currentCorner);
         }
-        return angles;
     }
 
     private void CircularVertices(float fieldOfViewRad, float radius, int numberOfHexagonRings)
     {
-        float radianBetweenPoints = 2 * Mathf.PI / (float)(6 * (1 + numberOfHexagonRings));
-        Vector3 cornerPointInPlaneZ = CornerAnglesForDepth(
-            fieldOfViewRad, numberOfHexagonRings, numberOfHexagonRings).First().Vertice(radius);
+        Vector3 cornerPointInPlaneZ = new SphereAngles(-fieldOfViewRad / 2f, 0f).Vertice(radius);
         float radiusInPlaneZ = Mathf.Abs(cornerPointInPlaneZ.y);
+        float radianBetweenPoints = 2 * Mathf.PI / (float)(6 * (1 + numberOfHexagonRings));
         for (int hexOffset = 0; hexOffset < 6; hexOffset++)
         {
             var currentAngle = hexOffset * Mathf.PI / 3f;
             for (int i = 0; i < numberOfHexagonRings; i++)
             {
                 currentAngle += radianBetweenPoints;
-                var a = new Vector3(
+                vertices[verticesIndex++] = new Vector3(
                     -radiusInPlaneZ * Mathf.Sin(currentAngle),
                     radiusInPlaneZ * Mathf.Cos(currentAngle),
                     cornerPointInPlaneZ.z
                 );
-                vertices[verticesIndex++] = a;
             }
         }
     }
