@@ -11,7 +11,7 @@ public class EnemyIOMono : MonoBehaviour
 
     private TextMesh textMesh;
     private Transform cooldownScaleParent;
-    private OutlineMono enemyOutline;
+    // private OutlineMono enemyOutline;
     
     void Awake()
     {
@@ -19,11 +19,11 @@ public class EnemyIOMono : MonoBehaviour
         cooldownScaleParent = GetComponentsInChildren<Transform>()
                                 .Where(x => x.CompareTag("ScaleParent"))
                                 .First();
-        enemyOutline = GetComponentInParent<EnemyMono>()
-                        .GetComponentsInChildren<Transform>()
-                        .Where(x => x.CompareTag("Model"))
-                        .First()
-                        .GetComponent<OutlineMono>();
+        // enemyOutline = GetComponentInParent<EnemyMono>()
+        //                 .GetComponentsInChildren<Transform>()
+        //                 .Where(x => x.CompareTag("Model"))
+        //                 .First()
+        //                 .GetComponent<OutlineMono>();
     }
 
     void Start()
@@ -31,7 +31,7 @@ public class EnemyIOMono : MonoBehaviour
         EnemyIO = new EnemyIO(
             eventsMono.EnemyEvents,
             textMesh,
-            enemyOutline,
+            // enemyOutline,
             kInactiveTextColor,
             kActiveTextColor,
             transform,

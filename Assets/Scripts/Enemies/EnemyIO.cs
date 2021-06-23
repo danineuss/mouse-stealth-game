@@ -24,7 +24,7 @@ public class EnemyIO : IEnemyIO
 {
     private IEnemyEvents enemyEvents;
     private TextMesh textMesh;
-    private OutlineMono enemyOutline;
+    // private OutlineMono enemyOutline;
     private readonly Color InactiveTextColor;
     private readonly Color ActiveTextColor;
     private Transform ioTransform;
@@ -32,12 +32,12 @@ public class EnemyIO : IEnemyIO
     private Transform playerFollowTransform;
     private Dictionary<IPlayerAbility, float> abilityCooldowns;
     private Guid enemyID;
-    private readonly float OutlineWidth = 10f;
+    // private readonly float OutlineWidth = 10f;
 
     public EnemyIO(
         IEnemyEvents enemyEvents,
         TextMesh textMesh,
-        OutlineMono enemyOutline,
+        // OutlineMono enemyOutline,
         Color inactiveTextColor,
         Color activeTextColor,
         Transform ioTransform,
@@ -45,7 +45,7 @@ public class EnemyIO : IEnemyIO
     {
         this.enemyEvents = enemyEvents;
         this.textMesh = textMesh;
-        this.enemyOutline = enemyOutline;
+        // this.enemyOutline = enemyOutline;
         this.InactiveTextColor = inactiveTextColor;
         this.ActiveTextColor = activeTextColor;
         this.ioTransform = ioTransform;
@@ -64,7 +64,7 @@ public class EnemyIO : IEnemyIO
     {
         textMesh.gameObject.SetActive(shouldDisplayText);
         cooldownScaleParent.gameObject.SetActive(shouldDisplayText);
-        enemyOutline.OutlineWidth = shouldDisplayText ? OutlineWidth : 0f;
+        // enemyOutline.OutlineWidth = shouldDisplayText ? OutlineWidth : 0f;
         playerFollowTransform = playerTransform;
     }
 
@@ -84,13 +84,9 @@ public class EnemyIO : IEnemyIO
     public void UpdateCooldownForAbility(IPlayerAbility ability)
     {
         if (abilityCooldowns.Keys.Contains(ability))
-        {
             abilityCooldowns[ability] = ability.CoolDown;
-        }
         else
-        {
             abilityCooldowns.Add(ability, ability.CoolDown);
-        }
     }
 
     public void SetEnemyID(Guid enemyID)
@@ -133,13 +129,9 @@ public class EnemyIO : IEnemyIO
             var newCooldown = abilityCooldowns[key] - Time.deltaTime;
             newCooldown = Mathf.Clamp(newCooldown, 0f, key.CoolDown);
             if (newCooldown == 0f)
-            {
                 textMesh.color = ActiveTextColor;
-            }
             else
-            {
                 textMesh.color = InactiveTextColor;
-            }
 
             var currentScale = cooldownScaleParent.localScale;
             cooldownScaleParent.localScale = new Vector3(
@@ -147,5 +139,6 @@ public class EnemyIO : IEnemyIO
             );
             abilityCooldowns[key] = newCooldown;
         }
+        keys = null;
     }
 }

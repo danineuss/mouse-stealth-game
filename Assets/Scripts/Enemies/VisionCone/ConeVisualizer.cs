@@ -26,7 +26,7 @@ public class ConeVisualizer : IConeVisualizer
     private MeshRenderer coneMeshRenderer;
     private Material greenMaterial;
     private Material blueMaterial;
-    private OutlineMono outline;
+    // private OutlineMono outline;
 
     private Light spotLight;
     private Color SpotLightGreen;
@@ -42,7 +42,7 @@ public class ConeVisualizer : IConeVisualizer
         MeshRenderer coneMeshRenderer,
         Material greenMaterial,
         Material blueMaterial,
-        OutlineMono outline,
+        // OutlineMono outline,
         Light spotLight,
         Color spotLightGreen,
         Color spotLightOrange,
@@ -57,7 +57,7 @@ public class ConeVisualizer : IConeVisualizer
         this.coneMeshRenderer = coneMeshRenderer;
         this.greenMaterial = greenMaterial;
         this.blueMaterial = blueMaterial;
-        this.outline = outline;
+        // this.outline = outline;
 
         this.spotLight = spotLight;
         this.SpotLightGreen = spotLightGreen;
@@ -88,7 +88,7 @@ public class ConeVisualizer : IConeVisualizer
             case SpotLightState.Idle:
                 spotLight.color = SpotLightGreen;
                 coneMeshRenderer.material = greenMaterial;
-                outline.OutlineColor = SpotLightGreen;
+                // outline.OutlineColor = SpotLightGreen;
                 break;
             case SpotLightState.Searching:
                 spotLight.color = Color.LerpUnclamped(
@@ -100,7 +100,7 @@ public class ConeVisualizer : IConeVisualizer
             case SpotLightState.Distracted:
                 spotLight.color = SpotLightBlue;
                 coneMeshRenderer.material = blueMaterial;
-                outline.OutlineColor = SpotLightBlue;
+                // outline.OutlineColor = SpotLightBlue;
                 break;
         }
     }

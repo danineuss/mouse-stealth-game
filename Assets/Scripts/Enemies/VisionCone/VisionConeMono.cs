@@ -32,7 +32,7 @@ public class VisionConeMono: MonoBehaviour
     {
         var spotLight = GetComponentInChildren<Light>();
         var coneMeshRenderer = GetComponentInChildren<MeshRenderer>();
-        var coneOutline = GetComponentInChildren<OutlineMono>();
+        // var coneOutline = GetComponentInChildren<OutlineMono>();
         var coneScaleParent = GetComponentsInChildren<Transform>()
                                 .Where(x => x.CompareTag("ScaleParent"))
                                 .First();
@@ -47,7 +47,7 @@ public class VisionConeMono: MonoBehaviour
             coneMeshRenderer,
             greenMaterial,
             blueMaterial,
-            coneOutline,
+            // coneOutline,
             spotLight,
             kSpotLightGreen,
             kSpotLightOrange,

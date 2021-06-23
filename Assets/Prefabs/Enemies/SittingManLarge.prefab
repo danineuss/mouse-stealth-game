@@ -525,7 +525,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4416090592457445931}
-  - component: {fileID: 198293953208393967}
   m_Layer: 0
   m_Name: Model
   m_TagString: Model
@@ -548,24 +547,6 @@ Transform:
   m_Father: {fileID: 4899786783182166119}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -44}
---- !u!114 &198293953208393967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4661630583969337526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ddc6a9f68d70834abbd933c69b1c60a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 10
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &5658285554190750162
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,7 +836,8 @@ PrefabInstance:
       propertyPath: controlPointsMono
       value: 
       objectReference: {fileID: 2651617555995060777}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 499238819, guid: 7b035256d4c924a4481e4e5892135f4b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7b035256d4c924a4481e4e5892135f4b, type: 3}
 --- !u!4 &8625671780765916035 stripped
 Transform:
