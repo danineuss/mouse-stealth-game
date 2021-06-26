@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlayerVM: IUpdatable, ILateUpdatable, ITriggerEnterable
-{
-}
+public interface IPlayerVM: IUpdatable, ILateUpdatable {}
 
 public class PlayerVM : IPlayerVM
 {
@@ -57,7 +55,7 @@ public class PlayerVM : IPlayerVM
     {
         ApplyPlayerAbilityInput();
         playerInput.HandleGenericPlayerInput();
-        characterController.MoveCharacter();
+        characterController.UpdateCharacterPosition();
     }
 
     void ApplyPlayerAbilityInput()
@@ -75,12 +73,6 @@ public class PlayerVM : IPlayerVM
     public void LateUpdate()
     {
         cameraController.RotateForPlayerInput();
-        characterController.RestrictCharacterMovement();
-    }
-
-    public void OnTriggerEnter(Collider collider)
-    {
-        characterController.OnTriggerEnter(collider);
     }
 
     void OnCursorEnterEnemy(Guid enemyID)

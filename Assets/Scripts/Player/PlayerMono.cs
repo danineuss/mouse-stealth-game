@@ -4,7 +4,11 @@ using UnityEngine;
 public class PlayerMono: MonoBehaviour 
 {
     [SerializeField] private EventsMono eventsMono = null;
-    [SerializeField] private float movementSpeed = 0f;
+    [SerializeField] private float minMovementSpeed = 0f;
+    [SerializeField] private float maxMovementSpeed = 0f;
+    [SerializeField] private float radiusStartSpeedDecrease = 0f;
+    [SerializeField] private float radiusStartFear = 0f;
+    [SerializeField] private LayerMask safeRoomObjectsLayerMask = new LayerMask();
     [SerializeField] private float rotationSpeed = 0f;
     public PlayerVM PlayerVM => playerVM;
 
@@ -21,8 +25,16 @@ public class PlayerMono: MonoBehaviour
         var cameraController = new FirstPersonCameraController(
             transform, cameraTransform, playerInput, rotationSpeed
         );
+        
         var characterController = new FirstPersonCharacterController(
-            transform, playerInput, movementSpeed
+            transform, 
+            minMovementSpeed, 
+            maxMovementSpeed,
+            radiusStartSpeedDecrease,
+            radiusStartFear,
+            safeRoomObjectsLayerMask,
+            playerInput,
+            eventsMono.PlayerEvents
         );
 
         playerVM = new PlayerVM(
@@ -45,10 +57,14 @@ public class PlayerMono: MonoBehaviour
     void LateUpdate() 
     {
         playerVM.LateUpdate();
-    }   
+    }
 
-    void OnTriggerEnter(Collider collider) 
+    void OnDrawGizmos()
     {
-        playerVM.OnTriggerEnter(collider);
+        Gizmos.color = new Color(1, 0, 0);
+        Gizmos.DrawWireSphere(transform.position, radiusStartFear);
+
+        Gizmos.color = new Color(0.9f, 0.4f, 0.4f);
+        Gizmos.DrawWireSphere(transform.position, radiusStartSpeedDecrease);
     }
 }

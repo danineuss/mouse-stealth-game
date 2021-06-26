@@ -7,9 +7,11 @@ public interface IPlayerEvents
     event Action<IPlayerAbility> OnAbilityLearned;
     event Action<Guid, float> OnEnemyDistracted;
     event Action OnPauseButtonPressed;
+    event Action<bool> OnCharacterInCoverChanged;
     event Action<Guid> OnPlayerLocationRemoved;
     event Action<Guid, bool, Transform> OnPlayerLocationSent;
 
+    void ChangeCharacterInCover(bool newValue);
     void DistractEnemy(Guid enemyID, float distractionDuration);
     void ExecuteAbility(IPlayerAbility ability);
     void LearnAbility(IPlayerAbility ability);
@@ -22,10 +24,19 @@ public class PlayerEvents : IPlayerEvents
 {
     public event Action<IPlayerAbility> OnAbilityExecuted;
     public event Action<IPlayerAbility> OnAbilityLearned;
+    public event Action<bool> OnCharacterInCoverChanged;
     public event Action<Guid, float> OnEnemyDistracted;
     public event Action OnPauseButtonPressed;
     public event Action<Guid> OnPlayerLocationRemoved;
     public event Action<Guid, bool, Transform> OnPlayerLocationSent;
+
+    public void ChangeCharacterInCover(bool newValue)
+    {
+        if (OnCharacterInCoverChanged == null)
+            return;
+        
+        OnCharacterInCoverChanged(newValue);
+    }
 
     public void DistractEnemy(Guid enemyID, float distractionDuration)
     {
