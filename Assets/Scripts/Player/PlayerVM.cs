@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPlayerVM: IUpdatable, ILateUpdatable, ITriggerEnterable
-{
-}
+public interface IPlayerVM: IUpdatable, ILateUpdatable {}
 
 public class PlayerVM : IPlayerVM
 {
@@ -12,6 +10,8 @@ public class PlayerVM : IPlayerVM
     private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
+    private IPanicMeter panicMeter;
+    private IPanicNoiseEmitter panicNoiseEmitter;
     private IPlayerAbilities playerAbilities;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
@@ -24,6 +24,8 @@ public class PlayerVM : IPlayerVM
         IFirstPersonCharacterController characterController,
         IPlayerInput playerInput,
         IPlayerAbilities playerAbilities,
+        IPanicMeter panicMeter,
+        IPanicNoiseEmitter panicNoiseEmitter,
         IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents,
         ISceneEvents sceneEvents)
@@ -33,6 +35,8 @@ public class PlayerVM : IPlayerVM
         this.characterController = characterController;
         this.playerInput = playerInput;
         this.playerAbilities = playerAbilities;
+        this.panicMeter = panicMeter;
+        this.panicNoiseEmitter = panicNoiseEmitter;
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;
@@ -57,7 +61,8 @@ public class PlayerVM : IPlayerVM
     {
         ApplyPlayerAbilityInput();
         playerInput.HandleGenericPlayerInput();
-        characterController.MoveCharacter();
+        characterController.UpdateCharacterPosition();
+        panicMeter.UpdatePanicLevel();
     }
 
     void ApplyPlayerAbilityInput()
@@ -75,12 +80,6 @@ public class PlayerVM : IPlayerVM
     public void LateUpdate()
     {
         cameraController.RotateForPlayerInput();
-        characterController.RestrictCharacterMovement();
-    }
-
-    public void OnTriggerEnter(Collider collider)
-    {
-        characterController.OnTriggerEnter(collider);
     }
 
     void OnCursorEnterEnemy(Guid enemyID)

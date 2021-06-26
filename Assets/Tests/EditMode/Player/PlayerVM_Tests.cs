@@ -13,6 +13,8 @@ namespace Tests
         private IFirstPersonCharacterController characterController;
         private IPlayerInput playerInput;
         private IPlayerAbilities playerAbilities;
+        private IPanicMeter panicMeter;
+        private IPanicNoiseEmitter panicNoiseEmitter;
         private IPlayerEvents playerEvents;
         private IEnemyEvents enemyEvents;
         private ISceneEvents sceneEvents;
@@ -24,6 +26,8 @@ namespace Tests
             characterController = Substitute.For<IFirstPersonCharacterController>();
             playerInput = Substitute.For<IPlayerInput>();
             playerAbilities = Substitute.For<IPlayerAbilities>();
+            panicMeter = Substitute.For<IPanicMeter>();
+            panicNoiseEmitter = Substitute.For<IPanicNoiseEmitter>();
             playerEvents = Substitute.For<IPlayerEvents>();
             enemyEvents = Substitute.For<IEnemyEvents>();
             sceneEvents = Substitute.For<ISceneEvents>(); 
@@ -38,6 +42,8 @@ namespace Tests
                 characterController,
                 playerInput,
                 playerAbilities,
+                panicMeter,
+                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -53,6 +59,8 @@ namespace Tests
                 characterController,
                 playerInput,
                 playerAbilities,
+                panicMeter,
+                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -146,6 +154,8 @@ namespace Tests
                 characterController,
                 playerInput,
                 playerAbilities,
+                panicMeter,
+                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -162,6 +172,8 @@ namespace Tests
                 characterController,
                 playerInput,
                 playerAbilities,
+                panicMeter,
+                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents

@@ -3,6 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
+using System.Linq;
+
+public class PanicSound
+{
+    public string Name { get; private set; }
+
+    private PanicSound(string name) { Name = name; }
+
+    public static PanicSound ScaredOne => new PanicSound("ScaredOne");
+    public static PanicSound ScaredTwo => new PanicSound("ScaredTwo");
+    public static PanicSound ScaredThree => new PanicSound("ScaredThree");
+    public static PanicSound Panicking => new PanicSound("Panicking");
+}
 
 public class EnemySound
 {
@@ -16,26 +29,30 @@ public class EnemySound
     public static EnemySound Alarmed => new EnemySound("Alarmed");
 }
 
-public class AudioVM : MonoBehaviour {
-    [SerializeField] private PlayerMono playerMono = null;
+public interface IAudioVM
+{
+    Sound SoundWithName(string name);
+}
+
+public class AudioVM : MonoBehaviour, IAudioVM
+{
+    [SerializeField] private SoundEmitter musicSoundEmitter = null;
     [SerializeField] private List<Sound> Sounds = null;
 
-    private SoundEmitter playerSoundEmitter;
 
-    public Sound SoundWithName(string name) {
+    public Sound SoundWithName(string name)
+    {
         return Sounds.Find(s => s.Name == name);
     }
 
-    void Awake() {
-        playerSoundEmitter = playerMono.GetComponentInChildren<SoundEmitter>();
-    }
-
-    void Start() {
+    void Start()
+    {
         PlayThemeMusic();
     }
 
-    void PlayThemeMusic() {
+    void PlayThemeMusic()
+    {
         Sound theme = SoundWithName("Theme");
-        playerSoundEmitter.PlaySound(theme);
+        musicSoundEmitter.PlaySound(theme);
     }
 }

@@ -3,31 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMono_Mock : MonoBehaviour {
-    public IEnemyEvents EnemyEvents;
-    public IPlayerEvents PlayerEvents;
-    public float MovementSpeed;
-    public float RotationSpeed;
     public PlayerVM PlayerVM;
 
     public static GameObject Dummy(IPlayerInput playerInput)
     {
+        return Dummy(playerInput, null);
+    }
+
+    public static GameObject Dummy(IPanicMeter panicMeter, IPlayerEvents playerEvents = null)
+    {
+        return Dummy(null, playerEvents, panicMeter);
+    }
+
+    public static GameObject Dummy(
+        IPlayerInput playerInput = null, 
+        IPlayerEvents playerEvents = null,
+        IPanicMeter panicMeter = null,
+        float? minMovementSpeed = null, 
+        float? maxMovementSpeed = null,
+        float? radiusStartSpeedDecrease = null,
+        float? radiusStartFear = null,
+        LayerMask? safeRoomObjectsLayerMask = null)
+    {
         GameObject playerGameObject = new GameObject("Player");
         var playerMono = playerGameObject.AddComponent<PlayerMono_Mock>();
+        var defaultPlayerInput = Substitute.For<IPlayerInput>();
         var cameraController = Substitute.For<IFirstPersonCameraController>();
         var playerAbilities = Substitute.For<IPlayerAbilities>();
         playerAbilities.Abilities.Returns(new Dictionary<KeyCode, IPlayerAbility>());
-        var playerEvents = Substitute.For<IPlayerEvents>();
+        var defaultPanicMeter = Substitute.For<IPanicMeter>();
+        var panicNoiseEmitter = Substitute.For<IPanicNoiseEmitter>();
+        var defaultPlayerEvents = Substitute.For<IPlayerEvents>();
         var enemyEvents = Substitute.For<IEnemyEvents>();
         var sceneEvents = Substitute.For<ISceneEvents>(); 
 
-        var characterController = new FirstPersonCharacterController(playerGameObject.transform, playerInput, 1f);
+        var characterController = new FirstPersonCharacterController(
+            playerGameObject.transform, 
+            minMovementSpeed ?? 1f, 
+            maxMovementSpeed ?? 1f,
+            radiusStartSpeedDecrease ?? 1f,
+            radiusStartFear ?? 2f,
+            safeRoomObjectsLayerMask ?? new LayerMask(),
+            playerInput ?? defaultPlayerInput, 
+            playerEvents ?? defaultPlayerEvents
+        );
+
         playerMono.PlayerVM = new PlayerVM(
             playerGameObject.transform, 
             cameraController, 
             characterController,
-            playerInput,
+            playerInput ?? defaultPlayerInput,
             playerAbilities, 
-            playerEvents,
+            panicMeter ?? defaultPanicMeter,
+            panicNoiseEmitter,
+            playerEvents ?? defaultPlayerEvents,
             enemyEvents,
             sceneEvents
         );
@@ -43,10 +72,5 @@ public class PlayerMono_Mock : MonoBehaviour {
     void LateUpdate()
     {
         PlayerVM.LateUpdate();
-    }
-
-    public void OnTriggerEnter(Collider collider) 
-    {
-        PlayerVM.OnTriggerEnter(collider);
     }
 }
