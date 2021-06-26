@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerMono: MonoBehaviour 
 {
     [SerializeField] private EventsMono eventsMono = null;
+    [SerializeField] private AudioVM audioVM = null;
+    [SerializeField] private SoundEmitter soundEmitter = null;
     [SerializeField] private float minMovementSpeed = 0f;
     [SerializeField] private float maxMovementSpeed = 0f;
     [SerializeField] private float radiusStartSpeedDecrease = 0f;
@@ -41,6 +43,8 @@ public class PlayerMono: MonoBehaviour
 
         var panicMeter = 
             new PanicMeter(panicEscalationSpeed, panicDeescalationSpeed, eventsMono.PlayerEvents);
+        var panicNoiseEmitter = new PanicNoiseEmitter(eventsMono.PlayerEvents, soundEmitter, audioVM);
+
         playerVM = new PlayerVM(
             gameObject.transform, 
             cameraController, 
@@ -48,6 +52,7 @@ public class PlayerMono: MonoBehaviour
             playerInput, 
             playerAbilities, 
             panicMeter,
+            panicNoiseEmitter,
             eventsMono.PlayerEvents, 
             eventsMono.EnemyEvents,
             eventsMono.SceneEvents

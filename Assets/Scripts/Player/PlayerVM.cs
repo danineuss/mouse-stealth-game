@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,7 @@ public class PlayerVM : IPlayerVM
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
     private IPanicMeter panicMeter;
+    private IPanicNoiseEmitter panicNoiseEmitter;
     private IPlayerAbilities playerAbilities;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
@@ -24,6 +25,7 @@ public class PlayerVM : IPlayerVM
         IPlayerInput playerInput,
         IPlayerAbilities playerAbilities,
         IPanicMeter panicMeter,
+        IPanicNoiseEmitter panicNoiseEmitter,
         IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents,
         ISceneEvents sceneEvents)
@@ -34,6 +36,7 @@ public class PlayerVM : IPlayerVM
         this.playerInput = playerInput;
         this.playerAbilities = playerAbilities;
         this.panicMeter = panicMeter;
+        this.panicNoiseEmitter = panicNoiseEmitter;
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;

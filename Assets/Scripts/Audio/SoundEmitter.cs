@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 
-public class SoundEmitter : MonoBehaviour {
+public interface ISoundEmitter
+{
+    void PlaySound(Sound sound);
+}
+
+public class SoundEmitter : MonoBehaviour, ISoundEmitter
+{
     private AudioSource audioSource;
 
-    void Awake() {
+    void Awake()
+    {
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void PlaySound(Sound sound) {
+    public void PlaySound(Sound sound)
+    {
         audioSource.clip = sound.Clip;
         audioSource.volume = sound.Volume;
         audioSource.loop = sound.Loop;

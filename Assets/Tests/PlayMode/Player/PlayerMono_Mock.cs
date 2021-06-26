@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +32,7 @@ public class PlayerMono_Mock : MonoBehaviour {
         var playerAbilities = Substitute.For<IPlayerAbilities>();
         playerAbilities.Abilities.Returns(new Dictionary<KeyCode, IPlayerAbility>());
         var defaultPanicMeter = Substitute.For<IPanicMeter>();
+        var panicNoiseEmitter = Substitute.For<IPanicNoiseEmitter>();
         var defaultPlayerEvents = Substitute.For<IPlayerEvents>();
         var enemyEvents = Substitute.For<IEnemyEvents>();
         var sceneEvents = Substitute.For<ISceneEvents>(); 
@@ -54,6 +55,7 @@ public class PlayerMono_Mock : MonoBehaviour {
             playerInput ?? defaultPlayerInput,
             playerAbilities, 
             panicMeter ?? defaultPanicMeter,
+            panicNoiseEmitter,
             playerEvents ?? defaultPlayerEvents,
             enemyEvents,
             sceneEvents
