@@ -15,7 +15,8 @@ namespace Tests
         public void should_be_empty_if_initialized_emptily() 
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
-            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+            var playerAbilities = 
+                new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
             var relevantAbilities = playerAbilities.RelevantAbilities;
             var relevantKeyPresses = playerAbilities.RelevantKeyPresses;
@@ -45,7 +46,8 @@ namespace Tests
         public void should_show_abilities_after_having_learned_them() 
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
-            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+            var playerAbilities = 
+                new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
             playerAbilities.LearnAbility(firstAbility);
 
@@ -60,7 +62,8 @@ namespace Tests
         public void should_not_learn_ability_twice()
         {
              var playerEvents = Substitute.For<IPlayerEvents>();
-            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+            var playerAbilities = 
+                new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
             playerAbilities.LearnAbility(firstAbility);
             playerAbilities.LearnAbility(firstAbility);
@@ -90,7 +93,8 @@ namespace Tests
         public void should_not_fire_event_if_no_ability_learned()
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
-            var playerAbilities = new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
+            var playerAbilities = 
+                new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
             playerAbilities.ExecuteAbility(firstAbility, Guid.Empty);
 
