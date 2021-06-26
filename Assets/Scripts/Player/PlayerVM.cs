@@ -10,6 +10,7 @@ public class PlayerVM : IPlayerVM
     private IPlayerInput playerInput;
     private IFirstPersonCameraController cameraController;
     private IFirstPersonCharacterController characterController;
+    private IPanicMeter panicMeter;
     private IPlayerAbilities playerAbilities;
     private IPlayerEvents playerEvents;
     private IEnemyEvents enemyEvents;
@@ -22,6 +23,7 @@ public class PlayerVM : IPlayerVM
         IFirstPersonCharacterController characterController,
         IPlayerInput playerInput,
         IPlayerAbilities playerAbilities,
+        IPanicMeter panicMeter,
         IPlayerEvents playerEvents,
         IEnemyEvents enemyEvents,
         ISceneEvents sceneEvents)
@@ -31,6 +33,7 @@ public class PlayerVM : IPlayerVM
         this.characterController = characterController;
         this.playerInput = playerInput;
         this.playerAbilities = playerAbilities;
+        this.panicMeter = panicMeter;
         this.playerEvents = playerEvents;
         this.enemyEvents = enemyEvents;
         this.sceneEvents = sceneEvents;
@@ -56,6 +59,7 @@ public class PlayerVM : IPlayerVM
         ApplyPlayerAbilityInput();
         playerInput.HandleGenericPlayerInput();
         characterController.UpdateCharacterPosition();
+        panicMeter.UpdatePanicLevel();
     }
 
     void ApplyPlayerAbilityInput()

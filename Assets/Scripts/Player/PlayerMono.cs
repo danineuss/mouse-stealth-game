@@ -8,6 +8,8 @@ public class PlayerMono: MonoBehaviour
     [SerializeField] private float maxMovementSpeed = 0f;
     [SerializeField] private float radiusStartSpeedDecrease = 0f;
     [SerializeField] private float radiusStartFear = 0f;
+    [SerializeField] private float panicEscalationSpeed = 0f;
+    [SerializeField] private float panicDeescalationSpeed = 0f;
     [SerializeField] private LayerMask safeRoomObjectsLayerMask = new LayerMask();
     [SerializeField] private float rotationSpeed = 0f;
     public PlayerVM PlayerVM => playerVM;
@@ -37,12 +39,15 @@ public class PlayerMono: MonoBehaviour
             eventsMono.PlayerEvents
         );
 
+        var panicMeter = 
+            new PanicMeter(panicEscalationSpeed, panicDeescalationSpeed, eventsMono.PlayerEvents);
         playerVM = new PlayerVM(
             gameObject.transform, 
             cameraController, 
             characterController, 
             playerInput, 
             playerAbilities, 
+            panicMeter,
             eventsMono.PlayerEvents, 
             eventsMono.EnemyEvents,
             eventsMono.SceneEvents

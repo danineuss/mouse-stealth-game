@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,11 +38,12 @@ public class SceneVM: ISceneVM
 
     void InitializeEvents()
     {
-        sceneEvents.OnDialogOpened += ToggleDialogOpen;
-        sceneEvents.OnDialogClosed += ToggleDialogOpen;
-        sceneEvents.OnGameRestarted += RestartGame;
+        sceneEvents.OnDialogOpened += OnDialogToggled;
+        sceneEvents.OnDialogClosed += OnDialogToggled;
+        sceneEvents.OnGameRestarted += OnGameRestarted;
 
-        playerEvents.OnPauseButtonPressed += HandlePauseButtonPressed;
+        playerEvents.OnPauseButtonPressed += OnPauseButtonPressed;
+        playerEvents.OnCharacterPanicked += OnCharacterPanicked;
         
         enemyEvents.OnGameFailed += FailGame;
     }
@@ -57,17 +59,22 @@ public class SceneVM: ISceneVM
         Time.timeScale = paused ? 0f : 1f;
     }
 
-    void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    void ToggleDialogOpen(IDialogVM dialogVM)
+    void OnDialogToggled(IDialogVM dialogVM)
     {
         sceneState.ToggleDialogOpen();
     }
 
-    void HandlePauseButtonPressed()
+    void OnGameRestarted()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void OnCharacterPanicked()
+    {
+        enemyEvents.FailGame();
+    }
+
+    void OnPauseButtonPressed()
     {
         sceneState.ToggleGamePaused();
     }

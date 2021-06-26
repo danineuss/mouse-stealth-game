@@ -31,6 +31,7 @@ public class PlayerMono_Mock : MonoBehaviour {
         var cameraController = Substitute.For<IFirstPersonCameraController>();
         var playerAbilities = Substitute.For<IPlayerAbilities>();
         playerAbilities.Abilities.Returns(new Dictionary<KeyCode, IPlayerAbility>());
+        var defaultPanicMeter = Substitute.For<IPanicMeter>();
         var defaultPlayerEvents = Substitute.For<IPlayerEvents>();
         var enemyEvents = Substitute.For<IEnemyEvents>();
         var sceneEvents = Substitute.For<ISceneEvents>(); 
@@ -52,6 +53,7 @@ public class PlayerMono_Mock : MonoBehaviour {
             characterController,
             playerInput ?? defaultPlayerInput,
             playerAbilities, 
+            panicMeter ?? defaultPanicMeter,
             playerEvents ?? defaultPlayerEvents,
             enemyEvents,
             sceneEvents
