@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public interface IPlayerAbility {
+public interface IPlayerAbility: IEquatable<IPlayerAbility> {
     KeyCode AssociatedKey { get; }
     float CoolDown { get; }
 

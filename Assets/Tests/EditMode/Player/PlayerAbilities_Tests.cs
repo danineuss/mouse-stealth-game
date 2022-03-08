@@ -61,7 +61,7 @@ namespace Tests
         [Test]
         public void should_not_learn_ability_twice()
         {
-             var playerEvents = Substitute.For<IPlayerEvents>();
+            var playerEvents = Substitute.For<IPlayerEvents>();
             var playerAbilities = 
                 new PlayerAbilities(playerEvents, new Dictionary<KeyCode, IPlayerAbility>());
 
