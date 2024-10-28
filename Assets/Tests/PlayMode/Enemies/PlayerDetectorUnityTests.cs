@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Enemies.Detection;
 using Enemies.VisionCone;
@@ -7,18 +6,18 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Enemies
 {
-    public class PlayerDetector_UnityTests
+    public class PlayerDetectorUnityTests
     {
-        private GameObject gameObject = new GameObject("PlayerDetector");
+        private readonly GameObject gameObject = new GameObject("PlayerDetector");
         private MonoBehaviour_Mock playerDetectorMono_Mock;
         private PlayerDetector playerDetector;
         private IVisionConeViewModel visionConeViewModel;
         private EventsMono_Mock eventsMono;
-        private float DetectionEscalationSpeed = 5f;
-        private float DetectionDeescalationSpeed = 5f;
-        private float distractionDuration = 0.1f;
+        private readonly float DetectionEscalationSpeed = 5f;
+        private readonly float DetectionDeescalationSpeed = 5f;
+        private readonly float distractionDuration = 0.1f;
 
         private void SetupPlayerDetector()
         {

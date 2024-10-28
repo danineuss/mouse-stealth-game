@@ -9,9 +9,9 @@ using UI;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Scene
 {
-    public class SceneViewModel_UnityTests
+    public class SceneViewModelUnityTests
     {
         private IPlayerViewModel playerViewModel;
         private IPlayerEvents playerEvents;

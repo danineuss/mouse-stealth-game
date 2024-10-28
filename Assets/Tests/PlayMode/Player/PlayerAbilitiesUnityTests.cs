@@ -2,16 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NSubstitute;
-using NUnit.Framework;
 using Player;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Player
 {
-    public class PlayerAbilities_UnityTests
+    public class PlayerAbilitiesUnityTests
     {
-        private IPlayerAbility firstAbility = new DummyAbility(KeyCode.A, 1f);
+        private readonly IPlayerAbility firstAbility = new DummyAbility(KeyCode.A, 1f);
 
         [UnityTest]
         public IEnumerator should_fire_ability_a_second_time_only_after_delay()

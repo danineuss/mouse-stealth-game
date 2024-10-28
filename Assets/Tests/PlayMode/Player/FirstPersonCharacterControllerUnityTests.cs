@@ -5,12 +5,12 @@ using Player;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Player
 {
-    public class FirstPersonCharacterController_UnityTests
+    public class FirstPersonCharacterControllerUnityTests
     {
-        private float minimumSpeed = 0.5f;
-        private float maximumSpeed = 2.0f;
+        private readonly float minimumSpeed = 0.5f;
+        private readonly float maximumSpeed = 2.0f;
         private readonly LayerMask safeRoomObjectsLayer = 8;
         private readonly float FloatingPointDelta = 0.005f;
 
@@ -29,7 +29,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput);
             
             yield return new WaitForSeconds(0.2f);
 
@@ -45,7 +45,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(-1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput);
             
             yield return new WaitForSeconds(0.2f);
 
@@ -61,7 +61,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Horizontal.Returns(1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput);
             
             yield return new WaitForSeconds(0.2f);
 
@@ -77,7 +77,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Horizontal.Returns(-1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput);
             
             yield return new WaitForSeconds(0.2f);
 
@@ -93,7 +93,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput, null, null, minimumSpeed, maximumSpeed);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput, null, null, minimumSpeed, maximumSpeed);
             float startTime = Time.time;
 
             yield return new WaitForSeconds(0.2f);
@@ -113,7 +113,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(
+            var playerGameObject = PlayerMonoMock.Dummy(
                 playerInput, null, null, minimumSpeed, maximumSpeed, 0.5f, 2f, 1<<safeRoomObjectsLayer);
             var safeObject = SetupSafeRoomObject(
                 new Vector3(1f, 1f, 10f),
@@ -139,7 +139,7 @@ namespace Tests
         {
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Vertical.Returns(1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(
+            var playerGameObject = PlayerMonoMock.Dummy(
                 playerInput, null, null, minimumSpeed, maximumSpeed, 0.5f, 2f, 1<<safeRoomObjectsLayer);
             var safeObject = SetupSafeRoomObject(
                 new Vector3(1f, 1f, 10f),
@@ -165,7 +165,7 @@ namespace Tests
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
             var playerInput = Substitute.For<IPlayerInput>();
-            var playerGameObject = PlayerMono_Mock.Dummy(playerInput, playerEvents);
+            var playerGameObject = PlayerMonoMock.Dummy(playerInput, playerEvents);
             float startTime = Time.time;
 
             yield return null;
@@ -180,7 +180,7 @@ namespace Tests
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
             var playerInput = Substitute.For<IPlayerInput>();
-            var playerGameObject = PlayerMono_Mock.Dummy(
+            var playerGameObject = PlayerMonoMock.Dummy(
                 playerInput, playerEvents, null, null, null, null, null, 1<<safeRoomObjectsLayer);
             var safeObject = SetupSafeRoomObject(
                 new Vector3(1f, 1f, 10f),
@@ -203,7 +203,7 @@ namespace Tests
             var playerEvents = Substitute.For<IPlayerEvents>();
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.Horizontal.Returns(-1f);
-            var playerGameObject = PlayerMono_Mock.Dummy(
+            var playerGameObject = PlayerMonoMock.Dummy(
                 playerInput, playerEvents, null, null, null, 0.5f, 0.6f, 1<<safeRoomObjectsLayer);
             var safeObject = SetupSafeRoomObject(
                 new Vector3(1f, 1f, 10f),

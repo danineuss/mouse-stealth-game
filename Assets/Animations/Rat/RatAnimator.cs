@@ -1,12 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RatAnimator : MonoBehaviour
+namespace Animations.Rat
 {
-	[SerializeField] Animator anim = null;
-	public void SetMoveSpeed(float speed)
+	public class RatAnimator : MonoBehaviour
 	{
-		anim.SetFloat("Speed", speed);
+		[SerializeField] Animator anim;
+	
+		private static readonly int Speed = Animator.StringToHash("Speed");
+
+		public void SetMoveSpeed(float speed)
+		{
+			anim.SetFloat(Speed, speed);
+		}
 	}
 }

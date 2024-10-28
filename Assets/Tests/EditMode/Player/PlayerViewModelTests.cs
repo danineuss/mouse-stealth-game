@@ -11,9 +11,9 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class PlayerViewModel_Tests
+    public class PlayerViewModelTests
     {
-        private GameObject gameObject = new GameObject("Player");
+        private readonly GameObject gameObject = new GameObject("Player");
         private IFirstPersonCameraController cameraController;
         private IFirstPersonCharacterController characterController;
         private IPlayerInput playerInput;

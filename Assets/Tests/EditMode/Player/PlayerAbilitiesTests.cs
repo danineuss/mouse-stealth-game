@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class PlayerAbilities_Tests
+    public class PlayerAbilitiesTests
     {
-        private IPlayerAbility firstAbility = new DummyAbility(KeyCode.A, 1f);
-        private IPlayerAbility secondAbility = new DummyAbility(KeyCode.F, 2f);
+        private readonly IPlayerAbility firstAbility = new DummyAbility(KeyCode.A, 1f);
+        private readonly IPlayerAbility secondAbility = new DummyAbility(KeyCode.F, 2f);
         
         [Test]
         public void should_be_empty_if_initialized_emptily() 

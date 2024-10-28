@@ -16,7 +16,7 @@ namespace Infrastructure
   [DisallowMultipleComponent]
 
   public class OutlineMono : MonoBehaviour {
-    private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
+    private static readonly HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
     public enum Mode {
       OutlineAll,

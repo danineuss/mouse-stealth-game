@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Audio;
 using NSubstitute;
-using NUnit.Framework;
 using Player;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Audio
 {
-    public class PanicNoiseEmitter_UnityTests
+    public class PanicNoiseEmitterUnityTests
     {
-        private PlayerEvents playerEvents = new PlayerEvents();
+        private readonly PlayerEvents playerEvents = new PlayerEvents();
 
-        private AudioClip audioClip = AudioClip.Create("mockClip", 1000, 1, 1000, false);
+        private readonly AudioClip audioClip = AudioClip.Create("mockClip", 1000, 1, 1000, false);
         private Sound panickedSound;
         private IAudioViewModel SetupAudioVMSubstitute()
         {

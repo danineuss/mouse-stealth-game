@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Tests 
 {
-    public class FirstPersonCameraController_Tests 
+    public class FirstPersonCameraControllerTests 
     {
         private FirstPersonCameraController cameraController;
         private Transform playerTransform;
         private Transform cameraTransform;
-        private float floatingPointDelta = 0.001f;
+        private readonly float floatingPointDelta = 0.001f;
 
         private void SetupCameraController(IPlayerInput playerInput, float movementSpeed) 
         {
