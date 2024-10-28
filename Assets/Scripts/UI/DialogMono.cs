@@ -1,20 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogMono: MonoBehaviour 
+namespace UI
 {
-    [SerializeField] private UICoordinator uiCoordinator = null;
-    [SerializeField] private List<GameObject> screens = null;
-    public IDialogVM DialogVM => dialogVM;
-    private IDialogVM dialogVM;
-
-    void Awake() 
+    public class DialogMono: MonoBehaviour 
     {
-        dialogVM = new DialogVM(screens, uiCoordinator, gameObject);
-    }
+        [SerializeField] private UICoordinator uiCoordinator = null;
+        [SerializeField] private List<GameObject> screens = null;
+        public IDialogVM DialogVM => dialogVM;
+        private IDialogVM dialogVM;
 
-    public void IterateScreens()
-    {
-        dialogVM.IterateScreens();
+        void Awake() 
+        {
+            dialogVM = new DialogVM(screens, uiCoordinator, gameObject);
+        }
+
+        public void IterateScreens()
+        {
+            dialogVM.IterateScreens();
+        }
     }
 }

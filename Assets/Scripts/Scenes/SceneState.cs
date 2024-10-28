@@ -1,76 +1,79 @@
 using System;
 using UnityEngine;
 
-public abstract class SceneState
+namespace Scenes
 {
-    protected ISceneVM sceneVM;
-
-    public void SetSceneVM(ISceneVM sceneVM)
+    public abstract class SceneState
     {
-        this.sceneVM = sceneVM;
-    }
-    public abstract void BroadcastSceneState(ISceneEvents sceneEvents);
-    public abstract void ToggleDialogOpen();
-    public abstract void ToggleGamePaused();
-}
+        protected ISceneVM sceneVM;
 
-public class SceneStateIdle : SceneState
-{
-    public override void BroadcastSceneState(ISceneEvents sceneEvents)
-    {
-        sceneEvents.PauseGame(false);
+        public void SetSceneVM(ISceneVM sceneVM)
+        {
+            this.sceneVM = sceneVM;
+        }
+        public abstract void BroadcastSceneState(ISceneEvents sceneEvents);
+        public abstract void ToggleDialogOpen();
+        public abstract void ToggleGamePaused();
     }
 
-    public override void ToggleDialogOpen()
+    public class SceneStateIdle : SceneState
     {
-        sceneVM.PauseGame(true);
-        sceneVM.TransitionTo(new SceneStateInDialog());
+        public override void BroadcastSceneState(ISceneEvents sceneEvents)
+        {
+            sceneEvents.PauseGame(false);
+        }
+
+        public override void ToggleDialogOpen()
+        {
+            sceneVM.PauseGame(true);
+            sceneVM.TransitionTo(new SceneStateInDialog());
+        }
+
+        public override void ToggleGamePaused()
+        {
+            sceneVM.PauseGame(true);
+            sceneVM.TransitionTo(new SceneStatePaused());
+        }
     }
 
-    public override void ToggleGamePaused()
+    public class SceneStatePaused : SceneState
     {
-        sceneVM.PauseGame(true);
-        sceneVM.TransitionTo(new SceneStatePaused());
-    }
-}
+        public override void BroadcastSceneState(ISceneEvents sceneEvents)
+        {
+            sceneEvents.PauseGame(true);
+        }
 
-public class SceneStatePaused : SceneState
-{
-    public override void BroadcastSceneState(ISceneEvents sceneEvents)
-    {
-        sceneEvents.PauseGame(true);
-    }
+        public override void ToggleDialogOpen() {}
 
-    public override void ToggleDialogOpen() {}
-
-    public override void ToggleGamePaused()
-    {
-        sceneVM.PauseGame(false);
-        sceneVM.TransitionTo(new SceneStateIdle());
-    }
-}
-
-public class SceneStateInDialog : SceneState
-{
-    public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
-
-    public override void ToggleDialogOpen()
-    {
-        sceneVM.PauseGame(false);
-        sceneVM.TransitionTo(new SceneStateIdle());
+        public override void ToggleGamePaused()
+        {
+            sceneVM.PauseGame(false);
+            sceneVM.TransitionTo(new SceneStateIdle());
+        }
     }
 
-    public override void ToggleGamePaused() {}
-}
-
-public class SceneStateInFailed : SceneState
-{
-    public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
-
-    public override void ToggleDialogOpen() {}
-
-    public override void ToggleGamePaused()
+    public class SceneStateInDialog : SceneState
     {
-        sceneVM.PauseGame(true);
+        public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
+
+        public override void ToggleDialogOpen()
+        {
+            sceneVM.PauseGame(false);
+            sceneVM.TransitionTo(new SceneStateIdle());
+        }
+
+        public override void ToggleGamePaused() {}
+    }
+
+    public class SceneStateInFailed : SceneState
+    {
+        public override void BroadcastSceneState(ISceneEvents sceneEvents) {}
+
+        public override void ToggleDialogOpen() {}
+
+        public override void ToggleGamePaused()
+        {
+            sceneVM.PauseGame(true);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
+using Player;
 using UnityEngine;
 using UnityEngine.TestTools;
 

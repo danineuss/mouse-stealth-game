@@ -1,38 +1,41 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerAbilityDistract : IPlayerAbility
+namespace Player
 {
-    public KeyCode AssociatedKey => KeyCode.F;
-    public float CoolDown => 10f;
-
-    private float distractionDuration;
-    private Guid targetID;
-
-    public PlayerAbilityDistract(float distractionDuration)
+    public class PlayerAbilityDistract : IPlayerAbility
     {
-        this.distractionDuration = distractionDuration;
-    }
+        public KeyCode AssociatedKey => KeyCode.F;
+        public float CoolDown => 10f;
 
-    public void SetTarget(Guid targetID)
-    {
-        this.targetID = targetID;
-    }
+        private float distractionDuration;
+        private Guid targetID;
 
-    public void Execute(IPlayerEvents playerEvents) 
-    {
-        playerEvents.DistractEnemy(targetID, distractionDuration);
-    }
+        public PlayerAbilityDistract(float distractionDuration)
+        {
+            this.distractionDuration = distractionDuration;
+        }
 
-    public bool Equals(IPlayerAbility other)
-    {
-        if (object.ReferenceEquals(this, other))
-            return true;
+        public void SetTarget(Guid targetID)
+        {
+            this.targetID = targetID;
+        }
 
-        if (this is null || other is null)
-            return false;
+        public void Execute(IPlayerEvents playerEvents) 
+        {
+            playerEvents.DistractEnemy(targetID, distractionDuration);
+        }
 
-        return this.AssociatedKey == other.AssociatedKey && 
-            this.CoolDown == other.CoolDown;
+        public bool Equals(IPlayerAbility other)
+        {
+            if (object.ReferenceEquals(this, other))
+                return true;
+
+            if (this is null || other is null)
+                return false;
+
+            return this.AssociatedKey == other.AssociatedKey && 
+                   this.CoolDown == other.CoolDown;
+        }
     }
 }

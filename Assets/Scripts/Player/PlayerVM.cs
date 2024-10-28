@@ -1,116 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
+using Audio;
+using Enemies;
+using Infrastructure;
+using Scenes;
 using UnityEngine;
 
-public interface IPlayerVM: IUpdatable, ILateUpdatable {}
-
-public class PlayerVM : IPlayerVM
+namespace Player
 {
-    private Transform playerTransform;
-    private IPlayerInput playerInput;
-    private IFirstPersonCameraController cameraController;
-    private IFirstPersonCharacterController characterController;
-    private IPanicMeter panicMeter;
-    private IPanicNoiseEmitter panicNoiseEmitter;
-    private IPlayerAbilities playerAbilities;
-    private IPlayerEvents playerEvents;
-    private IEnemyEvents enemyEvents;
-    private ISceneEvents sceneEvents;
-    private Guid targetEnemyID;
+    public interface IPlayerVM: IUpdatable, ILateUpdatable {}
 
-    public PlayerVM(
-        Transform playerTransform,
-        IFirstPersonCameraController cameraController,
-        IFirstPersonCharacterController characterController,
-        IPlayerInput playerInput,
-        IPlayerAbilities playerAbilities,
-        IPanicMeter panicMeter,
-        IPanicNoiseEmitter panicNoiseEmitter,
-        IPlayerEvents playerEvents,
-        IEnemyEvents enemyEvents,
-        ISceneEvents sceneEvents)
+    public class PlayerVM : IPlayerVM
     {
-        this.playerTransform = playerTransform;
-        this.cameraController = cameraController;
-        this.characterController = characterController;
-        this.playerInput = playerInput;
-        this.playerAbilities = playerAbilities;
-        this.panicMeter = panicMeter;
-        this.panicNoiseEmitter = panicNoiseEmitter;
-        this.playerEvents = playerEvents;
-        this.enemyEvents = enemyEvents;
-        this.sceneEvents = sceneEvents;
+        private Transform playerTransform;
+        private IPlayerInput playerInput;
+        private IFirstPersonCameraController cameraController;
+        private IFirstPersonCharacterController characterController;
+        private IPanicMeter panicMeter;
+        private IPanicNoiseEmitter panicNoiseEmitter;
+        private IPlayerAbilities playerAbilities;
+        private IPlayerEvents playerEvents;
+        private IEnemyEvents enemyEvents;
+        private ISceneEvents sceneEvents;
+        private Guid targetEnemyID;
 
-        targetEnemyID = Guid.Empty;
-
-        InitializeEvents();
-    }
-
-    void InitializeEvents()
-    {
-        enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
-        enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
-        enemyEvents.OnGameFailed += delegate{ cameraController.LockCursor(false); };
-        sceneEvents.OnGamePaused += ToggleCursorLockForGamePaused;
-        sceneEvents.OnDialogOpened += delegate{ cameraController.LockCursor(false); };
-        sceneEvents.OnDialogClosed += delegate{ cameraController.LockCursor(true); };
-        playerEvents.OnAbilityLearned += OnAbilityLearned;
-    }
-
-    public void Update()
-    {
-        ApplyPlayerAbilityInput();
-        playerInput.HandleGenericPlayerInput();
-        characterController.UpdateCharacterPosition();
-        panicMeter.UpdatePanicLevel();
-    }
-
-    void ApplyPlayerAbilityInput()
-    {
-        if (playerAbilities.Abilities.Count == 0)
-            return;
-
-        foreach (var keyCode in playerAbilities.RelevantKeyPresses)
+        public PlayerVM(
+            Transform playerTransform,
+            IFirstPersonCameraController cameraController,
+            IFirstPersonCharacterController characterController,
+            IPlayerInput playerInput,
+            IPlayerAbilities playerAbilities,
+            IPanicMeter panicMeter,
+            IPanicNoiseEmitter panicNoiseEmitter,
+            IPlayerEvents playerEvents,
+            IEnemyEvents enemyEvents,
+            ISceneEvents sceneEvents)
         {
-            if (playerInput.GetKeyDown(keyCode))
-                playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemyID);
+            this.playerTransform = playerTransform;
+            this.cameraController = cameraController;
+            this.characterController = characterController;
+            this.playerInput = playerInput;
+            this.playerAbilities = playerAbilities;
+            this.panicMeter = panicMeter;
+            this.panicNoiseEmitter = panicNoiseEmitter;
+            this.playerEvents = playerEvents;
+            this.enemyEvents = enemyEvents;
+            this.sceneEvents = sceneEvents;
+
+            targetEnemyID = Guid.Empty;
+
+            InitializeEvents();
         }
-    }
 
-    public void LateUpdate()
-    {
-        cameraController.RotateForPlayerInput();
-    }
-
-    void OnCursorEnterEnemy(Guid enemyID)
-    {
-        targetEnemyID = enemyID;
-        if (playerAbilities.RelevantAbilities.Count > 0)
+        void InitializeEvents()
         {
-            playerEvents.SendPlayerLocation(enemyID, true, playerTransform);
+            enemyEvents.OnCursorEnterEnemy += OnCursorEnterEnemy;
+            enemyEvents.OnCurserExitEnemy += OnCurserExitEnemy;
+            enemyEvents.OnGameFailed += delegate{ cameraController.LockCursor(false); };
+            sceneEvents.OnGamePaused += ToggleCursorLockForGamePaused;
+            sceneEvents.OnDialogOpened += delegate{ cameraController.LockCursor(false); };
+            sceneEvents.OnDialogClosed += delegate{ cameraController.LockCursor(true); };
+            playerEvents.OnAbilityLearned += OnAbilityLearned;
         }
-        else
+
+        public void Update()
         {
-            playerEvents.SendPlayerLocation(enemyID, false, null);
+            ApplyPlayerAbilityInput();
+            playerInput.HandleGenericPlayerInput();
+            characterController.UpdateCharacterPosition();
+            panicMeter.UpdatePanicLevel();
         }
-    }
 
-    void OnCurserExitEnemy()
-    {
-        if(targetEnemyID == Guid.Empty)
-            return;
+        void ApplyPlayerAbilityInput()
+        {
+            if (playerAbilities.Abilities.Count == 0)
+                return;
 
-        playerEvents.RemovePlayerLocation(targetEnemyID);
-        targetEnemyID = Guid.Empty;
-    }
+            foreach (var keyCode in playerAbilities.RelevantKeyPresses)
+            {
+                if (playerInput.GetKeyDown(keyCode))
+                    playerAbilities.ExecuteAbility(playerAbilities.Abilities[keyCode], targetEnemyID);
+            }
+        }
 
-    void ToggleCursorLockForGamePaused(bool gamePaused)
-    {
-        cameraController.LockCursor(!gamePaused);
-    }
+        public void LateUpdate()
+        {
+            cameraController.RotateForPlayerInput();
+        }
 
-    void OnAbilityLearned(IPlayerAbility ability)
-    {
-        playerAbilities.LearnAbility(ability);
+        void OnCursorEnterEnemy(Guid enemyID)
+        {
+            targetEnemyID = enemyID;
+            if (playerAbilities.RelevantAbilities.Count > 0)
+            {
+                playerEvents.SendPlayerLocation(enemyID, true, playerTransform);
+            }
+            else
+            {
+                playerEvents.SendPlayerLocation(enemyID, false, null);
+            }
+        }
+
+        void OnCurserExitEnemy()
+        {
+            if(targetEnemyID == Guid.Empty)
+                return;
+
+            playerEvents.RemovePlayerLocation(targetEnemyID);
+            targetEnemyID = Guid.Empty;
+        }
+
+        void ToggleCursorLockForGamePaused(bool gamePaused)
+        {
+            cameraController.LockCursor(!gamePaused);
+        }
+
+        void OnAbilityLearned(IPlayerAbility ability)
+        {
+            playerAbilities.LearnAbility(ability);
+        }
     }
 }

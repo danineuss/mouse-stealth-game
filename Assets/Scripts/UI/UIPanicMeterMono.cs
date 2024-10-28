@@ -1,34 +1,35 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Infrastructure;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPanicMeterMono : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private EventsMono eventsMono = null;
-    [SerializeField] private Color barDangerColor = Color.white;
-
-    private Slider slider;
-    private Image fillImage;
-    private Color barDefaultColor;
-
-    void Awake()
+    public class UIPanicMeterMono : MonoBehaviour
     {
-        slider = GetComponentInChildren<Slider>();
-        fillImage = slider.fillRect.GetComponent<Image>();
-        barDefaultColor = fillImage.color;
+        [SerializeField] private EventsMono eventsMono = null;
+        [SerializeField] private Color barDangerColor = Color.white;
+
+        private Slider slider;
+        private Image fillImage;
+        private Color barDefaultColor;
+
+        void Awake()
+        {
+            slider = GetComponentInChildren<Slider>();
+            fillImage = slider.fillRect.GetComponent<Image>();
+            barDefaultColor = fillImage.color;
         
-        InitializeEvents();
-    }
+            InitializeEvents();
+        }
 
-    private void InitializeEvents()
-    {
-        eventsMono.PlayerEvents.OnPanicLevelChanged += OnPanicLevelChanged;
-    }
+        private void InitializeEvents()
+        {
+            eventsMono.PlayerEvents.OnPanicLevelChanged += OnPanicLevelChanged;
+        }
 
-    private void OnPanicLevelChanged(float panicLevel)
-    {
-        slider.value = panicLevel;
+        private void OnPanicLevelChanged(float panicLevel)
+        {
+            slider.value = panicLevel;
+        }
     }
 }

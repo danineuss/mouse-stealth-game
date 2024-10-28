@@ -1,5 +1,9 @@
 using NSubstitute;
 using System.Collections;
+using Enemies;
+using Infrastructure;
+using Player;
+using Scenes;
 using UnityEngine;
 
 public class EventsMono_Mock : IEvents

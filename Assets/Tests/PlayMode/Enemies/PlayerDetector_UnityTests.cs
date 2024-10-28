@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Enemies.Detection;
+using Enemies.VisionCone;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;

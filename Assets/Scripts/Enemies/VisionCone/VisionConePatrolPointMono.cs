@@ -1,20 +1,23 @@
 using UnityEngine;
 
-public class VisionConePatrolPointMono: MonoBehaviour
+namespace Enemies.VisionCone
 {
-    [SerializeField] private float fieldOfView = 0f;
-    [SerializeField] private float durationTowardsPoint = 1f;
-    [SerializeField] private float waitTimeAtTarget = 0.5f;
-
-    public IVisionConePatrolPoint PatrolPoint => new VisionConePatrolPoint(
-        fieldOfView,
-        transform.position,
-        durationTowardsPoint,
-        waitTimeAtTarget
-    );
-
-    public void OnDrawGizmos()
+    public class VisionConePatrolPointMono: MonoBehaviour
     {
-        PatrolPoint.OnDrawGizmos();
+        [SerializeField] private float fieldOfView = 0f;
+        [SerializeField] private float durationTowardsPoint = 1f;
+        [SerializeField] private float waitTimeAtTarget = 0.5f;
+
+        public IVisionConePatrolPoint PatrolPoint => new VisionConePatrolPoint(
+            fieldOfView,
+            transform.position,
+            durationTowardsPoint,
+            waitTimeAtTarget
+        );
+
+        public void OnDrawGizmos()
+        {
+            PatrolPoint.OnDrawGizmos();
+        }
     }
 }

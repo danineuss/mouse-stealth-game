@@ -2,34 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IVisionConePatrolPoint: IVisionConeControlPoint
+namespace Enemies.VisionCone
 {
-    float DurationTowardsPoint { get; }
-    float WaitTimeAtTarget { get; }
-}
-
-public class VisionConePatrolPoint : IVisionConePatrolPoint
-{
-    public float FieldOfView { get; }
-    public Vector3 Position { get; }
-    public float DurationTowardsPoint { get; }
-    public float WaitTimeAtTarget { get; }
-
-    public VisionConePatrolPoint(
-        float fieldOfView, 
-        Vector3 position, 
-        float durationTowardsPoint, 
-        float waitTimeAtTarget)
+    public interface IVisionConePatrolPoint: IVisionConeControlPoint
     {
-        FieldOfView = fieldOfView;
-        Position = position;
-        DurationTowardsPoint = durationTowardsPoint;
-        WaitTimeAtTarget = waitTimeAtTarget;
+        float DurationTowardsPoint { get; }
+        float WaitTimeAtTarget { get; }
     }
 
-    public void OnDrawGizmos()
+    public class VisionConePatrolPoint : IVisionConePatrolPoint
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(Position, 0.5f);
+        public float FieldOfView { get; }
+        public Vector3 Position { get; }
+        public float DurationTowardsPoint { get; }
+        public float WaitTimeAtTarget { get; }
+
+        public VisionConePatrolPoint(
+            float fieldOfView, 
+            Vector3 position, 
+            float durationTowardsPoint, 
+            float waitTimeAtTarget)
+        {
+            FieldOfView = fieldOfView;
+            Position = position;
+            DurationTowardsPoint = durationTowardsPoint;
+            WaitTimeAtTarget = waitTimeAtTarget;
+        }
+
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(Position, 0.5f);
+        }
     }
 }

@@ -2,6 +2,11 @@ using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Audio;
+using Enemies;
+using Player;
+using Scenes;
+using UI;
 using UnityEngine;
 
 namespace Tests

@@ -1,53 +1,56 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDialogVM
+namespace UI
 {
-    void IterateScreens();
-    void SetActive(bool active);
-}
-
-public class DialogVM : IDialogVM
-{
-    private List<GameObject> screens;
-    private UICoordinator uiCoordinator;
-    private GameObject parentGameObject;
-    private int currentScreen;
-
-    public DialogVM(
-        List<GameObject> screens, 
-        UICoordinator uiCoordinator, 
-        GameObject parentGameObject)
+    public interface IDialogVM
     {
-        this.screens = screens;
-        this.uiCoordinator = uiCoordinator;
-        this.parentGameObject = parentGameObject;
-
-        InitializeScreens();
+        void IterateScreens();
+        void SetActive(bool active);
     }
 
-    void InitializeScreens()
+    public class DialogVM : IDialogVM
     {
-        screens.ForEach(screen => screen.SetActive(false));
-        screens[0].SetActive(true);
-        currentScreen = 0;
-    }
+        private List<GameObject> screens;
+        private UICoordinator uiCoordinator;
+        private GameObject parentGameObject;
+        private int currentScreen;
 
-    public void IterateScreens()
-    {
-        if (currentScreen == screens.Count - 1)
+        public DialogVM(
+            List<GameObject> screens, 
+            UICoordinator uiCoordinator, 
+            GameObject parentGameObject)
         {
-            uiCoordinator.SceneEvents.CloseDialog(this);
-            return;
+            this.screens = screens;
+            this.uiCoordinator = uiCoordinator;
+            this.parentGameObject = parentGameObject;
+
+            InitializeScreens();
         }
 
-        screens[currentScreen].SetActive(false);
-        currentScreen++;
-        screens[currentScreen].SetActive(true);
-    }
+        void InitializeScreens()
+        {
+            screens.ForEach(screen => screen.SetActive(false));
+            screens[0].SetActive(true);
+            currentScreen = 0;
+        }
 
-    public void SetActive(bool active)
-    {
-        parentGameObject.SetActive(active);
+        public void IterateScreens()
+        {
+            if (currentScreen == screens.Count - 1)
+            {
+                uiCoordinator.SceneEvents.CloseDialog(this);
+                return;
+            }
+
+            screens[currentScreen].SetActive(false);
+            currentScreen++;
+            screens[currentScreen].SetActive(true);
+        }
+
+        public void SetActive(bool active)
+        {
+            parentGameObject.SetActive(active);
+        }
     }
 }

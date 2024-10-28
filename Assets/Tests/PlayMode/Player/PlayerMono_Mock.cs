@@ -1,5 +1,9 @@
 ﻿using NSubstitute;
 using System.Collections.Generic;
+using Audio;
+using Enemies;
+using Player;
+using Scenes;
 using UnityEngine;
 
 public class PlayerMono_Mock : MonoBehaviour {

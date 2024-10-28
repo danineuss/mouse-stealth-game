@@ -1,17 +1,21 @@
+using Infrastructure;
 using UnityEngine;
 
-public class SceneMono: MonoBehaviour
+namespace Scenes
 {
-    [SerializeField] private EventsMono eventsMono = null;
-
-    private ISceneVM sceneVM;
-
-    void Awake()
+    public class SceneMono: MonoBehaviour
     {
-        sceneVM = new SceneVM(
-            eventsMono.PlayerEvents, 
-            eventsMono.EnemyEvents, 
-            eventsMono.SceneEvents
-        );
+        [SerializeField] private EventsMono eventsMono = null;
+
+        private ISceneVM sceneVM;
+
+        void Awake()
+        {
+            sceneVM = new SceneVM(
+                eventsMono.PlayerEvents, 
+                eventsMono.EnemyEvents, 
+                eventsMono.SceneEvents
+            );
+        }
     }
 }

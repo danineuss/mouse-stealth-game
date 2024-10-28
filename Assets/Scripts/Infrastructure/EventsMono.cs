@@ -1,39 +1,45 @@
 ﻿using System.Collections;
+using Enemies;
+using Player;
+using Scenes;
 using UnityEngine;
 
-public interface IEvents
+namespace Infrastructure
 {
-    IPlayerEvents PlayerEvents { get; }
-    IEnemyEvents EnemyEvents { get; }
-    ISceneEvents SceneEvents { get; }
-
-    void StartCoroutine(IEnumerator coroutine);
-    void StopCoroutine(IEnumerator coroutine);
-}
-
-public class EventsMono : MonoBehaviour, IEvents
-{
-    public IPlayerEvents PlayerEvents => playerEvents;
-    public IEnemyEvents EnemyEvents => enemyEvents;
-    public ISceneEvents SceneEvents => sceneEvents;
-    private IPlayerEvents playerEvents;
-    private IEnemyEvents enemyEvents;
-    private ISceneEvents sceneEvents;
-
-    void Awake()
+    public interface IEvents
     {
-        playerEvents = new PlayerEvents();
-        enemyEvents = new EnemyEvents();
-        sceneEvents = new SceneEvents();
+        IPlayerEvents PlayerEvents { get; }
+        IEnemyEvents EnemyEvents { get; }
+        ISceneEvents SceneEvents { get; }
+
+        void StartCoroutine(IEnumerator coroutine);
+        void StopCoroutine(IEnumerator coroutine);
     }
 
-    public new void StartCoroutine(IEnumerator coroutine)
+    public class EventsMono : MonoBehaviour, IEvents
     {
-        base.StartCoroutine(coroutine);
-    }
+        public IPlayerEvents PlayerEvents => playerEvents;
+        public IEnemyEvents EnemyEvents => enemyEvents;
+        public ISceneEvents SceneEvents => sceneEvents;
+        private IPlayerEvents playerEvents;
+        private IEnemyEvents enemyEvents;
+        private ISceneEvents sceneEvents;
 
-    public new void StopCoroutine(IEnumerator coroutine)
-    {
-        base.StopCoroutine(coroutine);
+        void Awake()
+        {
+            playerEvents = new PlayerEvents();
+            enemyEvents = new EnemyEvents();
+            sceneEvents = new SceneEvents();
+        }
+
+        public new void StartCoroutine(IEnumerator coroutine)
+        {
+            base.StartCoroutine(coroutine);
+        }
+
+        public new void StopCoroutine(IEnumerator coroutine)
+        {
+            base.StopCoroutine(coroutine);
+        }
     }
 }

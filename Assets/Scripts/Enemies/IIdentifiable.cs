@@ -1,6 +1,9 @@
 using System;
 
-public interface IIdentifiable
+namespace Enemies
 {
-    Guid ID { get; }
+    public interface IIdentifiable
+    {
+        Guid ID { get; }
+    }
 }

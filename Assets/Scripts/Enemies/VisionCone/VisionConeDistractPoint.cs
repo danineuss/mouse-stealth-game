@@ -1,21 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class VisionConeDistractPoint: IVisionConeControlPoint
+namespace Enemies.VisionCone
 {
-    public float FieldOfView { get; }
-    public Vector3 Position { get; }
+    public class VisionConeDistractPoint: IVisionConeControlPoint
+    {
+        public float FieldOfView { get; }
+        public Vector3 Position { get; }
     
-    public VisionConeDistractPoint(float fieldOfView, Vector3 position)
-    {
-        FieldOfView = fieldOfView;
-        Position = position;
-    }
+        public VisionConeDistractPoint(float fieldOfView, Vector3 position)
+        {
+            FieldOfView = fieldOfView;
+            Position = position;
+        }
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(Position, 0.1f);
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(Position, 0.1f);
+        }
     }
 }

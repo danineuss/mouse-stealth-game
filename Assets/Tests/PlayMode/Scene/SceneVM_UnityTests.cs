@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
+using Enemies;
 using NSubstitute;
 using NUnit.Framework;
+using Player;
+using Scenes;
+using UI;
 using UnityEngine;
 using UnityEngine.TestTools;
 
