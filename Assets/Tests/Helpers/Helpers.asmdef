@@ -1,7 +1,8 @@
 {
     "name": "Helpers",
     "references": [
-        "GUID:9796e597f6dea4e49a59cbbe99b97635"
+        "GUID:9796e597f6dea4e49a59cbbe99b97635",
+        "GUID:cc59b9e1d8dc88143b55ded377dc3109"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
