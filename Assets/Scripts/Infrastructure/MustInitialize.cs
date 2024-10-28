@@ -1,4 +1,7 @@
-public abstract class MustInitialize<T>
+namespace Infrastructure
 {
-    public MustInitialize(T parameters) {}
+    public abstract class MustInitialize<T>
+    {
+        public MustInitialize(T parameters) {}
+    }
 }

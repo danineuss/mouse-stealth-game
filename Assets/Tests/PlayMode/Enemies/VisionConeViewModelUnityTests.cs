@@ -1,30 +1,30 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enemies.VisionCone;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Enemies
 {
-    public class VisionConeVM_UnityTests
+    public class VisionConeViewModelUnityTests
     {
-        private GameObject visionConeObject = new GameObject("VisionCone");
-        private GameObject playerObject = new GameObject("Player");
+        private readonly GameObject visionConeObject = new GameObject("VisionCone");
+        private readonly GameObject playerObject = new GameObject("Player");
         private MonoBehaviour_Mock visionConeMono_Mock;
-        private VisionConeVM visionConeVM;
+        private VisionConeViewModel visionConeViewModel;
         private List<IVisionConePatrolPoint> patrolPoints;
         private IVisionConeControlPoint distractPoint;
         private IConeVisualizer coneVisualizer;
-        private LayerMask layerMask = LayerMask.NameToLayer("Obstacles");
+        private readonly LayerMask layerMask = LayerMask.NameToLayer("Obstacles");
         private EventsMono_Mock eventsMono;
 
         private void SetupVisionCone()
         {
             visionConeObject.transform.position = Vector3.zero;
             coneVisualizer = Substitute.For<IConeVisualizer>();
-            visionConeVM = new VisionConeVM(
+            visionConeViewModel = new VisionConeViewModel(
                 patrolPoints,
                 distractPoint,
                 coneVisualizer,
@@ -34,7 +34,7 @@ namespace Tests
                 eventsMono
             );
             visionConeMono_Mock = visionConeObject.AddComponent<MonoBehaviour_Mock>();
-            visionConeMono_Mock.Updatables.Add(visionConeVM);
+            visionConeMono_Mock.Updatables.Add(visionConeViewModel);
         }
 
         [UnityTest]
@@ -83,12 +83,12 @@ namespace Tests
             patrolPoints = new List<IVisionConePatrolPoint>() { patrolPoint };
             playerObject.transform.position = new Vector3(1, 0, 0);
             SetupVisionCone();
-            visionConeVM.TransitionTo(new VisionConeStateFollowingPlayer());
+            visionConeViewModel.TransitionTo(new VisionConeStateFollowingPlayer());
 
             yield return null;
 
-            visionConeVM.UpdateDetectionMeter(0.5f);
-            visionConeVM.UpdateDetectionMeter(1.0f);
+            visionConeViewModel.UpdateDetectionMeter(0.5f);
+            visionConeViewModel.UpdateDetectionMeter(1.0f);
 
             yield return null;
 

@@ -1,54 +1,58 @@
 ﻿using System;
+using UI;
 
-public interface ISceneEvents
+namespace Scenes
 {
-    event Action<IDialogVM> OnDialogOpened;
-    event Action<IDialogVM> OnDialogClosed;
-    event Action OnGameRestarted;
-    event Action<bool> OnGamePaused;
-
-    void CloseDialog(IDialogVM dialogVM);
-    void OpenDialog(IDialogVM dialogVM);
-    void RestartGame();
-    void PauseGame(bool paused);
-}
-
-public class SceneEvents : ISceneEvents
-{
-    public event Action<IDialogVM> OnDialogOpened;
-    public event Action<IDialogVM> OnDialogClosed;
-    public event Action OnGameRestarted;
-    public event Action<bool> OnGamePaused;
-
-    public void OpenDialog(IDialogVM dialogVM)
+    public interface ISceneEvents
     {
-        if (OnDialogOpened == null)
-            return;
+        event Action<IDialogViewModel> OnDialogOpened;
+        event Action<IDialogViewModel> OnDialogClosed;
+        event Action OnGameRestarted;
+        event Action<bool> OnGamePaused;
 
-        OnDialogOpened(dialogVM);
+        void CloseDialog(IDialogViewModel dialogViewModel);
+        void OpenDialog(IDialogViewModel dialogViewModel);
+        void RestartGame();
+        void PauseGame(bool paused);
     }
 
-    public void CloseDialog(IDialogVM dialogVM)
+    public class SceneEvents : ISceneEvents
     {
-        if (OnDialogClosed == null)
-            return;
+        public event Action<IDialogViewModel> OnDialogOpened;
+        public event Action<IDialogViewModel> OnDialogClosed;
+        public event Action OnGameRestarted;
+        public event Action<bool> OnGamePaused;
 
-        OnDialogClosed(dialogVM);
-    }
+        public void OpenDialog(IDialogViewModel dialogViewModel)
+        {
+            if (OnDialogOpened == null)
+                return;
 
-    public void RestartGame()
-    {
-        if (OnGameRestarted == null)
-            return;
+            OnDialogOpened(dialogViewModel);
+        }
+
+        public void CloseDialog(IDialogViewModel dialogViewModel)
+        {
+            if (OnDialogClosed == null)
+                return;
+
+            OnDialogClosed(dialogViewModel);
+        }
+
+        public void RestartGame()
+        {
+            if (OnGameRestarted == null)
+                return;
         
-        OnGameRestarted();
-    }
+            OnGameRestarted();
+        }
 
-    public void PauseGame(bool paused)
-    {
-        if (OnGamePaused == null)
-            return;
+        public void PauseGame(bool paused)
+        {
+            if (OnGamePaused == null)
+                return;
         
-        OnGamePaused(paused);
+            OnGamePaused(paused);
+        }
     }
 }

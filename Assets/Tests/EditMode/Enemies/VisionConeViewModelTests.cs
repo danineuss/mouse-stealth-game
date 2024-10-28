@@ -1,29 +1,28 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using Enemies.VisionCone;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 
 namespace Tests
 {
-    public class VisionConeVM_Tests
+    public class VisionConeViewModelTests
     {
-        private GameObject visionConeObject = new GameObject("VisionCone");
-        private GameObject playerObject = new GameObject("Player");
+        private readonly GameObject visionConeObject = new GameObject("VisionCone");
+        private readonly GameObject playerObject = new GameObject("Player");
         private MonoBehaviour_Mock visionConeMono_Mock;
-        private VisionConeVM visionConeVM;
+        private VisionConeViewModel visionConeViewModel;
         private List<IVisionConePatrolPoint> patrolPoints;
         private IVisionConeControlPoint distractPoint;
         private IConeVisualizer coneVisualizer;
-        private LayerMask layerMask = LayerMask.NameToLayer("Obstacles");
+        private readonly LayerMask layerMask = LayerMask.NameToLayer("Obstacles");
         private EventsMono_Mock eventsMono;
 
         private void SetupVisionCone()
         {
             visionConeObject.transform.position = Vector3.zero;
             coneVisualizer = Substitute.For<IConeVisualizer>();
-            visionConeVM = new VisionConeVM(
+            visionConeViewModel = new VisionConeViewModel(
                 patrolPoints,
                 distractPoint,
                 coneVisualizer,
@@ -33,7 +32,7 @@ namespace Tests
                 eventsMono
             );
             visionConeMono_Mock = visionConeObject.AddComponent<MonoBehaviour_Mock>();
-            visionConeMono_Mock.Updatables.Add(visionConeVM);
+            visionConeMono_Mock.Updatables.Add(visionConeViewModel);
         }
 
         [Test]
@@ -47,7 +46,7 @@ namespace Tests
             playerObject.transform.position = new Vector3(1, 0, 0);
             SetupVisionCone();
 
-            Assert.True(visionConeVM.IsPlayerInsideVisionCone());
+            Assert.True(visionConeViewModel.IsPlayerInsideVisionCone());
         }
 
         [Test]
@@ -61,7 +60,7 @@ namespace Tests
             playerObject.transform.position = new Vector3(3, 0, 0);
             SetupVisionCone();
 
-            Assert.True(!visionConeVM.IsPlayerInsideVisionCone());
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
         }
 
         [Test]
@@ -75,11 +74,11 @@ namespace Tests
             playerObject.transform.position = new Vector3(-1, 0, 0);
             SetupVisionCone();
 
-            Assert.True(!visionConeVM.IsPlayerInsideVisionCone());
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
 
             playerObject.transform.position = new Vector3(0, 1, 0);
 
-            Assert.True(!visionConeVM.IsPlayerInsideVisionCone());
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
         }
 
         [Test]
@@ -93,8 +92,8 @@ namespace Tests
             playerObject.transform.position = new Vector3(1, 0, 0);
             SetupVisionCone();
 
-            Assert.True(visionConeVM.IsPlayerInsideVisionCone());
-            Assert.True(!visionConeVM.IsPlayerObstructed());
+            Assert.True(visionConeViewModel.IsPlayerInsideVisionCone());
+            Assert.True(!visionConeViewModel.IsPlayerObstructed());
         }
     }
 }

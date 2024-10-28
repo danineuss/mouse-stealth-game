@@ -1,28 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Audio;
-using UnityEngine;
+﻿using UnityEngine;
 
-public interface ISoundEmitter
+namespace Audio
 {
-    void PlaySound(Sound sound);
-}
-
-public class SoundEmitter : MonoBehaviour, ISoundEmitter
-{
-    private AudioSource audioSource;
-
-    void Awake()
+    public interface ISoundEmitter
     {
-        audioSource = GetComponent<AudioSource>();
+        void PlaySound(Sound sound);
     }
 
-    public void PlaySound(Sound sound)
+    public class SoundEmitter : MonoBehaviour, ISoundEmitter
     {
-        audioSource.clip = sound.Clip;
-        audioSource.volume = sound.Volume;
-        audioSource.loop = sound.Loop;
+        private AudioSource audioSource;
 
-        audioSource.Play();
+        void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        public void PlaySound(Sound sound)
+        {
+            audioSource.clip = sound.Clip;
+            audioSource.volume = sound.Volume;
+            audioSource.loop = sound.Loop;
+
+            audioSource.Play();
+        }
     }
 }

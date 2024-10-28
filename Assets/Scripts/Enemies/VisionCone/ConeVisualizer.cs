@@ -1,107 +1,101 @@
-using System.Collections.Generic;
-using System.Linq;
+using Infrastructure;
 using UnityEngine;
 
-public enum SpotLightState
+namespace Enemies.VisionCone
 {
-    Idle,
-    Searching,
-    Alarmed,
-    Distracted
-}
-
-public interface IConeVisualizer
-{
-    void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0);
-    void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView);
-}
-
-public class ConeVisualizer : IConeVisualizer
-{
-    private Transform coneTransform;
-    private Transform coneScaleParent;
-    private Transform coneScaleAnchor;
-    private float ConeRangeMultiplier;
-
-    private MeshRenderer coneMeshRenderer;
-    private Material greenMaterial;
-    private Material blueMaterial;
-    private OutlineMono outline;
-
-    private Light spotLight;
-    private Color SpotLightGreen;
-    private Color SpotLightOrange;
-    private Color SpotLightRed;
-    private Color SpotLightBlue;
-
-    public ConeVisualizer(
-        Transform coneTransform,
-        Transform coneScaleParent,
-        Transform coneScaleAnchor,
-        float coneRangeMultiplier,
-        MeshRenderer coneMeshRenderer,
-        Material greenMaterial,
-        Material blueMaterial,
-        OutlineMono outline,
-        Light spotLight,
-        Color spotLightGreen,
-        Color spotLightOrange,
-        Color spotLightRed,
-        Color spotLightBlue)
+    public interface IConeVisualizer
     {
-        this.coneTransform = coneTransform;
-        this.coneScaleParent = coneScaleParent;
-        this.coneScaleAnchor = coneScaleAnchor;
-        this.ConeRangeMultiplier = coneRangeMultiplier;
-
-        this.coneMeshRenderer = coneMeshRenderer;
-        this.greenMaterial = greenMaterial;
-        this.blueMaterial = blueMaterial;
-        this.outline = outline;
-
-        this.spotLight = spotLight;
-        this.SpotLightGreen = spotLightGreen;
-        this.SpotLightOrange = spotLightOrange;
-        this.SpotLightRed = spotLightRed;
-        this.SpotLightBlue = spotLightBlue;
+        void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0);
+        void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView);
     }
 
-    public void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView)
+    public class ConeVisualizer : IConeVisualizer
     {
-        var toCurrentTarget = currentTarget - coneTransform.position;
-        var range = toCurrentTarget.magnitude * ConeRangeMultiplier;
-        coneTransform.rotation = Quaternion.LookRotation(toCurrentTarget);
+        private readonly Transform coneTransform;
+        private readonly Transform coneScaleParent;
+        private readonly Transform coneScaleAnchor;
+        private readonly float coneRangeMultiplier;
 
-        spotLight.spotAngle = fieldOfView;
-        spotLight.range = range;
+        private readonly MeshRenderer coneMeshRenderer;
+        private readonly Material greenMaterial;
+        private readonly Material blueMaterial;
+        private readonly OutlineMono outline;
 
-        var distanceToScaleAnchor = (coneScaleAnchor.position - coneTransform.position).magnitude;
-        var newScaleZ = coneScaleParent.localScale.z + 0.7f * (range - distanceToScaleAnchor) / range;
-        var newScaleXY = 2 * newScaleZ * Mathf.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
-        coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
-    }
+        private readonly Light spotLight;
+        private readonly Color spotLightGreen;
+        private readonly Color spotLightOrange;
+        private readonly Color spotLightRed;
+        private readonly Color spotLightBlue;
 
-    public void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0f)
-    {
-        switch (spotLightState)
+        public ConeVisualizer(
+            Transform coneTransform,
+            Transform coneScaleParent,
+            Transform coneScaleAnchor,
+            float coneRangeMultiplier,
+            MeshRenderer coneMeshRenderer,
+            Material greenMaterial,
+            Material blueMaterial,
+            OutlineMono outline,
+            Light spotLight,
+            Color spotLightGreen,
+            Color spotLightOrange,
+            Color spotLightRed,
+            Color spotLightBlue)
         {
-            case SpotLightState.Idle:
-                spotLight.color = SpotLightGreen;
-                coneMeshRenderer.material = greenMaterial;
-                outline.OutlineColor = SpotLightGreen;
-                break;
-            case SpotLightState.Searching:
-                spotLight.color = Color.LerpUnclamped(
-                    SpotLightOrange, SpotLightRed, detectionMeter);
-                break;
-            case SpotLightState.Alarmed:
-                spotLight.color = SpotLightRed;
-                break;
-            case SpotLightState.Distracted:
-                spotLight.color = SpotLightBlue;
-                coneMeshRenderer.material = blueMaterial;
-                outline.OutlineColor = SpotLightBlue;
-                break;
+            this.coneTransform = coneTransform;
+            this.coneScaleParent = coneScaleParent;
+            this.coneScaleAnchor = coneScaleAnchor;
+            this.coneRangeMultiplier = coneRangeMultiplier;
+
+            this.coneMeshRenderer = coneMeshRenderer;
+            this.greenMaterial = greenMaterial;
+            this.blueMaterial = blueMaterial;
+            this.outline = outline;
+
+            this.spotLight = spotLight;
+            this.spotLightGreen = spotLightGreen;
+            this.spotLightOrange = spotLightOrange;
+            this.spotLightRed = spotLightRed;
+            this.spotLightBlue = spotLightBlue;
+        }
+
+        public void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView)
+        {
+            var toCurrentTarget = currentTarget - coneTransform.position;
+            var range = toCurrentTarget.magnitude * coneRangeMultiplier;
+            coneTransform.rotation = Quaternion.LookRotation(toCurrentTarget);
+
+            spotLight.spotAngle = fieldOfView;
+            spotLight.range = range;
+
+            var distanceToScaleAnchor = (coneScaleAnchor.position - coneTransform.position).magnitude;
+            var newScaleZ = coneScaleParent.localScale.z + 0.7f * (range - distanceToScaleAnchor) / range;
+            var newScaleXY = 2 * newScaleZ * Mathf.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
+            coneScaleParent.localScale = new Vector3(newScaleXY, newScaleXY, newScaleZ);
+        }
+
+        public void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0f)
+        {
+            switch (spotLightState)
+            {
+                case SpotLightState.Idle:
+                    spotLight.color = spotLightGreen;
+                    coneMeshRenderer.material = greenMaterial;
+                    outline.OutlineColor = spotLightGreen;
+                    break;
+                case SpotLightState.Searching:
+                    spotLight.color = Color.LerpUnclamped(
+                        spotLightOrange, spotLightRed, detectionMeter);
+                    break;
+                case SpotLightState.Alarmed:
+                    spotLight.color = spotLightRed;
+                    break;
+                case SpotLightState.Distracted:
+                    spotLight.color = spotLightBlue;
+                    coneMeshRenderer.material = blueMaterial;
+                    outline.OutlineColor = spotLightBlue;
+                    break;
+            }
         }
     }
 }

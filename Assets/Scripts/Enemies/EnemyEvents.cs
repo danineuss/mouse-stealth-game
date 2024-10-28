@@ -1,53 +1,57 @@
 ﻿using System;
-public interface IEnemyEvents
+
+namespace Enemies
 {
-    event Action<Guid> OnCursorEnterEnemy;
-    event Action OnCurserExitEnemy;
-    event Action<Guid> OnDetectorStateChanged;
-    event Action OnGameFailed;
-
-    void ChangeDetectorState(Guid detectorID);
-    void CursorEnterEnemy(Guid enemyID);
-    void CursorExitEnemy();
-    void FailGame();
-}
-
-public class EnemyEvents : IEnemyEvents
-{
-    public event Action<Guid> OnCursorEnterEnemy;
-    public event Action OnCurserExitEnemy;
-    public event Action<Guid> OnDetectorStateChanged;
-    public event Action OnGameFailed;
-
-    public void CursorEnterEnemy(Guid enemyID)
+    public interface IEnemyEvents
     {
-        if (OnCursorEnterEnemy == null)
-            return;
+        event Action<Guid> OnCursorEnterEnemy;
+        event Action OnCurserExitEnemy;
+        event Action<Guid> OnDetectorStateChanged;
+        event Action OnGameFailed;
 
-        OnCursorEnterEnemy(enemyID);
+        void ChangeDetectorState(Guid detectorID);
+        void CursorEnterEnemy(Guid enemyID);
+        void CursorExitEnemy();
+        void FailGame();
     }
 
-    public void CursorExitEnemy()
+    public class EnemyEvents : IEnemyEvents
     {
-        if (OnCurserExitEnemy == null)
-            return;
+        public event Action<Guid> OnCursorEnterEnemy;
+        public event Action OnCurserExitEnemy;
+        public event Action<Guid> OnDetectorStateChanged;
+        public event Action OnGameFailed;
 
-        OnCurserExitEnemy();
-    }
+        public void CursorEnterEnemy(Guid enemyID)
+        {
+            if (OnCursorEnterEnemy == null)
+                return;
 
-    public void ChangeDetectorState(Guid detectorID)
-    {
-        if (OnDetectorStateChanged == null)
-            return;
+            OnCursorEnterEnemy(enemyID);
+        }
 
-        OnDetectorStateChanged(detectorID);
-    }
+        public void CursorExitEnemy()
+        {
+            if (OnCurserExitEnemy == null)
+                return;
 
-    public void FailGame()
-    {
-        if (OnGameFailed == null)
-            return;
+            OnCurserExitEnemy();
+        }
+
+        public void ChangeDetectorState(Guid detectorID)
+        {
+            if (OnDetectorStateChanged == null)
+                return;
+
+            OnDetectorStateChanged(detectorID);
+        }
+
+        public void FailGame()
+        {
+            if (OnGameFailed == null)
+                return;
         
-        OnGameFailed();
+            OnGameFailed();
+        }
     }
 }

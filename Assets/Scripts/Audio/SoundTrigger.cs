@@ -1,20 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SoundTrigger : MonoBehaviour
+namespace Audio
 {
-    [SerializeField] private AudioVM audioVM = null;
-    [SerializeField] private string nameOfSound = "";
-    private SoundEmitter soundEmitter;
+    public class SoundTrigger : MonoBehaviour
+    {
+        [SerializeField] private AudioViewModel audioViewModel;
+        [SerializeField] private string nameOfSound = "";
+        private SoundEmitter soundEmitter;
 
-    void Awake() {
-        soundEmitter = GetComponentInChildren<SoundEmitter>();
-    }
+        void Awake() {
+            soundEmitter = GetComponentInChildren<SoundEmitter>();
+        }
 
-    void OnTriggerEnter() {
+        void OnTriggerEnter() {
         
-        Sound sound = audioVM.SoundWithName(nameOfSound);
-        soundEmitter.PlaySound(sound);
+            Sound sound = audioViewModel.SoundWithName(nameOfSound);
+            soundEmitter.PlaySound(sound);
+        }
     }
 }

@@ -1,26 +1,26 @@
 using NSubstitute;
 using NUnit.Framework;
-using System;
 using System.Linq;
-using System.Collections.Generic;
+using Audio;
+using Player;
 using UnityEngine;
 
 namespace Tests
 {
-    public class PanicNoiseEmitter_Tests
+    public class PanicNoiseEmitterTests
     {
-        private PlayerEvents playerEvents = new PlayerEvents();
-
-        private AudioClip audioClip = AudioClip.Create("mockClip", 1000, 1, 1000, false);
         private Sound scaredSoundOne;
         private Sound scaredSoundTwo;
         private Sound scaredSoundThree;
         private Sound panickedSound;
         
+        private readonly PlayerEvents playerEvents = new PlayerEvents();
+        private readonly AudioClip audioClip = AudioClip.Create(
+            "mockClip", 1000, 1, 1000, false);
 
-        private IAudioVM SetupAudioVMSubstitute()
+        private IAudioViewModel SetupAudioViewModelSubstitute()
         {
-            var audioVM = Substitute.For<IAudioVM>();
+            var audioViewModelSubstitute = Substitute.For<IAudioViewModel>();
             scaredSoundOne = 
                 new Sound() { Name = "ScaredOne", Clip = audioClip, Volume = 1f, Loop = false };
             scaredSoundTwo =
@@ -29,11 +29,11 @@ namespace Tests
                 new Sound() { Name = "ScaredThree", Clip = audioClip, Volume = 1f, Loop = false };
             panickedSound = 
                 new Sound() { Name = "Panicked", Clip = audioClip, Volume = 1f, Loop = false };
-            audioVM.SoundWithName(PanicSound.ScaredOne.Name).Returns(scaredSoundOne);
-            audioVM.SoundWithName(PanicSound.ScaredTwo.Name).Returns(scaredSoundTwo);
-            audioVM.SoundWithName(PanicSound.ScaredThree.Name).Returns(scaredSoundThree);
-            audioVM.SoundWithName(PanicSound.Panicking.Name).Returns(panickedSound);
-            return audioVM;
+            audioViewModelSubstitute.SoundWithName(PanicSound.ScaredOne.Name).Returns(scaredSoundOne);
+            audioViewModelSubstitute.SoundWithName(PanicSound.ScaredTwo.Name).Returns(scaredSoundTwo);
+            audioViewModelSubstitute.SoundWithName(PanicSound.ScaredThree.Name).Returns(scaredSoundThree);
+            audioViewModelSubstitute.SoundWithName(PanicSound.Panicking.Name).Returns(panickedSound);
+            return audioViewModelSubstitute;
         }   
 
         [Test]
@@ -41,15 +41,15 @@ namespace Tests
         {
             // ARRANGE
             var playerSoundEmitter = Substitute.For<ISoundEmitter>();
-            var audioVM = SetupAudioVMSubstitute();
-            var panicNoiseEmitter = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioVM);
+            var audioViewModel = SetupAudioViewModelSubstitute();
+            _ = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioViewModel);
 
             // ACT
             playerEvents.ChangePanicLevel(0f);
 
             // ASSERT
             playerSoundEmitter.DidNotReceiveWithAnyArgs().PlaySound(default);
-            audioVM.DidNotReceiveWithAnyArgs().SoundWithName(default);
+            audioViewModel.DidNotReceiveWithAnyArgs().SoundWithName(default);
         }
 
         [Test]
@@ -57,8 +57,8 @@ namespace Tests
         {
             // ARRANGE
             var playerSoundEmitter = Substitute.For<ISoundEmitter>();
-            var audioVM = SetupAudioVMSubstitute();
-            var panicNoiseEmitter = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioVM);
+            var audioViewModel = SetupAudioViewModelSubstitute();
+            _ = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioViewModel);
 
             // ACT
             playerEvents.ChangePanicLevel(0.3f);
@@ -66,12 +66,12 @@ namespace Tests
             // ASSERT
             playerSoundEmitter.Received(1).PlaySound(
                 Arg.Is<Sound>(
-                    x => new Sound[] {scaredSoundOne, scaredSoundTwo, scaredSoundThree}.Contains(x)
+                    x => new[] {scaredSoundOne, scaredSoundTwo, scaredSoundThree}.Contains(x)
                 )
             );
-            audioVM.Received(1).SoundWithName(
+            audioViewModel.Received(1).SoundWithName(
                 Arg.Is<string>(
-                    x => new string[] {
+                    x => new[] {
                         scaredSoundOne.Name, scaredSoundTwo.Name, scaredSoundThree.Name
                     }.Contains(x)
                 )
@@ -83,15 +83,15 @@ namespace Tests
         {
             // ARRANGE
             var playerSoundEmitter = Substitute.For<ISoundEmitter>();
-            var audioVM = SetupAudioVMSubstitute();
-            var panicNoiseEmitter = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioVM);
+            var audioViewModel = SetupAudioViewModelSubstitute();
+            _ = new PanicNoiseEmitter(playerEvents, playerSoundEmitter, audioViewModel);
 
             // ACT
             playerEvents.ChangePanicLevel(0.8f);
 
             // ASSERT
             playerSoundEmitter.Received(1).PlaySound(panickedSound);
-            audioVM.Received(1).SoundWithName(PanicSound.Panicking.Name);
+            audioViewModel.Received(1).SoundWithName(PanicSound.Panicking.Name);
         }
     }
 }

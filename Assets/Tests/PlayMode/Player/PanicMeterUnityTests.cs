@@ -1,14 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using NSubstitute;
-using NUnit.Framework;
+using Player;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.PlayMode.Player
 {
-    public class PanicMeter_UnityTests
+    public class PanicMeterUnityTests
     {
         private readonly float panicEscalationSpeed = 4f;
         private readonly float panicDeescalationSpeed = 4f;
@@ -18,7 +16,7 @@ namespace Tests
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
             var panicMeter = new PanicMeter(panicEscalationSpeed, panicDeescalationSpeed, playerEvents);
-            var playerGameObject = PlayerMono_Mock.Dummy(panicMeter, playerEvents);
+            var playerGameObject = PlayerMonoMock.Dummy(panicMeter, playerEvents);
 
             yield return new WaitForSeconds(0.05f);
 
@@ -32,7 +30,7 @@ namespace Tests
         {
             var playerEvents = Substitute.For<IPlayerEvents>();
             var panicMeter = new PanicMeter(panicEscalationSpeed, panicDeescalationSpeed, playerEvents);
-            var playerGameObject = PlayerMono_Mock.Dummy(panicMeter, playerEvents);
+            var playerGameObject = PlayerMonoMock.Dummy(panicMeter, playerEvents);
 
             yield return new WaitForSeconds(0.3f);
 

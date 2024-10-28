@@ -1,62 +1,64 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public interface IPlayerAbilities
+namespace Player
 {
-    Dictionary<KeyCode, IPlayerAbility> Abilities { get; }
-    List<KeyCode> RelevantKeyPresses { get; }
-    List<IPlayerAbility> RelevantAbilities { get; }
-
-    void ExecuteAbility(IPlayerAbility ability, Guid enemyID);
-    void LearnAbility(IPlayerAbility ability);
-}
-
-public class PlayerAbilities : IPlayerAbilities
-{
-    public Dictionary<KeyCode, IPlayerAbility> Abilities
+    public interface IPlayerAbilities
     {
-        get; private set;
+        Dictionary<KeyCode, IPlayerAbility> Abilities { get; }
+        List<KeyCode> RelevantKeyPresses { get; }
+        List<IPlayerAbility> RelevantAbilities { get; }
+
+        void ExecuteAbility(IPlayerAbility ability, Guid enemyID);
+        void LearnAbility(IPlayerAbility ability);
     }
 
-    private Dictionary<IPlayerAbility, float> timesSinceLastExecute;
-    private IPlayerEvents playerEvents;
-
-    public PlayerAbilities(
-        IPlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 
+    public class PlayerAbilities : IPlayerAbilities
     {
-        this.playerEvents = playerEvents;
-        Abilities = abilities;
-        timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
-    }
+        public Dictionary<KeyCode, IPlayerAbility> Abilities
+        {
+            get;
+        }
 
-    public List<KeyCode> RelevantKeyPresses => Abilities.Select(x => x.Value.AssociatedKey).ToList();
+        private readonly Dictionary<IPlayerAbility, float> timesSinceLastExecute;
+        private readonly IPlayerEvents playerEvents;
 
-    public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
+        public PlayerAbilities(
+            IPlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 
+        {
+            this.playerEvents = playerEvents;
+            Abilities = abilities;
+            timesSinceLastExecute = Abilities.Values.ToDictionary(x => x, x => -1f);
+        }
 
-    public void ExecuteAbility(IPlayerAbility ability, Guid targetID)
-    {
-        if (!Abilities.ContainsValue(ability))
-            return;
+        public List<KeyCode> RelevantKeyPresses => Abilities.Select(x => x.Value.AssociatedKey).ToList();
 
-        var lastExecute = timesSinceLastExecute[ability];
-        if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
-            return;
+        public List<IPlayerAbility> RelevantAbilities => Abilities.Select(x => x.Value).ToList();
 
-        timesSinceLastExecute[ability] = Time.time;
-        ability.SetTarget(targetID);
-        ability.Execute(playerEvents);
-        playerEvents.ExecuteAbility(ability);
-    }
+        public void ExecuteAbility(IPlayerAbility ability, Guid targetID)
+        {
+            if (!Abilities.ContainsValue(ability))
+                return;
 
-    public void LearnAbility(IPlayerAbility ability)
-    {
-        if (Abilities.ContainsValue(ability))
-            return;
+            var lastExecute = timesSinceLastExecute[ability];
+            if (Time.time - lastExecute < ability.CoolDown && lastExecute != -1f)
+                return;
 
-        Abilities.Add(ability.AssociatedKey, ability);
-        timesSinceLastExecute.Add(ability, -1f);
+            timesSinceLastExecute[ability] = Time.time;
+            ability.SetTarget(targetID);
+            ability.Execute(playerEvents);
+            playerEvents.ExecuteAbility(ability);
+        }
+
+        public void LearnAbility(IPlayerAbility ability)
+        {
+            if (Abilities.ContainsValue(ability))
+                return;
+
+            Abilities.Add(ability.AssociatedKey, ability);
+            timesSinceLastExecute.Add(ability, -1f);
+        }
     }
 }
