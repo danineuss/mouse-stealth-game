@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 namespace Scenes
 {
     public abstract class SceneState

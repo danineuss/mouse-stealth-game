@@ -1,4 +1,3 @@
-using System;
 using Player;
 using UnityEngine;
 using Random = System.Random;
