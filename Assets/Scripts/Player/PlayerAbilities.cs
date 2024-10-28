@@ -19,11 +19,11 @@ namespace Player
     {
         public Dictionary<KeyCode, IPlayerAbility> Abilities
         {
-            get; private set;
+            get;
         }
 
-        private Dictionary<IPlayerAbility, float> timesSinceLastExecute;
-        private IPlayerEvents playerEvents;
+        private readonly Dictionary<IPlayerAbility, float> timesSinceLastExecute;
+        private readonly IPlayerEvents playerEvents;
 
         public PlayerAbilities(
             IPlayerEvents playerEvents, Dictionary<KeyCode, IPlayerAbility> abilities) 

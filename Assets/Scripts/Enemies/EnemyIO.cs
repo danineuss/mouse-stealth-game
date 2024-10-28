@@ -25,15 +25,15 @@ namespace Enemies
 
     public class EnemyIO : IEnemyIO
     {
-        private IEnemyEvents enemyEvents;
-        private TextMesh textMesh;
-        private OutlineMono enemyOutline;
+        private readonly IEnemyEvents enemyEvents;
+        private readonly TextMesh textMesh;
+        private readonly OutlineMono enemyOutline;
         private readonly Color InactiveTextColor;
         private readonly Color ActiveTextColor;
-        private Transform ioTransform;
-        private Transform cooldownScaleParent;
+        private readonly Transform ioTransform;
+        private readonly Transform cooldownScaleParent;
         private Transform playerFollowTransform;
-        private Dictionary<IPlayerAbility, float> abilityCooldowns;
+        private readonly Dictionary<IPlayerAbility, float> abilityCooldowns;
         private Guid enemyID;
         private readonly float OutlineWidth = 10f;
 
@@ -49,8 +49,8 @@ namespace Enemies
             this.enemyEvents = enemyEvents;
             this.textMesh = textMesh;
             this.enemyOutline = enemyOutline;
-            this.InactiveTextColor = inactiveTextColor;
-            this.ActiveTextColor = activeTextColor;
+            InactiveTextColor = inactiveTextColor;
+            ActiveTextColor = activeTextColor;
             this.ioTransform = ioTransform;
             this.cooldownScaleParent = cooldownScaleParent;
 
@@ -58,7 +58,7 @@ namespace Enemies
             playerFollowTransform = null;
             this.textMesh.color = activeTextColor;
             this.cooldownScaleParent.localScale = new Vector3(1f, 0f, 1f);
-            this.enemyID = Guid.Empty;
+            enemyID = Guid.Empty;
 
             SetTextVisibleAndFollowing(false);
         }

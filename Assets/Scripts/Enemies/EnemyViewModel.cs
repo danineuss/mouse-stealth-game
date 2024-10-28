@@ -13,14 +13,14 @@ namespace Enemies
 
     public class EnemyViewModel : IEnemyViewModel
     {
-        public Guid ID { get; private set; }
+        public Guid ID { get; }
 
-        private IPlayerDetector playerDetector;
-        private AudioViewModel audioViewModel;
-        private IEnemyIO enemyIO;
-        private SoundEmitter soundEmitter;
-        private IPlayerEvents playerEvents;
-        private IEnemyEvents enemyEvents;
+        private readonly IPlayerDetector playerDetector;
+        private readonly AudioViewModel audioViewModel;
+        private readonly IEnemyIO enemyIO;
+        private readonly SoundEmitter soundEmitter;
+        private readonly IPlayerEvents playerEvents;
+        private readonly IEnemyEvents enemyEvents;
 
         public void PlaySound(Sound sound)
         {
@@ -71,7 +71,7 @@ namespace Enemies
         void OnReceivePlayerLocation(
             Guid enemyID, bool shouldDisplayText, Transform playerTransform = null)
         {
-            if (enemyID != this.ID)
+            if (enemyID != ID)
                 return;
 
             enemyIO.SetTextVisibleAndFollowing(shouldDisplayText, playerTransform);
@@ -79,7 +79,7 @@ namespace Enemies
 
         void OnRemovePlayerLocation(Guid enemyID)
         {
-            if (enemyID != this.ID)
+            if (enemyID != ID)
                 return;
 
             enemyIO.SetTextVisibleAndFollowing(false);
@@ -92,7 +92,7 @@ namespace Enemies
 
         void OnEnemyDistracted(Guid targetID, float distractionDuration)
         {
-            if (targetID != this.ID)
+            if (targetID != ID)
                 return;
 
             if (!playerDetector.AttemptDistraction(distractionDuration))

@@ -22,10 +22,11 @@ namespace Scenes
             }
         }
 
-        private IPlayerEvents playerEvents;
-        private IEnemyEvents enemyEvents;
-        private ISceneEvents sceneEvents;
         private SceneState sceneState;
+        
+        private readonly IPlayerEvents playerEvents;
+        private readonly IEnemyEvents enemyEvents;
+        private readonly ISceneEvents sceneEvents;
 
         public SceneViewModel(
             IPlayerEvents playerEvents,
@@ -55,7 +56,7 @@ namespace Scenes
         public void TransitionTo(SceneState sceneState)
         {
             SceneState = sceneState;
-            this.sceneState.SetSceneVM(this);
+            this.sceneState.SetSceneViewModel(this);
         }
 
         public void PauseGame(bool paused)

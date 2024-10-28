@@ -21,9 +21,9 @@ namespace Enemies.Detection
         public float DetectionEscalationSpeed { get; }
         public float DetectionDeescalationSpeed { get; }
 
-        private IVisionConeViewModel visionConeViewModel;
-        private IEvents events;
         private DetectorState detectorState;
+        
+        private readonly IEvents events;
 
         public bool AttemptDistraction(float distractionDuration)
         {
@@ -33,7 +33,7 @@ namespace Enemies.Detection
         public void TransitionTo(DetectorState detectorState)
         {
             this.detectorState = detectorState;
-            events.EnemyEvents.ChangeDetectorState(this.ID);
+            events.EnemyEvents.ChangeDetectorState(ID);
         }
 
         public void Update()
@@ -47,11 +47,10 @@ namespace Enemies.Detection
             float detectionEscalationSpeed,
             float detectionDeescalationSpeed)
         {
-            this.visionConeViewModel = visionConeViewModel;
             this.events = events;
-            this.DetectionEscalationSpeed = detectionEscalationSpeed;
-            this.DetectionDeescalationSpeed = detectionDeescalationSpeed;
-            this.ID = Guid.NewGuid();
+            DetectionEscalationSpeed = detectionEscalationSpeed;
+            DetectionDeescalationSpeed = detectionDeescalationSpeed;
+            ID = Guid.NewGuid();
 
             TransitionTo(new DetectorStateIdle(this, visionConeViewModel, events));
         }

@@ -11,21 +11,21 @@ namespace Enemies.VisionCone
 
     public class ConeVisualizer : IConeVisualizer
     {
-        private Transform coneTransform;
-        private Transform coneScaleParent;
-        private Transform coneScaleAnchor;
-        private float ConeRangeMultiplier;
+        private readonly Transform coneTransform;
+        private readonly Transform coneScaleParent;
+        private readonly Transform coneScaleAnchor;
+        private readonly float coneRangeMultiplier;
 
-        private MeshRenderer coneMeshRenderer;
-        private Material greenMaterial;
-        private Material blueMaterial;
-        private OutlineMono outline;
+        private readonly MeshRenderer coneMeshRenderer;
+        private readonly Material greenMaterial;
+        private readonly Material blueMaterial;
+        private readonly OutlineMono outline;
 
-        private Light spotLight;
-        private Color SpotLightGreen;
-        private Color SpotLightOrange;
-        private Color SpotLightRed;
-        private Color SpotLightBlue;
+        private readonly Light spotLight;
+        private readonly Color spotLightGreen;
+        private readonly Color spotLightOrange;
+        private readonly Color spotLightRed;
+        private readonly Color spotLightBlue;
 
         public ConeVisualizer(
             Transform coneTransform,
@@ -45,7 +45,7 @@ namespace Enemies.VisionCone
             this.coneTransform = coneTransform;
             this.coneScaleParent = coneScaleParent;
             this.coneScaleAnchor = coneScaleAnchor;
-            this.ConeRangeMultiplier = coneRangeMultiplier;
+            this.coneRangeMultiplier = coneRangeMultiplier;
 
             this.coneMeshRenderer = coneMeshRenderer;
             this.greenMaterial = greenMaterial;
@@ -53,16 +53,16 @@ namespace Enemies.VisionCone
             this.outline = outline;
 
             this.spotLight = spotLight;
-            this.SpotLightGreen = spotLightGreen;
-            this.SpotLightOrange = spotLightOrange;
-            this.SpotLightRed = spotLightRed;
-            this.SpotLightBlue = spotLightBlue;
+            this.spotLightGreen = spotLightGreen;
+            this.spotLightOrange = spotLightOrange;
+            this.spotLightRed = spotLightRed;
+            this.spotLightBlue = spotLightBlue;
         }
 
         public void UpdateConeOrientation(Vector3 currentTarget, float fieldOfView)
         {
             var toCurrentTarget = currentTarget - coneTransform.position;
-            var range = toCurrentTarget.magnitude * ConeRangeMultiplier;
+            var range = toCurrentTarget.magnitude * coneRangeMultiplier;
             coneTransform.rotation = Quaternion.LookRotation(toCurrentTarget);
 
             spotLight.spotAngle = fieldOfView;
@@ -79,21 +79,21 @@ namespace Enemies.VisionCone
             switch (spotLightState)
             {
                 case SpotLightState.Idle:
-                    spotLight.color = SpotLightGreen;
+                    spotLight.color = spotLightGreen;
                     coneMeshRenderer.material = greenMaterial;
-                    outline.OutlineColor = SpotLightGreen;
+                    outline.OutlineColor = spotLightGreen;
                     break;
                 case SpotLightState.Searching:
                     spotLight.color = Color.LerpUnclamped(
-                        SpotLightOrange, SpotLightRed, detectionMeter);
+                        spotLightOrange, spotLightRed, detectionMeter);
                     break;
                 case SpotLightState.Alarmed:
-                    spotLight.color = SpotLightRed;
+                    spotLight.color = spotLightRed;
                     break;
                 case SpotLightState.Distracted:
-                    spotLight.color = SpotLightBlue;
+                    spotLight.color = spotLightBlue;
                     coneMeshRenderer.material = blueMaterial;
-                    outline.OutlineColor = SpotLightBlue;
+                    outline.OutlineColor = spotLightBlue;
                     break;
             }
         }

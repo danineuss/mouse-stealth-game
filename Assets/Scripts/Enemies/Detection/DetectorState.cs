@@ -9,18 +9,18 @@ namespace Enemies.Detection
         public abstract EnemyIOTextColor EnemyIOTextColor { get; }
         public abstract EnemySound EnemySound { get; }
 
-        protected IPlayerDetector playerDetector;
-        protected IVisionConeViewModel VisionConeViewModel;
-        protected IEvents events;
+        protected readonly IPlayerDetector PlayerDetector;
+        protected readonly IVisionConeViewModel VisionConeViewModel;
+        protected readonly IEvents Events;
 
         protected DetectorState(
             IPlayerDetector playerDetector, 
             IVisionConeViewModel visionConeViewModel,
             IEvents events) 
         {
-            this.playerDetector = playerDetector;
-            this.VisionConeViewModel = visionConeViewModel;
-            this.events = events;
+            this.PlayerDetector = playerDetector;
+            VisionConeViewModel = visionConeViewModel;
+            this.Events = events;
         }
 
         public abstract bool AttemptDistraction(float distractionDuration);

@@ -4,10 +4,11 @@ namespace Scenes
     {
         protected ISceneViewModel SceneViewModel;
 
-        public void SetSceneVM(ISceneViewModel sceneViewModel)
+        public void SetSceneViewModel(ISceneViewModel sceneViewModel)
         {
-            this.SceneViewModel = sceneViewModel;
+            SceneViewModel = sceneViewModel;
         }
+        
         public abstract void BroadcastSceneState(ISceneEvents sceneEvents);
         public abstract void ToggleDialogOpen();
         public abstract void ToggleGamePaused();

@@ -59,7 +59,6 @@ public class PlayerMono_Mock : MonoBehaviour {
             playerInput ?? defaultPlayerInput,
             playerAbilities, 
             panicMeter ?? defaultPanicMeter,
-            panicNoiseEmitter,
             playerEvents ?? defaultPlayerEvents,
             enemyEvents,
             sceneEvents

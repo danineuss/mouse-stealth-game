@@ -10,23 +10,25 @@ namespace Enemies.Detection
         public override EnemyIOTextColor EnemyIOTextColor => EnemyIOTextColor.Inactive;
         public override EnemySound EnemySound => EnemySound.Searching;
 
-        private readonly float DetectionEscalationSpeed;
-        private readonly float DetectionDeescalationSpeed;
-        private readonly float FloatingPointDelta = 0.005f;
         private float detectionMeter;
+        
+        private readonly float detectionEscalationSpeed;
+        private readonly float detectionDeescalationSpeed;
+        
+        private const float FloatingPointDelta = 0.005f;
 
         public DetectorStateSearching(
             IPlayerDetector playerDetector, 
             IVisionConeViewModel visionConeViewModel,
             IEvents events, 
-            float DetectionEscalationSpeed,
-            float DetectionDeescalationSpeed)
+            float detectionEscalationSpeed,
+            float detectionDeescalationSpeed)
             : base(playerDetector, visionConeViewModel, events)
         {
-            this.DetectionEscalationSpeed = DetectionEscalationSpeed;
-            this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
+            this.detectionEscalationSpeed = detectionEscalationSpeed;
+            this.detectionDeescalationSpeed = detectionDeescalationSpeed;
         
-            this.detectionMeter = 0f;
+            detectionMeter = 0f;
             visionConeViewModel.TransitionTo(new VisionConeStateFollowingPlayer());
         }
 
@@ -46,9 +48,9 @@ namespace Enemies.Detection
         private void UpdateDetectionMeter()
         {
             if (VisionConeViewModel.IsPlayerObstructed())
-                detectionMeter -= Time.deltaTime * DetectionDeescalationSpeed;
+                detectionMeter -= Time.deltaTime * detectionDeescalationSpeed;
             else
-                detectionMeter += Time.deltaTime * DetectionEscalationSpeed;
+                detectionMeter += Time.deltaTime * detectionEscalationSpeed;
         
             detectionMeter = Mathf.Clamp(detectionMeter, 0f, 1f);
         }
@@ -57,18 +59,18 @@ namespace Enemies.Detection
         {
             if (detectionMeter >= 1f - FloatingPointDelta)
             {
-                playerDetector.TransitionTo(new DetectorStateAlarmed(
-                    playerDetector, 
+                PlayerDetector.TransitionTo(new DetectorStateAlarmed(
+                    PlayerDetector, 
                     VisionConeViewModel,
-                    events)
+                    Events)
                 );
             }
             else if (detectionMeter <= 0f + FloatingPointDelta)
             {
-                playerDetector.TransitionTo(new DetectorStateIdle(
-                    playerDetector, 
+                PlayerDetector.TransitionTo(new DetectorStateIdle(
+                    PlayerDetector, 
                     VisionConeViewModel,
-                    events)
+                    Events)
                 );
             }
         }

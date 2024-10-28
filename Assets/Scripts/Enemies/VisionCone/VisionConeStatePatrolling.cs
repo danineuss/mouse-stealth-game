@@ -14,9 +14,9 @@ namespace Enemies.VisionCone
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.VisionConeViewModel = visionConeViewModel;
-            this.coneVisualizer = coneVisualizer;
-            this.currentPatrolPoint = patrolPoint;
+            VisionConeViewModel = visionConeViewModel;
+            this.ConeVisualizer = coneVisualizer;
+            currentPatrolPoint = patrolPoint;
 
             coneVisualizer.SetSpotState(SpotLightState.Idle);
             MoveTowardsNextControlPoint();

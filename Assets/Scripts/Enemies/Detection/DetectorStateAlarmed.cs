@@ -22,7 +22,7 @@ namespace Enemies.Detection
 
         public override void UpdateDetectionState()
         {
-            events.EnemyEvents.FailGame();
+            Events.EnemyEvents.FailGame();
         }
     }
 }

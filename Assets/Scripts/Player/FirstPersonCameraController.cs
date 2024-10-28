@@ -9,8 +9,8 @@ namespace Player
 
     public class FirstPersonCameraController : IFirstPersonCameraController
     {
-        private Transform playerTransform;
-        private Transform cameraTransform;
+        private readonly Transform playerTransform;
+        private readonly Transform cameraTransform;
         private readonly IPlayerInput playerInput;
         private readonly float rotationSpeed;
 

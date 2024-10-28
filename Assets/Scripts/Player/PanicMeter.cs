@@ -10,7 +10,7 @@ namespace Player
     {
         private float panicLevel;
         private bool characterInCover;
-        private IPlayerEvents playerEvents;
+        private readonly IPlayerEvents playerEvents;
 
         private readonly float panicEscalationSpeed;
         private readonly float panicDeescalationSpeed;

@@ -11,10 +11,11 @@ namespace UI
 
     public class DialogViewModel : IDialogViewModel
     {
-        private List<GameObject> screens;
-        private UICoordinator uiCoordinator;
-        private GameObject parentGameObject;
         private int currentScreen;
+        
+        private readonly List<GameObject> screens;
+        private readonly UICoordinator uiCoordinator;
+        private readonly GameObject parentGameObject;
 
         public DialogViewModel(
             List<GameObject> screens, 

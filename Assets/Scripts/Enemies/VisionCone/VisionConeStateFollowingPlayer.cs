@@ -6,7 +6,7 @@ namespace Enemies.VisionCone
     public class VisionConeStateFollowingPlayer : VisionConeState
     {
         private Transform playerTransform;
-        private float EvaluationWaitTime = 2f;
+        private readonly float EvaluationWaitTime = 2f;
         private const float FollowPlayerClampValue = 0.1f;
 
         public override void SetupVisionConeState(
@@ -16,8 +16,8 @@ namespace Enemies.VisionCone
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.VisionConeViewModel = visionConeViewModel;
-            this.coneVisualizer = coneVisualizer;
+            VisionConeViewModel = visionConeViewModel;
+            this.ConeVisualizer = coneVisualizer;
             this.playerTransform = playerTransform;
 
             coneVisualizer.SetSpotState(SpotLightState.Searching);
@@ -26,7 +26,7 @@ namespace Enemies.VisionCone
 
         public override void UpdateDetectionMeter(float detectionEscalationMeter) 
         {
-            coneVisualizer.SetSpotState(SpotLightState.Searching, detectionEscalationMeter);
+            ConeVisualizer.SetSpotState(SpotLightState.Searching, detectionEscalationMeter);
         }
 
         private IEnumerator FollowPlayer()

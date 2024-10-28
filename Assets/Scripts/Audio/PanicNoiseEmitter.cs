@@ -48,7 +48,7 @@ namespace Audio
             if (panicLevel < 0.7f)
             {
                 var scaredSounds = 
-                    new PanicSound[] { PanicSound.ScaredOne, PanicSound.ScaredTwo, PanicSound.ScaredThree };
+                    new[] { PanicSound.ScaredOne, PanicSound.ScaredTwo, PanicSound.ScaredThree };
                 var randomSound = scaredSounds[random.Next(scaredSounds.Length)];
 
                 return audioViewModel.SoundWithName(randomSound.Name);

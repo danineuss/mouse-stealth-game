@@ -14,8 +14,8 @@ namespace Enemies.VisionCone
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.VisionConeViewModel = visionConeViewModel;
-            this.coneVisualizer = coneVisualizer;
+            VisionConeViewModel = visionConeViewModel;
+            this.ConeVisualizer = coneVisualizer;
             this.distractPoint = distractPoint;
 
             LookToDistraction();
@@ -25,7 +25,7 @@ namespace Enemies.VisionCone
 
         void LookToDistraction()
         {
-            coneVisualizer.SetSpotState(SpotLightState.Distracted);
+            ConeVisualizer.SetSpotState(SpotLightState.Distracted);
 
             var distraction = VisionConeViewModel.LerpTowardsTarget(
                 distractPoint.Position, distractPoint.FieldOfView, LerpToDistractDuration

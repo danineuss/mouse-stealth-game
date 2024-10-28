@@ -5,7 +5,7 @@ namespace Enemies.VisionCone
     public abstract class VisionConeState
     {
         protected IVisionConeViewModel VisionConeViewModel;
-        protected IConeVisualizer coneVisualizer;
+        protected IConeVisualizer ConeVisualizer;
 
         public abstract void SetupVisionConeState(
             IVisionConeViewModel visionConeViewModel, 

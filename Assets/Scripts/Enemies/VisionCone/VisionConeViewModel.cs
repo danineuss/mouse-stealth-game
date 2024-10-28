@@ -28,17 +28,17 @@ namespace Enemies.VisionCone
         public float FieldOfView { get; private set; }
         public float Range => (CurrentLookAtTarget - coneTransform.position).magnitude;
 
-        private List<IVisionConePatrolPoint> patrolPoints;
-        private IVisionConeControlPoint distractPoint;
-        private IConeVisualizer coneVisualizer;
-        private Transform coneTransform;
-        private Transform playerTransform;
-        private LayerMask obstacleMask;
-        private IEvents events;
-
         private VisionConeState visionConeState;
-        private List<IEnumerator> currentCoroutines = new List<IEnumerator>();
         private int controlPointIndex;
+        
+        private readonly List<IVisionConePatrolPoint> patrolPoints;
+        private readonly IVisionConeControlPoint distractPoint;
+        private readonly IConeVisualizer coneVisualizer;
+        private readonly Transform coneTransform;
+        private readonly Transform playerTransform;
+        private readonly LayerMask obstacleMask;
+        private readonly IEvents events;
+        private readonly List<IEnumerator> currentCoroutines = new List<IEnumerator>();
 
         public VisionConeViewModel(
             List<IVisionConePatrolPoint> patrolPoints,

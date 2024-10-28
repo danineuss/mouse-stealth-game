@@ -2,7 +2,7 @@
 {
     public class PanicSound
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
         private PanicSound(string name) { Name = name; }
 

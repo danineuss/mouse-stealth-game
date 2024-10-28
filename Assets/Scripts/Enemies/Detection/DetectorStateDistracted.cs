@@ -29,7 +29,6 @@ namespace Enemies.Detection
 
         public override void UpdateDetectionState()
         {
-            return;
         }
 
         IEnumerator ResetDistraction(float distractionDuration)
@@ -37,10 +36,10 @@ namespace Enemies.Detection
             yield return new WaitForSeconds(distractionDuration);
 
             VisionConeViewModel.TransitionTo(new VisionConeStatePatrolling());
-            playerDetector.TransitionTo(new DetectorStateIdle(
-                playerDetector, 
+            PlayerDetector.TransitionTo(new DetectorStateIdle(
+                PlayerDetector, 
                 VisionConeViewModel, 
-                events)
+                Events)
             );
         }
     }

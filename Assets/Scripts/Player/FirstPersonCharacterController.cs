@@ -10,7 +10,7 @@ namespace Player
 
     public class FirstPersonCharacterController : IFirstPersonCharacterController
     {
-        private Transform characterTransform;
+        private readonly Transform characterTransform;
         private float movementSpeed;
         private bool CharacterInCover {
             get => characterInCover;
@@ -51,7 +51,7 @@ namespace Player
             this.playerInput = playerInput;
             this.playerEvents = playerEvents;
         
-            this.movementSpeed = minMovementSpeed;
+            movementSpeed = minMovementSpeed;
         }
 
         public void UpdateCharacterPosition()

@@ -20,10 +20,10 @@ namespace Enemies.Detection
 
         public override bool AttemptDistraction(float distractionDuration)
         {
-            playerDetector.TransitionTo(new DetectorStateDistracted(
-                playerDetector, 
+            PlayerDetector.TransitionTo(new DetectorStateDistracted(
+                PlayerDetector, 
                 VisionConeViewModel,
-                events,
+                Events,
                 distractionDuration)
             );
             return true;
@@ -37,12 +37,12 @@ namespace Enemies.Detection
             if (VisionConeViewModel.IsPlayerObstructed())
                 return;
 
-            playerDetector.TransitionTo(new DetectorStateSearching(
-                playerDetector, 
+            PlayerDetector.TransitionTo(new DetectorStateSearching(
+                PlayerDetector, 
                 VisionConeViewModel,
-                events,
-                playerDetector.DetectionEscalationSpeed,
-                playerDetector.DetectionDeescalationSpeed)
+                Events,
+                PlayerDetector.DetectionEscalationSpeed,
+                PlayerDetector.DetectionDeescalationSpeed)
             );
         }
     }

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Audio
 {
-    [System.Serializable]
+    [Serializable]
     public struct Sound {
         public string Name;
         public AudioClip Clip;

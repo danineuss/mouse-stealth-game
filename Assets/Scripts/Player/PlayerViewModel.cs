@@ -1,5 +1,4 @@
 ﻿using System;
-using Audio;
 using Enemies;
 using Infrastructure;
 using Scenes;
@@ -11,17 +10,17 @@ namespace Player
 
     public class PlayerViewModel : IPlayerViewModel
     {
-        private Transform playerTransform;
-        private IPlayerInput playerInput;
-        private IFirstPersonCameraController cameraController;
-        private IFirstPersonCharacterController characterController;
-        private IPanicMeter panicMeter;
-        private IPanicNoiseEmitter panicNoiseEmitter;
-        private IPlayerAbilities playerAbilities;
-        private IPlayerEvents playerEvents;
-        private IEnemyEvents enemyEvents;
-        private ISceneEvents sceneEvents;
         private Guid targetEnemyID;
+
+        private readonly Transform playerTransform;
+        private readonly IPlayerInput playerInput;
+        private readonly IFirstPersonCameraController cameraController;
+        private readonly IFirstPersonCharacterController characterController;
+        private readonly IPanicMeter panicMeter;
+        private readonly IPlayerAbilities playerAbilities;
+        private readonly IPlayerEvents playerEvents;
+        private readonly IEnemyEvents enemyEvents;
+        private readonly ISceneEvents sceneEvents;
 
         public PlayerViewModel(
             Transform playerTransform,
@@ -30,7 +29,6 @@ namespace Player
             IPlayerInput playerInput,
             IPlayerAbilities playerAbilities,
             IPanicMeter panicMeter,
-            IPanicNoiseEmitter panicNoiseEmitter,
             IPlayerEvents playerEvents,
             IEnemyEvents enemyEvents,
             ISceneEvents sceneEvents)
@@ -41,7 +39,6 @@ namespace Player
             this.playerInput = playerInput;
             this.playerAbilities = playerAbilities;
             this.panicMeter = panicMeter;
-            this.panicNoiseEmitter = panicNoiseEmitter;
             this.playerEvents = playerEvents;
             this.enemyEvents = enemyEvents;
             this.sceneEvents = sceneEvents;

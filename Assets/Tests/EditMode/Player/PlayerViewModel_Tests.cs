@@ -19,20 +19,19 @@ namespace Tests
         private IPlayerInput playerInput;
         private IPlayerAbilities playerAbilities;
         private IPanicMeter panicMeter;
-        private IPanicNoiseEmitter panicNoiseEmitter;
         private IPlayerEvents playerEvents;
         private IEnemyEvents enemyEvents;
         private ISceneEvents sceneEvents;
         private PlayerViewModel playerViewModel;
 
-        private void SetupDependecies()
+        private void SetupDependencies()
         {
             cameraController = Substitute.For<IFirstPersonCameraController>();
             characterController = Substitute.For<IFirstPersonCharacterController>();
             playerInput = Substitute.For<IPlayerInput>();
             playerAbilities = Substitute.For<IPlayerAbilities>();
             panicMeter = Substitute.For<IPanicMeter>();
-            panicNoiseEmitter = Substitute.For<IPanicNoiseEmitter>();
+            Substitute.For<IPanicNoiseEmitter>();
             playerEvents = Substitute.For<IPlayerEvents>();
             enemyEvents = Substitute.For<IEnemyEvents>();
             sceneEvents = Substitute.For<ISceneEvents>(); 
@@ -40,7 +39,7 @@ namespace Tests
 
         private void SetupPlayerViewModel()
         {
-            SetupDependecies(); 
+            SetupDependencies(); 
             playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
@@ -48,7 +47,6 @@ namespace Tests
                 playerInput,
                 playerAbilities,
                 panicMeter,
-                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -57,7 +55,7 @@ namespace Tests
 
         private void SetupPlayerViewModel(IPlayerAbilities playerAbilities)
         {
-            SetupDependecies(); 
+            SetupDependencies(); 
             playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
@@ -65,7 +63,6 @@ namespace Tests
                 playerInput,
                 playerAbilities,
                 panicMeter,
-                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -160,7 +157,6 @@ namespace Tests
                 playerInput,
                 playerAbilities,
                 panicMeter,
-                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -178,7 +174,6 @@ namespace Tests
                 playerInput,
                 playerAbilities,
                 panicMeter,
-                panicNoiseEmitter,
                 playerEvents,
                 enemyEvents,
                 sceneEvents

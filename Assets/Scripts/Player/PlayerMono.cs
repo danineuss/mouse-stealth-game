@@ -57,7 +57,6 @@ namespace Player
                 playerInput, 
                 playerAbilities, 
                 panicMeter,
-                panicNoiseEmitter,
                 eventsMono.PlayerEvents, 
                 eventsMono.EnemyEvents,
                 eventsMono.SceneEvents
