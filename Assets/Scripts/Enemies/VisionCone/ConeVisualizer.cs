@@ -3,14 +3,6 @@ using UnityEngine;
 
 namespace Enemies.VisionCone
 {
-    public enum SpotLightState
-    {
-        Idle,
-        Searching,
-        Alarmed,
-        Distracted
-    }
-
     public interface IConeVisualizer
     {
         void SetSpotState(SpotLightState spotLightState, float detectionMeter = 0);
