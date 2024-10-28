@@ -20,9 +20,9 @@ namespace Tests
         private Sound panickedSound;
         
 
-        private IAudioVM SetupAudioVMSubstitute()
+        private IAudioViewModel SetupAudioVMSubstitute()
         {
-            var audioVM = Substitute.For<IAudioVM>();
+            var audioVM = Substitute.For<IAudioViewModel>();
             scaredSoundOne = 
                 new Sound() { Name = "ScaredOne", Clip = audioClip, Volume = 1f, Loop = false };
             scaredSoundTwo =

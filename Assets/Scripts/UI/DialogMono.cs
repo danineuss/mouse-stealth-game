@@ -5,19 +5,19 @@ namespace UI
 {
     public class DialogMono: MonoBehaviour 
     {
-        [SerializeField] private UICoordinator uiCoordinator = null;
-        [SerializeField] private List<GameObject> screens = null;
-        public IDialogVM DialogVM => dialogVM;
-        private IDialogVM dialogVM;
+        [SerializeField] private UICoordinator uiCoordinator;
+        [SerializeField] private List<GameObject> screens;
+        public IDialogViewModel DialogViewModel => dialogViewModel;
+        private IDialogViewModel dialogViewModel;
 
         void Awake() 
         {
-            dialogVM = new DialogVM(screens, uiCoordinator, gameObject);
+            dialogViewModel = new DialogViewModel(screens, uiCoordinator, gameObject);
         }
 
         public void IterateScreens()
         {
-            dialogVM.IterateScreens();
+            dialogViewModel.IterateScreens();
         }
     }
 }

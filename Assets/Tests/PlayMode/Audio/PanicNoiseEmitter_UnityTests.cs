@@ -16,9 +16,9 @@ namespace Tests
 
         private AudioClip audioClip = AudioClip.Create("mockClip", 1000, 1, 1000, false);
         private Sound panickedSound;
-        private IAudioVM SetupAudioVMSubstitute()
+        private IAudioViewModel SetupAudioVMSubstitute()
         {
-            var audioVM = Substitute.For<IAudioVM>();
+            var audioVM = Substitute.For<IAudioViewModel>();
             panickedSound = 
                 new Sound() { Name = "Panicked", Clip = audioClip, Volume = 1f, Loop = false };
             audioVM.SoundWithName(PanicSound.Panicking.Name).Returns(panickedSound);

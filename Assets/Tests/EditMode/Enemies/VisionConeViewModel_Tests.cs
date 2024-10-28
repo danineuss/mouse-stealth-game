@@ -5,16 +5,15 @@ using Enemies.VisionCone;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class VisionConeVM_UnityTests
+    public class VisionConeViewModel_Tests
     {
         private GameObject visionConeObject = new GameObject("VisionCone");
         private GameObject playerObject = new GameObject("Player");
         private MonoBehaviour_Mock visionConeMono_Mock;
-        private VisionConeVM visionConeVM;
+        private VisionConeViewModel visionConeViewModel;
         private List<IVisionConePatrolPoint> patrolPoints;
         private IVisionConeControlPoint distractPoint;
         private IConeVisualizer coneVisualizer;
@@ -25,7 +24,7 @@ namespace Tests
         {
             visionConeObject.transform.position = Vector3.zero;
             coneVisualizer = Substitute.For<IConeVisualizer>();
-            visionConeVM = new VisionConeVM(
+            visionConeViewModel = new VisionConeViewModel(
                 patrolPoints,
                 distractPoint,
                 coneVisualizer,
@@ -35,11 +34,11 @@ namespace Tests
                 eventsMono
             );
             visionConeMono_Mock = visionConeObject.AddComponent<MonoBehaviour_Mock>();
-            visionConeMono_Mock.Updatables.Add(visionConeVM);
+            visionConeMono_Mock.Updatables.Add(visionConeViewModel);
         }
 
-        [UnityTest]
-        public IEnumerator should_with_one_patrol_point_stay_idle()
+        [Test]
+        public void should_detect_player_if_inside_range_and_vision_cone()
         {
             distractPoint = Substitute.For<IVisionConeControlPoint>();
             eventsMono = EventsMono_Mock.NewSubstitute();
@@ -49,33 +48,43 @@ namespace Tests
             playerObject.transform.position = new Vector3(1, 0, 0);
             SetupVisionCone();
 
-            yield return null;
-
-            coneVisualizer.ReceivedWithAnyArgs(1).SetSpotState(default);
-            coneVisualizer.Received(1).SetSpotState(SpotLightState.Idle);            
+            Assert.True(visionConeViewModel.IsPlayerInsideVisionCone());
         }
 
-        [UnityTest]
-        public IEnumerator should_with_two_patrol_points_switch_to_patrolling()
+        [Test]
+        public void should_not_detect_player_if_outside_range()
         {
             distractPoint = Substitute.For<IVisionConeControlPoint>();
             eventsMono = EventsMono_Mock.NewSubstitute();
 
             var patrolPoint = new VisionConePatrolPoint(50, new Vector3(2, 0, 0), 1f, 1f);
-            var secondPatrolPoint = new VisionConePatrolPoint(50, new Vector3(2, 2, 0), 1f, 1f);
-            patrolPoints = new List<IVisionConePatrolPoint>() { patrolPoint, secondPatrolPoint };
-            playerObject.transform.position = new Vector3(1, 0, 0);
+            patrolPoints = new List<IVisionConePatrolPoint>() { patrolPoint };
+            playerObject.transform.position = new Vector3(3, 0, 0);
             SetupVisionCone();
 
-            yield return null;
-
-            coneVisualizer.ReceivedWithAnyArgs(2).SetSpotState(default);
-            coneVisualizer.Received(2).SetSpotState(SpotLightState.Idle);
-            Assert.AreEqual(2, eventsMono.CoroutineStartCounter);
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
         }
 
-        [UnityTest]
-        public IEnumerator should_when_searching_update_color_according_to_detection_meter()
+        [Test]
+        public void should_not_detect_player_if_outside_field_of_vision()
+        {
+            distractPoint = Substitute.For<IVisionConeControlPoint>();
+            eventsMono = EventsMono_Mock.NewSubstitute();
+
+            var patrolPoint = new VisionConePatrolPoint(50, new Vector3(2, 0, 0), 1f, 1f);
+            patrolPoints = new List<IVisionConePatrolPoint>() { patrolPoint };
+            playerObject.transform.position = new Vector3(-1, 0, 0);
+            SetupVisionCone();
+
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
+
+            playerObject.transform.position = new Vector3(0, 1, 0);
+
+            Assert.True(!visionConeViewModel.IsPlayerInsideVisionCone());
+        }
+
+        [Test]
+        public void should_not_be_obstructed_without_obstacle()
         {
             distractPoint = Substitute.For<IVisionConeControlPoint>();
             eventsMono = EventsMono_Mock.NewSubstitute();
@@ -84,21 +93,9 @@ namespace Tests
             patrolPoints = new List<IVisionConePatrolPoint>() { patrolPoint };
             playerObject.transform.position = new Vector3(1, 0, 0);
             SetupVisionCone();
-            visionConeVM.TransitionTo(new VisionConeStateFollowingPlayer());
 
-            yield return null;
-
-            visionConeVM.UpdateDetectionMeter(0.5f);
-            visionConeVM.UpdateDetectionMeter(1.0f);
-
-            yield return null;
-
-            coneVisualizer.ReceivedWithAnyArgs(4).SetSpotState(default);
-            coneVisualizer.Received(1).SetSpotState(SpotLightState.Idle);
-            coneVisualizer.Received(1).SetSpotState(SpotLightState.Searching);
-            coneVisualizer.Received(1).SetSpotState(SpotLightState.Searching, 0.5f);
-            coneVisualizer.Received(1).SetSpotState(SpotLightState.Searching, 1.0f);
-            Assert.AreEqual(1, eventsMono.CoroutineStartCounter);
+            Assert.True(visionConeViewModel.IsPlayerInsideVisionCone());
+            Assert.True(!visionConeViewModel.IsPlayerObstructed());
         }
     }
 }

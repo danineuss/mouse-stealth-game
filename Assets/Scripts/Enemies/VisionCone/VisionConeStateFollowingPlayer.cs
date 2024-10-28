@@ -10,18 +10,18 @@ namespace Enemies.VisionCone
         private const float FollowPlayerClampValue = 0.1f;
 
         public override void SetupVisionConeState(
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IConeVisualizer coneVisualizer,
             IVisionConePatrolPoint patrolPoint, 
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.visionConeVM = visionConeVM;
+            this.VisionConeViewModel = visionConeViewModel;
             this.coneVisualizer = coneVisualizer;
             this.playerTransform = playerTransform;
 
             coneVisualizer.SetSpotState(SpotLightState.Searching);
-            visionConeVM.StartLookatCoroutine(FollowPlayer());
+            visionConeViewModel.StartLookAtCoroutine(FollowPlayer());
         }
 
         public override void UpdateDetectionMeter(float detectionEscalationMeter) 
@@ -31,18 +31,18 @@ namespace Enemies.VisionCone
 
         private IEnumerator FollowPlayer()
         {
-            while (!visionConeVM.IsPlayerObstructed())
+            while (!VisionConeViewModel.IsPlayerObstructed())
             {
-                var deltaVector = playerTransform.position - visionConeVM.CurrentLookatTarget;
+                var deltaVector = playerTransform.position - VisionConeViewModel.CurrentLookAtTarget;
                 if (deltaVector.magnitude > FollowPlayerClampValue)
                     deltaVector *= FollowPlayerClampValue / deltaVector.magnitude;
-                var newLookatTarget = visionConeVM.CurrentLookatTarget + deltaVector;
+                var newLookatTarget = VisionConeViewModel.CurrentLookAtTarget + deltaVector;
             
-                visionConeVM.UpdateCone(newLookatTarget, visionConeVM.FieldOfView);
+                VisionConeViewModel.UpdateCone(newLookatTarget, VisionConeViewModel.FieldOfView);
                 yield return null;
             }
 
-            visionConeVM.StartLookatCoroutine(EvaluateReturningToPatrolling());
+            VisionConeViewModel.StartLookAtCoroutine(EvaluateReturningToPatrolling());
         }
 
         private IEnumerator EvaluateReturningToPatrolling()
@@ -50,13 +50,13 @@ namespace Enemies.VisionCone
             var startTime = Time.time;
             while(Time.time - startTime < EvaluationWaitTime)
             {
-                if (visionConeVM.IsPlayerInsideVisionCone() && !visionConeVM.IsPlayerObstructed())
-                    visionConeVM.StartLookatCoroutine(FollowPlayer());
+                if (VisionConeViewModel.IsPlayerInsideVisionCone() && !VisionConeViewModel.IsPlayerObstructed())
+                    VisionConeViewModel.StartLookAtCoroutine(FollowPlayer());
 
                 yield return null;
             }
 
-            visionConeVM.TransitionTo(new VisionConeStatePatrolling());
+            VisionConeViewModel.TransitionTo(new VisionConeStatePatrolling());
         }
     }
 }

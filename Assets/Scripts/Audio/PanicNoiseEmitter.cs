@@ -12,14 +12,14 @@ namespace Audio
 
         private readonly IPlayerEvents playerEvents;
         private readonly ISoundEmitter playerSoundEmitter;
-        private readonly IAudioVM audioVM;
+        private readonly IAudioViewModel audioViewModel;
         private readonly Random random;
 
-        public PanicNoiseEmitter(IPlayerEvents playerEvents, ISoundEmitter playerSoundEmitter, IAudioVM audioVM)
+        public PanicNoiseEmitter(IPlayerEvents playerEvents, ISoundEmitter playerSoundEmitter, IAudioViewModel audioViewModel)
         {
             this.playerEvents = playerEvents;
             this.playerSoundEmitter = playerSoundEmitter;
-            this.audioVM = audioVM;
+            this.audioViewModel = audioViewModel;
 
             random = new Random();
             timeUntilReadyToPlaySound = Time.time;
@@ -51,10 +51,10 @@ namespace Audio
                     new PanicSound[] { PanicSound.ScaredOne, PanicSound.ScaredTwo, PanicSound.ScaredThree };
                 var randomSound = scaredSounds[random.Next(scaredSounds.Length)];
 
-                return audioVM.SoundWithName(randomSound.Name);
+                return audioViewModel.SoundWithName(randomSound.Name);
             }
         
-            return audioVM.SoundWithName(PanicSound.Panicking.Name);
+            return audioViewModel.SoundWithName(PanicSound.Panicking.Name);
         }
     }
 }

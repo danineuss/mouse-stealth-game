@@ -2,25 +2,26 @@ using System.Collections.Generic;
 using Audio;
 using Infrastructure;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
     public class PlayerMono: MonoBehaviour 
     {
-        [SerializeField] private EventsMono eventsMono = null;
-        [SerializeField] private AudioVM audioVM = null;
-        [SerializeField] private SoundEmitter soundEmitter = null;
-        [SerializeField] private float minMovementSpeed = 0f;
-        [SerializeField] private float maxMovementSpeed = 0f;
-        [SerializeField] private float radiusStartSpeedDecrease = 0f;
-        [SerializeField] private float radiusStartFear = 0f;
-        [SerializeField] private float panicEscalationSpeed = 0f;
-        [SerializeField] private float panicDeescalationSpeed = 0f;
-        [SerializeField] private LayerMask safeRoomObjectsLayerMask = new LayerMask();
-        [SerializeField] private float rotationSpeed = 0f;
-        public PlayerVM PlayerVM => playerVM;
+        [SerializeField] private EventsMono eventsMono;
+        [FormerlySerializedAs("audioVM")] [SerializeField] private AudioViewModel audioViewModel;
+        [SerializeField] private SoundEmitter soundEmitter;
+        [SerializeField] private float minMovementSpeed;
+        [SerializeField] private float maxMovementSpeed;
+        [SerializeField] private float radiusStartSpeedDecrease;
+        [SerializeField] private float radiusStartFear;
+        [SerializeField] private float panicEscalationSpeed;
+        [SerializeField] private float panicDeescalationSpeed;
+        [SerializeField] private LayerMask safeRoomObjectsLayerMask;
+        [SerializeField] private float rotationSpeed;
+        public PlayerViewModel PlayerViewModel => playerViewModel;
 
-        private PlayerVM playerVM;
+        private PlayerViewModel playerViewModel;
 
         void Awake() 
         {
@@ -47,9 +48,9 @@ namespace Player
 
             var panicMeter = 
                 new PanicMeter(panicEscalationSpeed, panicDeescalationSpeed, eventsMono.PlayerEvents);
-            var panicNoiseEmitter = new PanicNoiseEmitter(eventsMono.PlayerEvents, soundEmitter, audioVM);
+            var panicNoiseEmitter = new PanicNoiseEmitter(eventsMono.PlayerEvents, soundEmitter, audioViewModel);
 
-            playerVM = new PlayerVM(
+            playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController, 
                 characterController, 
@@ -65,12 +66,12 @@ namespace Player
 
         void Update() 
         {
-            playerVM.Update();
+            playerViewModel.Update();
         }
 
         void LateUpdate() 
         {
-            playerVM.LateUpdate();
+            playerViewModel.LateUpdate();
         }
 
         void OnDrawGizmos()

@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Enemies.VisionCone
 {
     public class VisionConeControlPointsMono : MonoBehaviour {
-        [SerializeField] private List<VisionConePatrolPointMono> patrolPoints = null;
-        [SerializeField] private VisionConeDistractPointMono distractPoint = null;
+        [SerializeField] private List<VisionConePatrolPointMono> patrolPoints;
+        [SerializeField] private VisionConeDistractPointMono distractPoint;
 
         public List<IVisionConePatrolPoint> PatrolPoints => patrolPoints.Select(x => x.PatrolPoint).ToList();
         public IVisionConeControlPoint DistractPoint => distractPoint.DistractPoint; 

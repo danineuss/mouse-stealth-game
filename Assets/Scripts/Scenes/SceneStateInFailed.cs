@@ -8,7 +8,7 @@
 
         public override void ToggleGamePaused()
         {
-            sceneVM.PauseGame(true);
+            SceneViewModel.PauseGame(true);
         }
     }
 }

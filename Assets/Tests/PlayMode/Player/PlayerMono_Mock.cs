@@ -7,7 +7,7 @@ using Scenes;
 using UnityEngine;
 
 public class PlayerMono_Mock : MonoBehaviour {
-    public PlayerVM PlayerVM;
+    public PlayerViewModel PlayerViewModel;
 
     public static GameObject Dummy(IPlayerInput playerInput)
     {
@@ -52,7 +52,7 @@ public class PlayerMono_Mock : MonoBehaviour {
             playerEvents ?? defaultPlayerEvents
         );
 
-        playerMono.PlayerVM = new PlayerVM(
+        playerMono.PlayerViewModel = new PlayerViewModel(
             playerGameObject.transform, 
             cameraController, 
             characterController,
@@ -70,11 +70,11 @@ public class PlayerMono_Mock : MonoBehaviour {
 
     void Update()
     {
-        PlayerVM.Update();
+        PlayerViewModel.Update();
     }
 
     void LateUpdate()
     {
-        PlayerVM.LateUpdate();
+        PlayerViewModel.LateUpdate();
     }
 }

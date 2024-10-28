@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace Player
 {
-    public interface IPlayerVM: IUpdatable, ILateUpdatable {}
+    public interface IPlayerViewModel: IUpdatable, ILateUpdatable {}
 
-    public class PlayerVM : IPlayerVM
+    public class PlayerViewModel : IPlayerViewModel
     {
         private Transform playerTransform;
         private IPlayerInput playerInput;
@@ -23,7 +23,7 @@ namespace Player
         private ISceneEvents sceneEvents;
         private Guid targetEnemyID;
 
-        public PlayerVM(
+        public PlayerViewModel(
             Transform playerTransform,
             IFirstPersonCameraController cameraController,
             IFirstPersonCharacterController characterController,

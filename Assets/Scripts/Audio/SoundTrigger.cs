@@ -4,7 +4,7 @@ namespace Audio
 {
     public class SoundTrigger : MonoBehaviour
     {
-        [SerializeField] private AudioVM audioVM = null;
+        [SerializeField] private AudioViewModel audioViewModel;
         [SerializeField] private string nameOfSound = "";
         private SoundEmitter soundEmitter;
 
@@ -14,7 +14,7 @@ namespace Audio
 
         void OnTriggerEnter() {
         
-            Sound sound = audioVM.SoundWithName(nameOfSound);
+            Sound sound = audioViewModel.SoundWithName(nameOfSound);
             soundEmitter.PlaySound(sound);
         }
     }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Enemies.VisionCone
 {
-    public interface IVisionConeVM: IUpdatable
+    public interface IVisionConeViewModel: IUpdatable
     {
-        Vector3 CurrentLookatTarget { get; }
+        Vector3 CurrentLookAtTarget { get; }
         float FieldOfView { get; }
         float Range { get; }
 
@@ -15,18 +15,18 @@ namespace Enemies.VisionCone
         bool IsPlayerObstructed();
         void IterateControlPointIndex();
         IEnumerator LerpTowardsTarget(
-            Vector3 newLookatTarget, float newFieldOfView, float durationSeconds);
-        void StartLookatCoroutine(IEnumerator lerpCoroutine, bool interrupt = true);
+            Vector3 newLookAtTarget, float newFieldOfView, float durationSeconds);
+        void StartLookAtCoroutine(IEnumerator lerpCoroutine, bool interrupt = true);
         void TransitionTo(VisionConeState visionConeState);
         void UpdateCone(Vector3 target, float fieldOfView);
         void UpdateDetectionMeter(float detectionMeter);
     }
 
-    public class VisionConeVM : IVisionConeVM
+    public class VisionConeViewModel : IVisionConeViewModel
     {
-        public Vector3 CurrentLookatTarget { get; private set; }
+        public Vector3 CurrentLookAtTarget { get; private set; }
         public float FieldOfView { get; private set; }
-        public float Range => (CurrentLookatTarget - coneTransform.position).magnitude;
+        public float Range => (CurrentLookAtTarget - coneTransform.position).magnitude;
 
         private List<IVisionConePatrolPoint> patrolPoints;
         private IVisionConeControlPoint distractPoint;
@@ -38,9 +38,9 @@ namespace Enemies.VisionCone
 
         private VisionConeState visionConeState;
         private List<IEnumerator> currentCoroutines = new List<IEnumerator>();
-        private int controlPointIndex = 0;
+        private int controlPointIndex;
 
-        public VisionConeVM(
+        public VisionConeViewModel(
             List<IVisionConePatrolPoint> patrolPoints,
             IVisionConeControlPoint distractPoint,
             IConeVisualizer coneVisualizer,
@@ -66,16 +66,16 @@ namespace Enemies.VisionCone
         void InitializeCone()
         {
             var currentControlPoint = patrolPoints[controlPointIndex];
-            CurrentLookatTarget = currentControlPoint.Position;
+            CurrentLookAtTarget = currentControlPoint.Position;
             FieldOfView = currentControlPoint.FieldOfView;
 
-            coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
+            coneVisualizer.UpdateConeOrientation(CurrentLookAtTarget, FieldOfView);
         }
 
         public bool IsPlayerInsideVisionCone()
         {
             float angleToPlayer = Vector3.Angle(
-                CurrentLookatTarget - coneTransform.position,
+                CurrentLookAtTarget - coneTransform.position,
                 playerTransform.position - coneTransform.position
             );
             float distanceToPlayer = Vector3.Distance(playerTransform.position, coneTransform.position);
@@ -100,16 +100,16 @@ namespace Enemies.VisionCone
         }
 
         public IEnumerator LerpTowardsTarget(
-            Vector3 newLookatTarget, float newFieldOfView, float durationSeconds)
+            Vector3 newLookAtTarget, float newFieldOfView, float durationSeconds)
         {
-            Vector3 startLookatTarget = CurrentLookatTarget;
+            Vector3 startLookatTarget = CurrentLookAtTarget;
             float startFieldOfView = FieldOfView;
             float elapsedTime = 0f;
 
             while (elapsedTime < durationSeconds)
             {
-                CurrentLookatTarget = Vector3.Slerp(
-                    startLookatTarget, newLookatTarget, elapsedTime / durationSeconds);
+                CurrentLookAtTarget = Vector3.Slerp(
+                    startLookatTarget, newLookAtTarget, elapsedTime / durationSeconds);
                 FieldOfView = Mathf.Lerp(
                     startFieldOfView, newFieldOfView, elapsedTime / durationSeconds);
             
@@ -118,7 +118,7 @@ namespace Enemies.VisionCone
             }
         }
 
-        public void StartLookatCoroutine(IEnumerator newCoroutine, bool interrupt = true)
+        public void StartLookAtCoroutine(IEnumerator newCoroutine, bool interrupt = true)
         {
             if (currentCoroutines.Count != 0 && interrupt)
             {
@@ -144,12 +144,12 @@ namespace Enemies.VisionCone
 
         public void Update()
         {
-            coneVisualizer.UpdateConeOrientation(CurrentLookatTarget, FieldOfView);
+            coneVisualizer.UpdateConeOrientation(CurrentLookAtTarget, FieldOfView);
         }
 
         public void UpdateCone(Vector3 target, float fieldOfView)
         {
-            CurrentLookatTarget = target;
+            CurrentLookAtTarget = target;
             FieldOfView = fieldOfView;
         }
 

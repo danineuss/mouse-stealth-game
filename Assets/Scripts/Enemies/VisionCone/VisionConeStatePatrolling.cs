@@ -8,13 +8,13 @@ namespace Enemies.VisionCone
         private IVisionConePatrolPoint currentPatrolPoint;
 
         public override void SetupVisionConeState(
-            IVisionConeVM visionConeVM, 
+            IVisionConeViewModel visionConeViewModel, 
             IConeVisualizer coneVisualizer,
             IVisionConePatrolPoint patrolPoint, 
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.visionConeVM = visionConeVM;
+            this.VisionConeViewModel = visionConeViewModel;
             this.coneVisualizer = coneVisualizer;
             this.currentPatrolPoint = patrolPoint;
 
@@ -26,13 +26,13 @@ namespace Enemies.VisionCone
 
         void MoveTowardsNextControlPoint()
         {
-            var lerpLookatTarget = visionConeVM.LerpTowardsTarget(
+            var lerpLookatTarget = VisionConeViewModel.LerpTowardsTarget(
                 currentPatrolPoint.Position, 
                 currentPatrolPoint.FieldOfView, 
                 currentPatrolPoint.DurationTowardsPoint
             );
-            visionConeVM.StartLookatCoroutine(lerpLookatTarget);
-            visionConeVM.StartLookatCoroutine(WaitAndIterate(), false);
+            VisionConeViewModel.StartLookAtCoroutine(lerpLookatTarget);
+            VisionConeViewModel.StartLookAtCoroutine(WaitAndIterate(), false);
         }
 
         IEnumerator WaitAndIterate()
@@ -40,8 +40,8 @@ namespace Enemies.VisionCone
             var waitTime = currentPatrolPoint.DurationTowardsPoint + currentPatrolPoint.WaitTimeAtTarget;
             yield return new WaitForSeconds(waitTime);
 
-            visionConeVM.IterateControlPointIndex();
-            visionConeVM.TransitionTo(new VisionConeStateIdle());
+            VisionConeViewModel.IterateControlPointIndex();
+            VisionConeViewModel.TransitionTo(new VisionConeStateIdle());
         }
     }
 }

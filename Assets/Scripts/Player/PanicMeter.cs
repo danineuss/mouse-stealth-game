@@ -8,7 +8,7 @@ namespace Player
 
     public class PanicMeter: IPanicMeter
     {
-        private float panicLevel = 0f;
+        private float panicLevel;
         private bool characterInCover;
         private IPlayerEvents playerEvents;
 

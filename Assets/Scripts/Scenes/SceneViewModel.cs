@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 
 namespace Scenes
 {
-    public interface ISceneVM
+    public interface ISceneViewModel
     {
         void PauseGame(bool paused);
         void TransitionTo(SceneState sceneState);
     }
 
-    public class SceneVM: ISceneVM
+    public class SceneViewModel: ISceneViewModel
     {
         private SceneState SceneState {
             get => sceneState;
@@ -27,7 +27,7 @@ namespace Scenes
         private ISceneEvents sceneEvents;
         private SceneState sceneState;
 
-        public SceneVM(
+        public SceneViewModel(
             IPlayerEvents playerEvents,
             IEnemyEvents enemyEvents, 
             ISceneEvents sceneEvents)
@@ -63,7 +63,7 @@ namespace Scenes
             Time.timeScale = paused ? 0f : 1f;
         }
 
-        void OnDialogToggled(IDialogVM dialogVM)
+        void OnDialogToggled(IDialogViewModel dialogViewModel)
         {
             sceneState.ToggleDialogOpen();
         }

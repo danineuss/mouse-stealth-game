@@ -6,17 +6,17 @@ using UnityEngine;
 
 namespace Enemies
 {
-    public interface IEnemyVM: IIdentifiable
+    public interface IEnemyViewModel: IIdentifiable
     {
         void PlaySound(Sound sound);
     }
 
-    public class EnemyVM : IEnemyVM
+    public class EnemyViewModel : IEnemyViewModel
     {
         public Guid ID { get; private set; }
 
         private IPlayerDetector playerDetector;
-        private AudioVM audioVM;
+        private AudioViewModel audioViewModel;
         private IEnemyIO enemyIO;
         private SoundEmitter soundEmitter;
         private IPlayerEvents playerEvents;
@@ -27,16 +27,16 @@ namespace Enemies
             soundEmitter.PlaySound(sound);
         }
 
-        public EnemyVM(
+        public EnemyViewModel(
             IPlayerDetector playerDetector,
-            AudioVM audioVM,
+            AudioViewModel audioViewModel,
             IEnemyIO enemyIO,
             SoundEmitter soundEmitter,
             IPlayerEvents playerEvents,
             IEnemyEvents enemyEvents)
         {
             this.playerDetector = playerDetector;
-            this.audioVM = audioVM;
+            this.audioViewModel = audioViewModel;
             this.enemyIO = enemyIO;
             this.soundEmitter = soundEmitter;
             this.playerEvents = playerEvents;
@@ -65,7 +65,7 @@ namespace Enemies
 
             enemyIO.SetTextColor(playerDetector.DetectorState.EnemyIOTextColor);
             var enemySoundName = playerDetector.DetectorState.EnemySound.Name;
-            PlaySound(audioVM.SoundWithName(enemySoundName));
+            PlaySound(audioViewModel.SoundWithName(enemySoundName));
         }
 
         void OnReceivePlayerLocation(

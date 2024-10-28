@@ -11,21 +11,21 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class SceneVM_UnityTests
+    public class SceneViewModel_UnityTests
     {
-        private IPlayerVM playerVM;
+        private IPlayerViewModel playerViewModel;
         private IPlayerEvents playerEvents;
         private IEnemyEvents enemyEvents;
         private ISceneEvents sceneEvents;
-        private SceneVM sceneVM;
+        private SceneViewModel sceneViewModel;
 
-        private void SetupSceneVM()
+        private void SetupSceneViewModel()
         {
-            playerVM = Substitute.For<IPlayerVM>();
+            playerViewModel = Substitute.For<IPlayerViewModel>();
             playerEvents = Substitute.For<IPlayerEvents>();
             enemyEvents = Substitute.For<IEnemyEvents>();
             sceneEvents = Substitute.For<ISceneEvents>();
-            sceneVM = new SceneVM(
+            sceneViewModel = new SceneViewModel(
                 playerEvents,
                 enemyEvents,
                 sceneEvents
@@ -35,7 +35,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator should_stop_and_resume_time_when_toggeling_paused()
         {
-            SetupSceneVM();
+            SetupSceneViewModel();
 
             float timeWhenPausing = Time.time;
             playerEvents.OnPauseButtonPressed += Raise.Event<Action>();
@@ -58,18 +58,18 @@ namespace Tests
         [UnityTest]
         public IEnumerator should_stop_and_resume_time_when_toggeling_dialog()
         {
-            SetupSceneVM();
-            var dialogVM = Substitute.For<IDialogVM>();
+            SetupSceneViewModel();
+            var dialogVM = Substitute.For<IDialogViewModel>();
 
             float timeWhenPausing = Time.time;
-            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogVM>>(dialogVM);
+            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogViewModel>>(dialogVM);
 
             yield return null;
 
             Assert.AreEqual(timeWhenPausing, Time.time);
             Assert.AreEqual(Time.timeScale, 0f);
 
-            sceneEvents.OnDialogClosed += Raise.Event<Action<IDialogVM>>(dialogVM);
+            sceneEvents.OnDialogClosed += Raise.Event<Action<IDialogViewModel>>(dialogVM);
 
             yield return null;
 
@@ -80,11 +80,11 @@ namespace Tests
         [UnityTest]
         public IEnumerator should_not_unpause_when_dialog_open()
         {
-            SetupSceneVM();
-            var dialogVM = Substitute.For<IDialogVM>();
+            SetupSceneViewModel();
+            var dialogVM = Substitute.For<IDialogViewModel>();
 
             float timeWhenPausing = Time.time;
-            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogVM>>(dialogVM);
+            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogViewModel>>(dialogVM);
 
             yield return null;
             
@@ -102,7 +102,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator should_not_unpause_when_game_failed()
         {
-            SetupSceneVM();
+            SetupSceneViewModel();
 
             float timeWhenPausing = Time.time;
             enemyEvents.OnGameFailed += Raise.Event<Action>();

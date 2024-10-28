@@ -7,11 +7,11 @@ namespace Enemies
 {
     public class EnemyMono : MonoBehaviour
     {
-        [SerializeField] private EventsMono eventsMono = null;
+        [SerializeField] private EventsMono eventsMono;
         //TODO: make audio into interface and Mono as well.
-        [SerializeField] private AudioVM audioVM = null;
+        [SerializeField] private AudioViewModel audioViewModel;
 
-        public IEnemyVM EnemyVM { get; private set; }
+        public IEnemyViewModel EnemyViewModel { get; private set; }
 
         private EnemyIOMono enemyIOMono;
         private VisionConeMono visionConeMono;
@@ -27,9 +27,9 @@ namespace Enemies
 
         void Start()
         {
-            EnemyVM = new EnemyVM(
+            EnemyViewModel = new EnemyViewModel(
                 visionConeMono.PlayerDetector,
-                audioVM,
+                audioViewModel,
                 enemyIOMono.EnemyIO,
                 soundEmitter,
                 eventsMono.PlayerEvents,

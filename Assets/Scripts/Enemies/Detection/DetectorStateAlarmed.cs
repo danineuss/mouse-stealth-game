@@ -11,9 +11,9 @@ namespace Enemies.Detection
 
         public DetectorStateAlarmed(
             IPlayerDetector playerDetector,
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events) 
-            : base(playerDetector, visionConeVM, events) {}
+            : base(playerDetector, visionConeViewModel, events) {}
 
         public override bool AttemptDistraction(float distractionDuration)
         {

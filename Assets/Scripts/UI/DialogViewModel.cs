@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace UI
 {
-    public interface IDialogVM
+    public interface IDialogViewModel
     {
         void IterateScreens();
         void SetActive(bool active);
     }
 
-    public class DialogVM : IDialogVM
+    public class DialogViewModel : IDialogViewModel
     {
         private List<GameObject> screens;
         private UICoordinator uiCoordinator;
         private GameObject parentGameObject;
         private int currentScreen;
 
-        public DialogVM(
+        public DialogViewModel(
             List<GameObject> screens, 
             UICoordinator uiCoordinator, 
             GameObject parentGameObject)

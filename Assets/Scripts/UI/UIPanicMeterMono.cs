@@ -6,7 +6,7 @@ namespace UI
 {
     public class UIPanicMeterMono : MonoBehaviour
     {
-        [SerializeField] private EventsMono eventsMono = null;
+        [SerializeField] private EventsMono eventsMono;
         [SerializeField] private Color barDangerColor = Color.white;
 
         private Slider slider;

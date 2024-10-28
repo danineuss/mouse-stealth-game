@@ -5,13 +5,13 @@ namespace Scenes
 {
     public class SceneMono: MonoBehaviour
     {
-        [SerializeField] private EventsMono eventsMono = null;
+        [SerializeField] private EventsMono eventsMono;
 
-        private ISceneVM sceneVM;
+        private ISceneViewModel sceneViewModel;
 
         void Awake()
         {
-            sceneVM = new SceneVM(
+            sceneViewModel = new SceneViewModel(
                 eventsMono.PlayerEvents, 
                 eventsMono.EnemyEvents, 
                 eventsMono.SceneEvents

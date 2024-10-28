@@ -4,7 +4,7 @@ namespace Enemies.VisionCone
 {
     public class VisionConePatrolPointMono: MonoBehaviour
     {
-        [SerializeField] private float fieldOfView = 0f;
+        [SerializeField] private float fieldOfView;
         [SerializeField] private float durationTowardsPoint = 1f;
         [SerializeField] private float waitTimeAtTarget = 0.5f;
 

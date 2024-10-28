@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class PlayerVM_Tests
+    public class PlayerViewModel_Tests
     {
         private GameObject gameObject = new GameObject("Player");
         private IFirstPersonCameraController cameraController;
@@ -23,7 +23,7 @@ namespace Tests
         private IPlayerEvents playerEvents;
         private IEnemyEvents enemyEvents;
         private ISceneEvents sceneEvents;
-        private PlayerVM playerVM;
+        private PlayerViewModel playerViewModel;
 
         private void SetupDependecies()
         {
@@ -38,10 +38,10 @@ namespace Tests
             sceneEvents = Substitute.For<ISceneEvents>(); 
         }
 
-        private void SetupPlayerVM()
+        private void SetupPlayerViewModel()
         {
             SetupDependecies(); 
-            playerVM = new PlayerVM(
+            playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -55,10 +55,10 @@ namespace Tests
             );
         }
 
-        private void SetupPlayerVM(IPlayerAbilities playerAbilities)
+        private void SetupPlayerViewModel(IPlayerAbilities playerAbilities)
         {
             SetupDependecies(); 
-            playerVM = new PlayerVM(
+            playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -78,9 +78,9 @@ namespace Tests
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             var relevantAbilities = new List<IPlayerAbility>() { new DummyAbility(KeyCode.A, 10f) };
             playerAbilities.RelevantAbilities.Returns(relevantAbilities);
-            var enemyVM = Substitute.For<IEnemyVM>();
+            var enemyVM = Substitute.For<IEnemyViewModel>();
             enemyVM.ID.Returns(Guid.NewGuid());
-            SetupPlayerVM(playerAbilities);
+            SetupPlayerViewModel(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             
@@ -93,9 +93,9 @@ namespace Tests
         {
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var enemyVM = Substitute.For<IEnemyVM>();
+            var enemyVM = Substitute.For<IEnemyViewModel>();
             enemyVM.ID.Returns(Guid.NewGuid());
-            SetupPlayerVM(playerAbilities);
+            SetupPlayerViewModel(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             
@@ -108,9 +108,9 @@ namespace Tests
         {
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            var enemyVM = Substitute.For<IEnemyVM>();
+            var enemyVM = Substitute.For<IEnemyViewModel>();
             enemyVM.ID.Returns(Guid.NewGuid());
-            SetupPlayerVM(playerAbilities);
+            SetupPlayerViewModel(playerAbilities);
             
             enemyEvents.OnCursorEnterEnemy += Raise.Event<Action<Guid>>(enemyVM.ID);
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
@@ -121,9 +121,9 @@ namespace Tests
         [Test]
         public void should_not_remove_player_location_for_enemy_iff_no_enemy()
         {
-            var enemyVM = Substitute.For<IEnemyVM>();
+            var enemyVM = Substitute.For<IEnemyViewModel>();
             enemyVM.ID.Returns(Guid.NewGuid());
-            SetupPlayerVM();
+            SetupPlayerViewModel();
             
             enemyEvents.OnCurserExitEnemy += Raise.Event<Action>();
             
@@ -133,7 +133,7 @@ namespace Tests
         [Test]
         public void should_pass_along_ability_for_abiltiy_learned_event()
         {
-            SetupPlayerVM();
+            SetupPlayerViewModel();
             var ability = new DummyAbility(KeyCode.A, 10f);
 
             playerEvents.OnAbilityLearned += Raise.Event<Action<IPlayerAbility>>(ability);
@@ -144,7 +144,7 @@ namespace Tests
         [Test]
         public void should_trigger_ability_only_for_correct_input()
         {
-            SetupPlayerVM();
+            SetupPlayerViewModel();
             var ability = new DummyAbility(KeyCode.A, 10f);
             var playerInput = Substitute.For<IPlayerInput>();
             playerInput.GetKeyDown(default).ReturnsForAnyArgs(false);
@@ -153,7 +153,7 @@ namespace Tests
                 { ability.AssociatedKey, ability } 
             });
             playerAbilities.RelevantKeyPresses.Returns(new List<KeyCode>(){ ability.AssociatedKey });
-            playerVM = new PlayerVM(
+            playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -166,12 +166,12 @@ namespace Tests
                 sceneEvents
             );
 
-            playerVM.Update();
+            playerViewModel.Update();
 
             playerAbilities.DidNotReceiveWithAnyArgs().ExecuteAbility(default, default);
 
             playerInput.GetKeyDown(ability.AssociatedKey).Returns(true);
-            playerVM = new PlayerVM(
+            playerViewModel = new PlayerViewModel(
                 gameObject.transform, 
                 cameraController,
                 characterController,
@@ -184,7 +184,7 @@ namespace Tests
                 sceneEvents
             );
 
-            playerVM.Update();
+            playerViewModel.Update();
             playerAbilities.Received().ExecuteAbility(ability, Guid.Empty);
         }
 
@@ -193,7 +193,7 @@ namespace Tests
         {
             var playerAbilities = Substitute.For<IPlayerAbilities>();
             playerAbilities.RelevantAbilities.Returns(new List<IPlayerAbility>());
-            SetupPlayerVM(playerAbilities);
+            SetupPlayerViewModel(playerAbilities);
             
             sceneEvents.OnGamePaused += Raise.Event<Action<bool>>(true);
             
@@ -207,14 +207,14 @@ namespace Tests
         [Test]
         public void should_lock_cursor_when_dialog_opened_and_reverse()
         {
-            SetupPlayerVM();
+            SetupPlayerViewModel();
             
-            var dialogVM = Substitute.For<IDialogVM>();
-            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogVM>>(dialogVM);
+            var dialogVM = Substitute.For<IDialogViewModel>();
+            sceneEvents.OnDialogOpened += Raise.Event<Action<IDialogViewModel>>(dialogVM);
             
             cameraController.Received().LockCursor(false);
 
-            sceneEvents.OnDialogClosed += Raise.Event<Action<IDialogVM>>(dialogVM);
+            sceneEvents.OnDialogClosed += Raise.Event<Action<IDialogViewModel>>(dialogVM);
             
             cameraController.Received().LockCursor(true);
         }
@@ -222,7 +222,7 @@ namespace Tests
         [Test]
         public void should_lock_cursor_when_game_failed()
         {
-            SetupPlayerVM();
+            SetupPlayerViewModel();
             
             enemyEvents.OnGameFailed += Raise.Event<Action>();
             

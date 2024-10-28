@@ -11,8 +11,8 @@
 
         public override void ToggleGamePaused()
         {
-            sceneVM.PauseGame(false);
-            sceneVM.TransitionTo(new SceneStateIdle());
+            SceneViewModel.PauseGame(false);
+            SceneViewModel.TransitionTo(new SceneStateIdle());
         }
     }
 }

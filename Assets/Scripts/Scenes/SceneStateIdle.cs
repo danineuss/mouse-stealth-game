@@ -9,14 +9,14 @@
 
         public override void ToggleDialogOpen()
         {
-            sceneVM.PauseGame(true);
-            sceneVM.TransitionTo(new SceneStateInDialog());
+            SceneViewModel.PauseGame(true);
+            SceneViewModel.TransitionTo(new SceneStateInDialog());
         }
 
         public override void ToggleGamePaused()
         {
-            sceneVM.PauseGame(true);
-            sceneVM.TransitionTo(new SceneStatePaused());
+            SceneViewModel.PauseGame(true);
+            SceneViewModel.TransitionTo(new SceneStatePaused());
         }
     }
 }

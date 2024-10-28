@@ -13,12 +13,12 @@ namespace Enemies.Detection
 
         public DetectorStateDistracted(
             IPlayerDetector playerDetector, 
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events,
             float distractionDuration) 
-            : base(playerDetector, visionConeVM, events)
+            : base(playerDetector, visionConeViewModel, events)
         {
-            visionConeVM.TransitionTo(new VisionConeStateDistracted());
+            visionConeViewModel.TransitionTo(new VisionConeStateDistracted());
             events.StartCoroutine(ResetDistraction(distractionDuration));
         }
 
@@ -36,10 +36,10 @@ namespace Enemies.Detection
         {
             yield return new WaitForSeconds(distractionDuration);
 
-            visionConeVM.TransitionTo(new VisionConeStatePatrolling());
+            VisionConeViewModel.TransitionTo(new VisionConeStatePatrolling());
             playerDetector.TransitionTo(new DetectorStateIdle(
                 playerDetector, 
-                visionConeVM, 
+                VisionConeViewModel, 
                 events)
             );
         }

@@ -6,13 +6,13 @@ namespace Enemies.VisionCone
     {
         private IVisionConePatrolPoint nextPatrolPoint;
         public override void SetupVisionConeState(
-            IVisionConeVM visionConeVM, 
+            IVisionConeViewModel visionConeViewModel, 
             IConeVisualizer coneVisualizer,
             IVisionConePatrolPoint patrolPoint, 
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.visionConeVM = visionConeVM;
+            this.VisionConeViewModel = visionConeViewModel;
             this.coneVisualizer = coneVisualizer;        
             this.nextPatrolPoint = patrolPoint;
 
@@ -24,11 +24,11 @@ namespace Enemies.VisionCone
 
         private void EvaluatePatrolStart()
         {    
-            if (nextPatrolPoint.Position == visionConeVM.CurrentLookatTarget && 
-                nextPatrolPoint.FieldOfView == visionConeVM.FieldOfView)
+            if (nextPatrolPoint.Position == VisionConeViewModel.CurrentLookAtTarget && 
+                nextPatrolPoint.FieldOfView == VisionConeViewModel.FieldOfView)
                 return;
         
-            visionConeVM.TransitionTo(new VisionConeStatePatrolling());
+            VisionConeViewModel.TransitionTo(new VisionConeStatePatrolling());
         }
     }
 }

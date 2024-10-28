@@ -4,11 +4,11 @@ namespace Enemies.VisionCone
 {
     public abstract class VisionConeState
     {
-        protected IVisionConeVM visionConeVM;
+        protected IVisionConeViewModel VisionConeViewModel;
         protected IConeVisualizer coneVisualizer;
 
         public abstract void SetupVisionConeState(
-            IVisionConeVM visionConeVM, 
+            IVisionConeViewModel visionConeViewModel, 
             IConeVisualizer coneVisualizer,
             IVisionConePatrolPoint patrolPoint, 
             IVisionConeControlPoint distractPoint,

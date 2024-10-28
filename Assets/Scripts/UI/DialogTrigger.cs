@@ -5,10 +5,10 @@ namespace UI
 {
     public class DialogTrigger : MonoBehaviour 
     {
-        [SerializeField] private DialogMono dialogMono = null;
-        [SerializeField] private EventsMono eventsMono = null;
-        [SerializeField] private bool disableAfterDisplay = false;
-        [SerializeField] private bool triggerUponStart = false;
+        [SerializeField] private DialogMono dialogMono;
+        [SerializeField] private EventsMono eventsMono;
+        [SerializeField] private bool disableAfterDisplay;
+        [SerializeField] private bool triggerUponStart;
     
         private Collider triggerCollider;
     
@@ -30,7 +30,7 @@ namespace UI
 
         void TriggerDialog()
         {
-            eventsMono.SceneEvents.OpenDialog(dialogMono.DialogVM);
+            eventsMono.SceneEvents.OpenDialog(dialogMono.DialogViewModel);
 
             if (disableAfterDisplay)
                 triggerCollider.gameObject.SetActive(false);

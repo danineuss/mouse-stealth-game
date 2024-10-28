@@ -8,13 +8,13 @@ namespace Enemies.VisionCone
         private readonly float LerpToDistractDuration = 1f;
 
         public override void SetupVisionConeState(
-            IVisionConeVM visionConeVM, 
+            IVisionConeViewModel visionConeViewModel, 
             IConeVisualizer coneVisualizer,
             IVisionConePatrolPoint patrolPoint, 
             IVisionConeControlPoint distractPoint,
             Transform playerTransform)
         {
-            this.visionConeVM = visionConeVM;
+            this.VisionConeViewModel = visionConeViewModel;
             this.coneVisualizer = coneVisualizer;
             this.distractPoint = distractPoint;
 
@@ -27,10 +27,10 @@ namespace Enemies.VisionCone
         {
             coneVisualizer.SetSpotState(SpotLightState.Distracted);
 
-            var distraction = visionConeVM.LerpTowardsTarget(
+            var distraction = VisionConeViewModel.LerpTowardsTarget(
                 distractPoint.Position, distractPoint.FieldOfView, LerpToDistractDuration
             );
-            visionConeVM.StartLookatCoroutine(distraction);
+            VisionConeViewModel.StartLookAtCoroutine(distraction);
         }
     }
 }

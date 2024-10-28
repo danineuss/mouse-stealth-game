@@ -5,38 +5,38 @@ namespace Scenes
 {
     public interface ISceneEvents
     {
-        event Action<IDialogVM> OnDialogOpened;
-        event Action<IDialogVM> OnDialogClosed;
+        event Action<IDialogViewModel> OnDialogOpened;
+        event Action<IDialogViewModel> OnDialogClosed;
         event Action OnGameRestarted;
         event Action<bool> OnGamePaused;
 
-        void CloseDialog(IDialogVM dialogVM);
-        void OpenDialog(IDialogVM dialogVM);
+        void CloseDialog(IDialogViewModel dialogViewModel);
+        void OpenDialog(IDialogViewModel dialogViewModel);
         void RestartGame();
         void PauseGame(bool paused);
     }
 
     public class SceneEvents : ISceneEvents
     {
-        public event Action<IDialogVM> OnDialogOpened;
-        public event Action<IDialogVM> OnDialogClosed;
+        public event Action<IDialogViewModel> OnDialogOpened;
+        public event Action<IDialogViewModel> OnDialogClosed;
         public event Action OnGameRestarted;
         public event Action<bool> OnGamePaused;
 
-        public void OpenDialog(IDialogVM dialogVM)
+        public void OpenDialog(IDialogViewModel dialogViewModel)
         {
             if (OnDialogOpened == null)
                 return;
 
-            OnDialogOpened(dialogVM);
+            OnDialogOpened(dialogViewModel);
         }
 
-        public void CloseDialog(IDialogVM dialogVM)
+        public void CloseDialog(IDialogViewModel dialogViewModel)
         {
             if (OnDialogClosed == null)
                 return;
 
-            OnDialogClosed(dialogVM);
+            OnDialogClosed(dialogViewModel);
         }
 
         public void RestartGame()

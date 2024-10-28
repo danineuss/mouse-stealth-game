@@ -30,7 +30,7 @@ namespace Player
             }
         }
         private readonly float buttonDelay = 0.2f;
-        private float timeSinceLastPause = 0.0f;
+        private float timeSinceLastPause;
         private IPlayerEvents playerEvents;
 
         public PlayerInput(IPlayerEvents playerEvents) : base(playerEvents)

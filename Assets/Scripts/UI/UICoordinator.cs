@@ -7,13 +7,13 @@ namespace UI
 {
     public class UICoordinator : MonoBehaviour
     {
-        [SerializeField] private EventsMono eventsMono = null;
-        [SerializeField] private GameObject failedScreen = null;
-        [SerializeField] private GameObject pausedScreen = null;
-        [SerializeField] private DialogMono introScreen = null;
-        [SerializeField] private DialogMono distractAbilityScreen = null;
-        [SerializeField] private DialogMono victoryScreen = null;
-        [SerializeField] private GameObject headsUpDisplay = null;
+        [SerializeField] private EventsMono eventsMono;
+        [SerializeField] private GameObject failedScreen;
+        [SerializeField] private GameObject pausedScreen;
+        [SerializeField] private DialogMono introScreen;
+        [SerializeField] private DialogMono distractAbilityScreen;
+        [SerializeField] private DialogMono victoryScreen;
+        [SerializeField] private GameObject headsUpDisplay;
         public ISceneEvents SceneEvents => eventsMono.SceneEvents;
 
         void Start() {
@@ -51,13 +51,13 @@ namespace UI
             headsUpDisplay.SetActive(false);
         }
 
-        void OpenDialog(IDialogVM dialogVM) {
-            dialogVM.SetActive(true);
+        void OpenDialog(IDialogViewModel dialogViewModel) {
+            dialogViewModel.SetActive(true);
             headsUpDisplay.SetActive(false);
         }
 
-        void CloseDialog(IDialogVM dialogVM) {
-            dialogVM.SetActive(false);
+        void CloseDialog(IDialogViewModel dialogViewModel) {
+            dialogViewModel.SetActive(false);
             headsUpDisplay.SetActive(true);
         }
     }

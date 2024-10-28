@@ -21,7 +21,7 @@ namespace Enemies.Detection
         public float DetectionEscalationSpeed { get; }
         public float DetectionDeescalationSpeed { get; }
 
-        private IVisionConeVM visionConeVM;
+        private IVisionConeViewModel visionConeViewModel;
         private IEvents events;
         private DetectorState detectorState;
 
@@ -42,18 +42,18 @@ namespace Enemies.Detection
         }
 
         public PlayerDetector(
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events,
-            float DetectionEscalationSpeed,
-            float DetectionDeescalationSpeed)
+            float detectionEscalationSpeed,
+            float detectionDeescalationSpeed)
         {
-            this.visionConeVM = visionConeVM;
+            this.visionConeViewModel = visionConeViewModel;
             this.events = events;
-            this.DetectionEscalationSpeed = DetectionEscalationSpeed;
-            this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
+            this.DetectionEscalationSpeed = detectionEscalationSpeed;
+            this.DetectionDeescalationSpeed = detectionDeescalationSpeed;
             this.ID = Guid.NewGuid();
 
-            TransitionTo(new DetectorStateIdle(this, visionConeVM, events));
+            TransitionTo(new DetectorStateIdle(this, visionConeViewModel, events));
         }
     }
 }

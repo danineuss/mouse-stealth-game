@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Enemies.VisionCone
 {
     public class VisionConeDistractPointMono : MonoBehaviour {
-        [SerializeField] private float fieldOfView = 0f; 
+        [SerializeField] private float fieldOfView; 
     
         public IVisionConeControlPoint DistractPoint => new VisionConeDistractPoint(
             fieldOfView,

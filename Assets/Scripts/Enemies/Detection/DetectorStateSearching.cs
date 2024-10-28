@@ -17,17 +17,17 @@ namespace Enemies.Detection
 
         public DetectorStateSearching(
             IPlayerDetector playerDetector, 
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events, 
             float DetectionEscalationSpeed,
             float DetectionDeescalationSpeed)
-            : base(playerDetector, visionConeVM, events)
+            : base(playerDetector, visionConeViewModel, events)
         {
             this.DetectionEscalationSpeed = DetectionEscalationSpeed;
             this.DetectionDeescalationSpeed = DetectionDeescalationSpeed;
         
             this.detectionMeter = 0f;
-            visionConeVM.TransitionTo(new VisionConeStateFollowingPlayer());
+            visionConeViewModel.TransitionTo(new VisionConeStateFollowingPlayer());
         }
 
         public override bool AttemptDistraction(float distractionDuration)
@@ -40,12 +40,12 @@ namespace Enemies.Detection
             UpdateDetectionMeter();
             EscalateOrDeescalateDetection();
 
-            visionConeVM.UpdateDetectionMeter(detectionMeter);
+            VisionConeViewModel.UpdateDetectionMeter(detectionMeter);
         }
 
         private void UpdateDetectionMeter()
         {
-            if (visionConeVM.IsPlayerObstructed())
+            if (VisionConeViewModel.IsPlayerObstructed())
                 detectionMeter -= Time.deltaTime * DetectionDeescalationSpeed;
             else
                 detectionMeter += Time.deltaTime * DetectionEscalationSpeed;
@@ -59,7 +59,7 @@ namespace Enemies.Detection
             {
                 playerDetector.TransitionTo(new DetectorStateAlarmed(
                     playerDetector, 
-                    visionConeVM,
+                    VisionConeViewModel,
                     events)
                 );
             }
@@ -67,7 +67,7 @@ namespace Enemies.Detection
             {
                 playerDetector.TransitionTo(new DetectorStateIdle(
                     playerDetector, 
-                    visionConeVM,
+                    VisionConeViewModel,
                     events)
                 );
             }

@@ -8,19 +8,19 @@ namespace Enemies.VisionCone
     public class VisionConeMono: MonoBehaviour
     {
         [Header("Detection")]
-        [SerializeField] private Transform player = null;
-        [SerializeField] private EventsMono eventsMono = null;
-        [SerializeField] private LayerMask obstacleMask = new LayerMask();
+        [SerializeField] private Transform player;
+        [SerializeField] private EventsMono eventsMono;
+        [SerializeField] private LayerMask obstacleMask;
         [SerializeField, Range(0.01f, 1.0f)] private float DetectionEscalationSpeed = 0.5f;
         [SerializeField, Range(0.01f, 0.5f)] private float DetectionDeescalationSpeed = 0.2f;
 
         [Header("Control Points")]
-        [SerializeField] private VisionConeControlPointsMono controlPointsMono = null;
+        [SerializeField] private VisionConeControlPointsMono controlPointsMono;
 
         [Header("Visualization")]
         [SerializeField] private float kConeRangeMultiplier = 1.5f;
-        [SerializeField] private Material greenMaterial = null;
-        [SerializeField] private Material blueMaterial = null;
+        [SerializeField] private Material greenMaterial;
+        [SerializeField] private Material blueMaterial;
         [SerializeField] private Color kSpotLightGreen = new Color(0f, 183f, 18f, 1f);
         [SerializeField] private Color kSpotLightOrange = new Color(183f, 102f, 0f, 1f);
         [SerializeField] private Color kSpotLightRed = new Color(191, 0f, 10f, 1f);
@@ -28,7 +28,7 @@ namespace Enemies.VisionCone
 
         public IPlayerDetector PlayerDetector => playerDetector;
 
-        private IVisionConeVM visionConeVM;
+        private IVisionConeViewModel visionConeViewModel;
         private IPlayerDetector playerDetector;
 
         void Awake()
@@ -58,7 +58,7 @@ namespace Enemies.VisionCone
                 kSpotLightBlue
             );
 
-            visionConeVM = new VisionConeVM(
+            visionConeViewModel = new VisionConeViewModel(
                 controlPointsMono.PatrolPoints,
                 controlPointsMono.DistractPoint,
                 coneVisualizer, 
@@ -68,7 +68,7 @@ namespace Enemies.VisionCone
                 eventsMono
             );
             playerDetector = new PlayerDetector(
-                visionConeVM,
+                visionConeViewModel,
                 eventsMono,
                 DetectionEscalationSpeed,
                 DetectionDeescalationSpeed
@@ -77,7 +77,7 @@ namespace Enemies.VisionCone
 
         void Update()
         {
-            visionConeVM.Update();
+            visionConeViewModel.Update();
             playerDetector.Update();
         }
     }

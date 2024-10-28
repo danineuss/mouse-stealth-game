@@ -6,7 +6,7 @@ namespace Enemies
 {
     public class EnemyIOMono : MonoBehaviour
     {
-        [SerializeField] private EventsMono eventsMono = null;
+        [SerializeField] private EventsMono eventsMono;
         [SerializeField] private Color kActiveTextColor = new Color(0, 71, 188, 255);
         [SerializeField] private Color kInactiveTextColor = new Color(0, 75, 75, 75);
 

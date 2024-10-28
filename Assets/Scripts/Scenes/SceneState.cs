@@ -2,11 +2,11 @@ namespace Scenes
 {
     public abstract class SceneState
     {
-        protected ISceneVM sceneVM;
+        protected ISceneViewModel SceneViewModel;
 
-        public void SetSceneVM(ISceneVM sceneVM)
+        public void SetSceneVM(ISceneViewModel sceneViewModel)
         {
-            this.sceneVM = sceneVM;
+            this.SceneViewModel = sceneViewModel;
         }
         public abstract void BroadcastSceneState(ISceneEvents sceneEvents);
         public abstract void ToggleDialogOpen();

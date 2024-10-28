@@ -11,18 +11,18 @@ namespace Enemies.Detection
 
         public DetectorStateIdle(
             IPlayerDetector playerDetector,
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events) 
-            : base(playerDetector, visionConeVM, events) 
+            : base(playerDetector, visionConeViewModel, events) 
         {
-            visionConeVM.TransitionTo(new VisionConeStateIdle());
+            visionConeViewModel.TransitionTo(new VisionConeStateIdle());
         }
 
         public override bool AttemptDistraction(float distractionDuration)
         {
             playerDetector.TransitionTo(new DetectorStateDistracted(
                 playerDetector, 
-                visionConeVM,
+                VisionConeViewModel,
                 events,
                 distractionDuration)
             );
@@ -31,15 +31,15 @@ namespace Enemies.Detection
 
         public override void UpdateDetectionState()
         {
-            if (!visionConeVM.IsPlayerInsideVisionCone())
+            if (!VisionConeViewModel.IsPlayerInsideVisionCone())
                 return;
         
-            if (visionConeVM.IsPlayerObstructed())
+            if (VisionConeViewModel.IsPlayerObstructed())
                 return;
 
             playerDetector.TransitionTo(new DetectorStateSearching(
                 playerDetector, 
-                visionConeVM,
+                VisionConeViewModel,
                 events,
                 playerDetector.DetectionEscalationSpeed,
                 playerDetector.DetectionDeescalationSpeed)

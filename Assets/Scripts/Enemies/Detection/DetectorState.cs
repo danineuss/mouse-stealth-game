@@ -10,16 +10,16 @@ namespace Enemies.Detection
         public abstract EnemySound EnemySound { get; }
 
         protected IPlayerDetector playerDetector;
-        protected IVisionConeVM visionConeVM;
+        protected IVisionConeViewModel VisionConeViewModel;
         protected IEvents events;
 
         protected DetectorState(
             IPlayerDetector playerDetector, 
-            IVisionConeVM visionConeVM,
+            IVisionConeViewModel visionConeViewModel,
             IEvents events) 
         {
             this.playerDetector = playerDetector;
-            this.visionConeVM = visionConeVM;
+            this.VisionConeViewModel = visionConeViewModel;
             this.events = events;
         }
 
